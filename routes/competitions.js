@@ -6,6 +6,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const sharp = require('sharp');
+const cloudinary = require('../utils/cloudinary');
 const { validateCompetition, validateObjectIdParam, isValidObjectId } = require('../middleware/sanitize');
 
 // Configure Multer for memory storage
@@ -221,21 +222,29 @@ router.post('/:id/photos', isAuthenticated, validateObjectIdParam('id'), upload.
      if (!comp) return res.status(404).json({ error: 'Competition not found' });
      if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
-     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-     const filename = `poster-${uniqueSuffix}.webp`;
-     const dir = path.join(__dirname, '../public/uploads/competitions/');
-     if (!fs.existsSync(dir)){
-         fs.mkdirSync(dir, { recursive: true });
-     }
-     const outputPath = path.join(dir, filename);
-
      // Optimize image using Sharp
-     await sharp(req.file.buffer)
+     const webpBuffer = await sharp(req.file.buffer)
        .resize(1200, null, { withoutEnlargement: true }) // Max width 1200, auto height
        .webp({ quality: 80 }) // Compress to 80% quality WebP
-       .toFile(outputPath);
+       .toBuffer();
 
-     const photoUrl = '/uploads/competitions/' + filename;
+     // Upload optimized buffer to Cloudinary
+     const uploadToCloudinary = (buffer) => {
+       return new Promise((resolve, reject) => {
+         const uploadStream = cloudinary.uploader.upload_stream(
+           { folder: 'dindi-competitions', format: 'webp' },
+           (error, result) => {
+             if (result) resolve(result);
+             else reject(error);
+           }
+         );
+         uploadStream.end(buffer);
+       });
+     };
+
+     const cloudinaryResult = await uploadToCloudinary(webpBuffer);
+     const photoUrl = cloudinaryResult.secure_url;
+
      comp.photos.push(photoUrl);
      await comp.save();
      console.log('[PHOTO UPLOAD] Success:', photoUrl);

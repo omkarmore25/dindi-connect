@@ -5,6 +5,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const sharp = require('sharp');
+const cloudinary = require('../utils/cloudinary');
 const { validateGroup, validateObjectIdParam, escapeRegex } = require('../middleware/sanitize');
 
 // Configure Multer for memory storage
@@ -152,17 +153,29 @@ router.post('/:id/photos', requireAuth, validateObjectIdParam('id'), upload.sing
 
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const filename = `photo-${uniqueSuffix}.webp`;
-    const outputPath = path.join(__dirname, '../public/uploads/', filename);
-
     // Optimize image using Sharp
-    await sharp(req.file.buffer)
+    const webpBuffer = await sharp(req.file.buffer)
       .resize(1200, null, { withoutEnlargement: true }) // Max width 1200, auto height
       .webp({ quality: 80 }) // Compress to 80% quality WebP
-      .toFile(outputPath);
+      .toBuffer();
 
-    const photoUrl = '/uploads/' + filename;
+    // Upload optimized buffer to Cloudinary
+    const uploadToCloudinary = (buffer) => {
+      return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { folder: 'dindi-groups', format: 'webp' },
+          (error, result) => {
+            if (result) resolve(result);
+            else reject(error);
+          }
+        );
+        uploadStream.end(buffer);
+      });
+    };
+
+    const cloudinaryResult = await uploadToCloudinary(webpBuffer);
+    const photoUrl = cloudinaryResult.secure_url;
+
     group.photos.push(photoUrl);
     await group.save();
 
