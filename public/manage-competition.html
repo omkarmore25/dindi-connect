@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Event - Dindi</title>
+  
+  <link href="/css/style.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+    
+    body {
+      background-image: radial-gradient(at 0% 0%, rgba(251,146,60,0.1) 0px, transparent 50%),
+                        radial-gradient(at 100% 0%, rgba(234,88,12,0.1) 0px, transparent 50%);
+      background-attachment: fixed;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      font-family: 'Outfit', sans-serif;
+    }
+    
+    .dark body {
+      background-image: radial-gradient(at 0% 0%, rgba(251,146,60,0.15) 0px, transparent 50%),
+                        radial-gradient(at 100% 100%, rgba(79,70,229,0.15) 0px, transparent 50%);
+    }
+
+    /* Modal Open Support */
+    body.modal-open {
+      overflow: hidden !important;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      overscroll-behavior: none;
+    }
+
+    .glass-nav { 
+      background: rgba(255, 255, 255, 0.75); 
+      backdrop-filter: blur(16px); 
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .dark .glass-nav {
+      background: rgba(15, 23, 42, 0.75);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    
+    .dark .glass-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    }
+
+    .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* Scrollbar Styling */
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+  </style>
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col md:flex-row pb-32 md:pb-0">
+
+  <!-- Desktop Sidebar -->
+  <header class="bg-slate-950 sticky top-0 z-50 w-full md:w-72 md:h-screen md:fixed md:flex md:flex-col md:border-r border-slate-800 px-4 py-3 md:p-6 shadow-2xl flex justify-between items-center md:items-start transition-colors">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-400 to-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 font-serif">D</div>
+      <h1 class="text-xl md:text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-red-500 tracking-tighter">Dindi</h1>
+    </div>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex flex-col gap-2 mt-10 w-full">
+      <a href="/" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">Home</a>
+      <a href="/calendar.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">Calendar</a>
+      <a href="/auth.html" class="mt-4 flex items-center justify-center gap-3 px-4 py-3 bg-brand-500 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/20 hover:bg-brand-600 transition cursor-pointer">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        Back to Dashboard
+      </a>
+    </nav>
+
+    <div class="flex items-center gap-3 md:mt-auto md:w-full md:justify-between">
+      <button id="themeToggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition text-slate-500 dark:text-slate-400" aria-label="Toggle Dark Mode">
+        <svg id="themeToggleDarkIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+        <svg id="themeToggleLightIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 2.32a1 1 0 011.415 1.415l-.707.707a1 1 0 01-1.414-1.414l.707-.707zm-9.855.707a1 1 0 010-1.414l.707-.707a1 1 0 111.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 6a4 4 0 100 8 4 4 0 000-8zm-5 4a1 1 0 11-2 0 1 1 0 012 0zm14 0a1 1 0 11-2 0 1 1 0 012 0zm-5.657 5.657a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-2.32a1 1 0 01-1.415-1.415l.707-.707a1 1 0 011.414 1.414l-.707.707z" clip-rule="evenodd"></path></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Content Area -->
+  <div class="flex-1 md:ml-72 flex flex-col min-h-screen px-4 md:px-8 py-8 relative">
+    <div class="max-w-4xl w-full mx-auto relative z-10 animate-fade-in transition-all">
+        <div id="loadingState" class="py-20 text-center">
+            <div class="inline-block relative w-16 h-16"><div class="absolute inset-0 border-4 border-slate-200 dark:border-slate-800 rounded-full"></div><div class="absolute inset-0 border-4 border-brand-500 rounded-full border-t-transparent animate-spin"></div></div>
+        </div>
+      
+        <div id="compContent" class="hidden flex flex-col gap-6">
+            <div class="bg-slate-900/40 backdrop-blur-md rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border border-slate-800/50 shadow-2xl">
+               <div class="flex-1 text-left">
+                  <h2 class="text-2xl sm:text-3xl font-black text-slate-100 mb-3 tracking-tight" id="compTitle">Event Title</h2>
+                  <div class="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-500 dark:text-slate-400">
+                    <span id="compDate" class="bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg">Date</span>
+                    <span id="compLoc" class="bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg">Location</span>
+                  </div>
+               </div>
+               <div class="flex flex-col md:items-end gap-3 w-full md:w-auto">
+                  <button id="openEditModalBtn" class="bg-brand-500 text-white font-bold px-8 py-3.5 rounded-2xl hover:bg-brand-600 transition shadow-xl shadow-brand-500/20 w-full md:w-auto text-lg">Edit Event Details</button>
+                  <div class="bg-slate-800 dark:bg-slate-800/80 w-full md:w-auto px-6 py-4 rounded-2xl text-center border border-slate-700">
+                     <div class="text-3xl font-black text-brand-500" id="participantCount">0</div>
+                     <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Participants</div>
+                  </div>
+               </div>
+            </div>
+      
+            <div class="glass-card rounded-3xl p-6 md:p-8 mt-2">
+               <h3 class="text-xl font-bold mb-6 text-slate-800 dark:text-slate-100">Registered Teams</h3>
+               <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+                 <table class="w-full text-center border-collapse">
+                   <thead>
+                     <tr class="bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 text-slate-500 text-xs font-bold uppercase tracking-widest">
+                       <th class="py-4 px-5">Group Name</th>
+                       <th class="py-4 px-5">Location</th>
+                       <th class="py-4 px-5">Leader</th>
+                       <th class="py-4 px-5">Action</th>
+                     </tr>
+                   </thead>
+                   <tbody id="participantsList" class="bg-white/50 dark:bg-slate-900/50"></tbody>
+                 </table>
+                 <div id="noParticipantsMsg" class="hidden text-center py-12 text-slate-500">No teams registered yet.</div>
+               </div>
+            </div>
+         </div>
+    </div>
+  </div>
+
+  <!-- Modal Removed from this DOM tree to bypass Stacking Context restrictions, appended to body tail --!>
+
+  <script src="/js/main.js?v=11"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const compId = urlParams.get('id');
+      if (!compId) return window.location.href = '/auth.html';
+
+      const uRes = await fetch('/api/auth/current_user');
+      const uData = await uRes.json();
+      if (!uData.isAuthenticated) return window.location.href = '/';
+      const user = uData.user;
+
+      const cRes = await fetch('/api/competitions/' + compId);
+      const comp = await cRes.json();
+      if (comp.organizerId !== user._id) return window.location.href = '/auth.html';
+
+      document.getElementById('loadingState').classList.add('hidden');
+      document.getElementById('compContent').classList.remove('hidden');
+
+      document.getElementById('compTitle').textContent = comp.title || '';
+      document.getElementById('compDate').textContent = comp.date ? new Date(comp.date).toLocaleDateString() : '';
+      document.getElementById('compLoc').textContent = comp.location || '';
+      document.getElementById('participantCount').textContent = comp.registeredGroups.length;
+
+      const tbody = document.getElementById('participantsList');
+      if (comp.registeredGroups.length === 0) {
+         document.getElementById('noParticipantsMsg').classList.remove('hidden');
+      } else {
+         comp.registeredGroups.forEach(rg => {
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition';
+            tr.innerHTML = `<td class="py-4 px-5 font-bold text-slate-800 dark:text-slate-200">${rg.groupName}</td>` +
+                           `<td class="py-4 px-5 text-slate-600 dark:text-slate-400">${rg.village || '-'}</td>` +
+                           `<td class="py-4 px-5 text-slate-600 dark:text-slate-400">${rg.leaderName || '-'}</td>` +
+                           `<td class="py-4 px-5">
+                              <a href="https://wa.me/${rg.contactNumber}" target="_blank" 
+                                 class="inline-flex items-center gap-2 px-5 py-2.5 bg-green-500/5 hover:bg-green-500/20 font-bold rounded-full border-2 border-[#25D366]/40 hover:border-[#25D366] transition-all hover:scale-105 active:scale-95 group"
+                                 style="color: #25D366 !important;">
+                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" style="color: #25D366 !important;">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                                 </svg>
+                                 Message
+                              </a>
+                           </td>`;
+            tbody.appendChild(tr);
+         });
+      }
+
+      const openBtn = document.getElementById('openEditModalBtn');
+
+      openBtn.onclick = () => {
+         window.location.href = '/edit-competition.html?id=' + compId;
+      };
+
+    });
+  </script>
+
+</body>
+</html>

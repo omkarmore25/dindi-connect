@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dindi - Calendar</title>
+  
+  <link href="/css/style.css" rel="stylesheet">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+    
+    body {
+      background-image: radial-gradient(at 0% 0%, rgba(251,146,60,0.1) 0px, transparent 50%),
+                        radial-gradient(at 100% 0%, rgba(234,88,12,0.1) 0px, transparent 50%);
+      background-attachment: fixed;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    .dark body {
+      background-image: radial-gradient(at 0% 0%, rgba(251,146,60,0.15) 0px, transparent 50%),
+                        radial-gradient(at 100% 100%, rgba(79,70,229,0.15) 0px, transparent 50%);
+    }
+
+    .glass-nav { 
+      background: rgba(255, 255, 255, 0.75); 
+      backdrop-filter: blur(16px); 
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .dark .glass-nav {
+      background: rgba(15, 23, 42, 0.75);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    
+    .dark .glass-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    }
+
+    .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col md:flex-row pb-32 md:pb-0">
+
+  <!-- Desktop Sidebar / Mobile Top Nav -->
+  <header class="glass-nav sticky top-0 z-50 w-full md:w-72 md:h-screen md:fixed md:flex md:flex-col md:border-r md:border-b-0 px-4 py-3 md:p-6 shadow-sm flex justify-between items-center md:items-start transition-colors">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-400 to-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 font-serif">D</div>
+      <h1 class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-red-500">Dindi</h1>
+    </div>
+
+    <!-- Desktop Navigation Links -->
+    <nav class="hidden md:flex flex-col gap-2 mt-10 w-full">
+      <a href="/" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+        Home
+      </a>
+      <a href="/calendar.html" class="flex items-center gap-3 px-4 py-3 bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-semibold rounded-xl transition">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+        Calendar
+      </a>
+      <a href="/auth.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+        Profile
+      </a>
+    </nav>
+
+    <div class="flex items-center gap-3 md:mt-auto md:w-full md:justify-between">
+      <button id="themeToggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition text-slate-500 dark:text-slate-400" aria-label="Toggle Dark Mode">
+        <svg id="themeToggleDarkIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+        <svg id="themeToggleLightIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 2.32a1 1 0 011.415 1.415l-.707.707a1 1 0 01-1.414-1.414l.707-.707zm-9.855.707a1 1 0 010-1.414l.707-.707a1 1 0 111.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 6a4 4 0 100 8 4 4 0 000-8zm-5 4a1 1 0 11-2 0 1 1 0 012 0zm14 0a1 1 0 11-2 0 1 1 0 012 0zm-5.657 5.657a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-2.32a1 1 0 01-1.415-1.415l.707-.707a1 1 0 011.414 1.414l-.707.707z" clip-rule="evenodd"></path></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 md:ml-72 flex flex-col min-h-screen">
+    
+    <!-- Hero Section -->
+    <div class="px-4 py-8 md:px-10 md:py-12 relative z-10 transition-colors">
+      <h2 class="text-3xl md:text-4xl font-bold mb-3 tracking-tight">Calendar</h2>
+      <p class="text-slate-500 dark:text-slate-400 text-sm md:text-base max-w-xl">See where Dindi groups are performing or register for upcoming competitions.</p>
+      
+      <!-- Tabs -->
+      <div class="flex gap-4 mt-6 border-b border-slate-200 dark:border-slate-700/50 pb-2">
+        <button id="tabEventsBtn" class="text-brand-600 dark:text-brand-400 font-bold border-b-2 border-brand-500 pb-2 transition">Upcoming Performances</button>
+        <button id="tabCompsBtn" class="text-slate-500 dark:text-slate-400 font-bold border-b-2 border-transparent hover:text-slate-700 dark:hover:text-slate-300 pb-2 transition">Competitions</button>
+      </div>
+    </div>
+
+    <!-- Events List -->
+    <main class="flex-1 px-4 md:px-10 pb-28 md:pb-10 relative">
+      <!-- Events Container -->
+      <div id="eventsContainer" class="flex flex-col gap-6 relative max-w-3xl">
+        <div class="absolute left-[36px] top-6 bottom-6 w-0.5 bg-brand-200 dark:bg-brand-900/50 hidden sm:block rounded-full"></div>
+        <!-- Events injected here -->
+      </div>
+      
+      <!-- Competitions Container (Hidden by default) -->
+      <div id="competitionsContainer" class="hidden flex flex-col gap-6 relative max-w-3xl">
+        <div class="absolute left-[36px] top-6 bottom-6 w-0.5 bg-orange-200 dark:bg-orange-900/50 hidden sm:block rounded-full"></div>
+        <!-- Competitions injected here -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Mobile Floating Bottom Nav -->
+  <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav rounded-3xl px-6 py-3 flex justify-between items-center shadow-xl z-50 transition-all duration-300 transform">
+    <a href="/" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+      <span class="text-[10px] font-medium">Home</span>
+    </a>
+    <a href="/calendar.html" class="flex flex-col items-center text-brand-500 transition transform scale-105">
+      <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+      <span class="text-[10px] font-bold">Calendar</span>
+    </a>
+    <a href="/auth.html" id="profileTab" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+      <span class="text-[10px] font-medium">Profile</span>
+    </a>
+  </nav>
+
+  <!-- TEMPLATE: Event Row -->
+  <div id="event-row-template" class="hidden">
+    <div class="flex gap-4 sm:gap-8 items-start relative z-10 animate-fade-in group">
+      <!-- Date Marker -->
+      <div class="flex flex-col items-center glass-card rounded-2xl min-w-[72px] py-3 mt-1 shadow-lg shadow-brand-500/10 group-hover:scale-105 transition duration-300">
+        <span class="text-xs font-bold text-brand-500 uppercase tracking-wide event-month-slot">MMM</span>
+        <span class="text-3xl font-black text-slate-800 dark:text-slate-100 mt-1 event-day-slot">DD</span>
+      </div>
+      
+      <!-- Event Details Card -->
+      <div class="glass-card flex-1 p-5 rounded-3xl transition duration-300 hover:shadow-xl hover:shadow-brand-500/5 group-hover:-translate-y-1">
+        <h4 class="font-bold text-xl text-slate-800 dark:text-slate-100 event-temple-slot">Temple Name</h4>
+        <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-sm mt-1">
+          <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          <span class="event-village-slot">Village</span>
+          <a href="#" target="_blank" class="event-map-slot hidden ml-2 text-xs font-bold text-brand-500 hover:text-brand-600 transition underline flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+            Map
+          </a>
+        </div>
+        
+        <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700/50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+          <div class="text-sm font-medium text-slate-600 dark:text-slate-300">
+            Performing: <a href="#" class="font-bold text-brand-600 dark:text-brand-400 event-group-slot hover:underline transition">Group Name</a>
+          </div>
+          <!-- You can add a button here if needed -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEMPLATE: Competition Row -->
+  <div id="comp-row-template" class="hidden">
+    <div class="flex gap-4 sm:gap-8 items-start relative z-10 animate-fade-in group cursor-pointer comp-card-btn">
+      <!-- Date Marker -->
+      <div class="flex flex-col items-center glass-card rounded-2xl min-w-[72px] py-3 mt-1 shadow-lg shadow-orange-500/10 group-hover:scale-105 transition duration-300">
+        <span class="text-xs font-bold text-orange-500 uppercase tracking-wide comp-month-slot">MMM</span>
+        <span class="text-3xl font-black text-slate-800 dark:text-slate-100 mt-1 comp-day-slot">DD</span>
+      </div>
+      
+      <!-- Comp Details Card -->
+      <div class="glass-card flex-1 p-0 rounded-3xl overflow-hidden transition duration-300 hover:shadow-xl hover:shadow-orange-500/5 group-hover:-translate-y-1 flex flex-col sm:flex-row">
+        <!-- Poster Slot -->
+        <div class="w-full sm:w-48 h-48 sm:h-auto bg-slate-200 dark:bg-slate-800 flex-shrink-0 relative overflow-hidden hidden comp-poster-container">
+           <img src="" class="w-full h-full object-cover comp-poster-slot" alt="Competition Poster" onerror="this.closest('.comp-poster-container').style.display='none'">
+        </div>
+        
+        <div class="p-5 flex-1">
+          <h4 class="font-bold text-xl text-slate-800 dark:text-slate-100 comp-title-slot">Comp Title</h4>
+          <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-sm mt-1">
+            <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <span class="comp-location-slot">Location</span>
+            <a href="#" target="_blank" class="comp-map-slot hidden ml-2 text-xs font-bold text-orange-500 hover:text-orange-600 transition underline flex items-center gap-1" onclick="event.stopPropagation()">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+              Map
+            </a>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mt-3 comp-desc-slot line-clamp-2">Description</p>
+          
+          <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700/50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+            <div class="text-sm font-medium text-slate-600 dark:text-slate-300">
+              Registered: <span class="font-bold text-orange-600 dark:text-orange-400 comp-count-slot">0 groups</span>
+            </div>
+            <div class="text-orange-500 font-bold text-sm hidden sm:block group-hover:underline">View Details & Rules &rarr;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

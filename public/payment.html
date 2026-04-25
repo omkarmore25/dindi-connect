@@ -1,0 +1,246 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support - Dindi</title>
+
+  <link href="/css/style.css" rel="stylesheet">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+
+    :root {
+      --input-text-color: #1e293b;
+    }
+
+    .dark {
+      --input-text-color: #f1f5f9;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      background-image: radial-gradient(at 0% 0%, rgba(251, 146, 60, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(234, 88, 12, 0.1) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    .dark body {
+      background-image: radial-gradient(at 0% 0%, rgba(251, 146, 60, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(79, 70, 229, 0.15) 0px, transparent 50%);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+      border-radius: 2.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .dark .glass-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    .glass-input {
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+    }
+
+    .dark .glass-input {
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .glass-input:focus-within {
+      border-color: #f97316;
+      box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+    }
+
+    .animate-in {
+      animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    textarea::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    textarea::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    textarea::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    .dark textarea::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .dark h1 {
+      color: #ffffff !important;
+    }
+
+    .dark label {
+      color: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    input,
+    textarea {
+      background-color: transparent !important;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    input:-webkit-autofill {
+      -webkit-text-fill-color: inherit !important;
+      -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+      transition: background-color 5000s ease-in-out 0s !important;
+    }
+
+    .no-spinners::-webkit-inner-spin-button,
+    .no-spinners::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .no-spinners {
+      -moz-appearance: textfield;
+    }
+  </style>
+
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+
+<body
+  class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col items-center justify-center p-4">
+  
+  <div class="max-w-xl w-full animate-in py-12">
+    <div class="glass-card p-6 md:p-10 shadow-2xl relative">
+      <!-- Header section with back button -->
+      <div class="flex items-center justify-between mb-8">
+        <button onclick="handleClose()"
+          class="flex items-center gap-2 text-brand-500 font-bold hover:translate-x-[-4px] transition-transform group">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          <span class="text-xs uppercase tracking-widest">Back</span>
+        </button>
+        <div class="w-10 h-10 rounded-xl bg-brand-500 text-white flex items-center justify-center shadow-lg shadow-brand-500/30">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+          </svg>
+        </div>
+      </div>
+
+      <div class="text-center mb-10">
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2 text-slate-800 dark:text-white">Support the Community</h1>
+        <p class="text-slate-500 dark:text-slate-400 font-medium">Contributing to: <span id="paymentTargetName" class="text-brand-500 font-bold"></span></p>
+      </div>
+
+      <form id="paymentForm" class="space-y-6">
+        <input type="hidden" id="donateGroupId">
+
+        <!-- Amount Selection -->
+        <div class="space-y-3">
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 ml-4">Select Amount</label>
+          <div class="grid grid-cols-3 gap-3">
+            <button type="button" onclick="selectAmount(51, this)"
+              class="amount-btn py-4 rounded-2xl glass-input font-bold transition-all hover:scale-[1.02] active:scale-95 text-slate-600 dark:text-white border-transparent">₹51</button>
+            <button type="button" onclick="selectAmount(101, this)"
+              class="amount-btn py-4 rounded-2xl bg-brand-500 text-white font-bold shadow-lg shadow-brand-500/20 transition-all hover:scale-[1.02] active:scale-95">₹101</button>
+            <button type="button" onclick="selectAmount(501, this)"
+              class="amount-btn py-4 rounded-2xl glass-input font-bold transition-all hover:scale-[1.02] active:scale-95 text-slate-600 dark:text-white border-transparent">₹501</button>
+          </div>
+
+          <div class="mt-4 glass-input rounded-2xl px-6 py-4 flex items-center">
+            <span class="text-slate-400 dark:text-slate-500 text-xl font-bold mr-3 select-none">₹</span>
+            <input type="number" id="donateAmount" placeholder="Amount"
+              class="w-full font-bold focus:outline-none text-xl no-spinners placeholder:text-slate-300 dark:placeholder:text-slate-600"
+              style="color: var(--input-text-color) !important;" required min="1" value="101">
+          </div>
+        </div>
+
+        <!-- Personal Info -->
+        <div class="space-y-4 pt-2">
+          <div class="space-y-1.5">
+            <label class="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 ml-4">Full Name</label>
+            <input type="text" id="donateName" placeholder="Your Name"
+              class="w-full glass-input px-6 py-4 rounded-2xl font-semibold focus:outline-none transition-all text-sm placeholder:text-slate-300 dark:placeholder:text-slate-600"
+              style="color: var(--input-text-color) !important;" required>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <label class="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 ml-4">Email Address</label>
+              <input type="email" id="donateEmail" placeholder="email@example.com"
+                class="w-full glass-input px-6 py-4 rounded-2xl font-semibold focus:outline-none transition-all text-sm placeholder:text-slate-300 dark:placeholder:text-slate-600"
+                style="color: var(--input-text-color) !important;" required>
+            </div>
+            <div class="space-y-1.5">
+              <label class="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 ml-4">Phone Number</label>
+              <input type="tel" id="donatePhone" placeholder="+91 00000 00000"
+                class="w-full glass-input px-6 py-4 rounded-2xl font-semibold focus:outline-none transition-all text-sm placeholder:text-slate-300 dark:placeholder:text-slate-600"
+                style="color: var(--input-text-color) !important;" required>
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 ml-4">Message (Optional)</label>
+            <textarea id="donateMessage" rows="3" placeholder="Write a message..."
+              class="w-full glass-input px-6 py-4 rounded-2xl font-semibold focus:outline-none transition-all text-sm placeholder:text-slate-300 dark:placeholder:text-slate-600 resize-none"
+              style="color: var(--input-text-color) !important;"></textarea>
+          </div>
+        </div>
+
+        <button type="submit" id="donateSubmitBtn"
+          class="w-full py-5 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-xl shadow-brand-500/30 transition-all transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 mt-4">
+          <span class="tracking-wide text-lg">Proceed to Pay</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+          </svg>
+        </button>
+      </form>
+      
+      <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 text-center">
+        <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] flex items-center justify-center gap-2">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+          </svg>
+          Secure SSL Encrypted
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/payment.js"></script>
+</body>
+
+</html>

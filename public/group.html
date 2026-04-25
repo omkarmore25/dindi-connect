@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Group Profile - Dindi</title>
+  
+  <link href="/css/style.css" rel="stylesheet">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+    
+    body {
+      background-image: radial-gradient(at 0% 0%, rgba(251,146,60,0.1) 0px, transparent 50%),
+                        radial-gradient(at 100% 0%, rgba(234,88,12,0.1) 0px, transparent 50%);
+      background-attachment: fixed;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    .dark body {
+      background-image: radial-gradient(at 0% 0%, rgba(251,146,60,0.15) 0px, transparent 50%),
+                        radial-gradient(at 100% 100%, rgba(79,70,229,0.15) 0px, transparent 50%);
+    }
+
+    .glass-nav { 
+      background: rgba(255, 255, 255, 0.75); 
+      backdrop-filter: blur(16px); 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .dark .glass-nav {
+      background: rgba(15, 23, 42, 0.75);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    
+    .dark .glass-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+  <!-- Razorpay Checkout -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col md:flex-row pb-32 md:pb-0">
+
+  <!-- Desktop Sidebar / Mobile Top Nav -->
+  <header class="glass-nav sticky top-0 z-50 w-full md:w-72 md:h-screen md:fixed md:flex md:flex-col md:border-r md:border-b-0 px-4 py-3 md:p-6 shadow-sm flex justify-between items-center md:items-start transition-colors">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-400 to-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 font-serif">D</div>
+      <h1 class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-red-500">Dindi</h1>
+    </div>
+
+    <!-- Desktop Navigation Links -->
+    <nav class="hidden md:flex flex-col gap-2 mt-10 w-full">
+      <a href="/" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5 font-bold" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+        Home
+      </a>
+      <a href="/calendar.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+        Calendar
+      </a>
+      <a href="/auth.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+        Profile
+      </a>
+    </nav>
+    
+    <div class="flex items-center gap-3 md:mt-auto md:w-full md:justify-between">
+      <button id="themeToggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition text-slate-500 dark:text-slate-400" aria-label="Toggle Dark Mode">
+        <svg id="themeToggleDarkIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+        <svg id="themeToggleLightIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 2.32a1 1 0 011.415 1.415l-.707.707a1 1 0 01-1.414-1.414l.707-.707zm-9.855.707a1 1 0 010-1.414l.707-.707a1 1 0 111.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 6a4 4 0 100 8 4 4 0 000-8zm-5 4a1 1 0 11-2 0 1 1 0 012 0zm14 0a1 1 0 11-2 0 1 1 0 012 0zm-5.657 5.657a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-2.32a1 1 0 01-1.415-1.415l.707-.707a1 1 0 011.414 1.414l-.707.707z" clip-rule="evenodd"></path></svg>
+      </button>
+      <div id="auth-section"></div>
+    </div>
+  </header>
+
+  <!-- Mobile Floating Bottom Nav -->
+  <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav rounded-3xl px-6 py-3 flex justify-between items-center shadow-xl z-50 transition-all duration-300 transform">
+    <a href="/" class="flex flex-col items-center text-brand-500 transition transform scale-105">
+      <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+      <span class="text-[10px] font-bold">Home</span>
+    </a>
+    <a href="/calendar.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+      <span class="text-[10px] font-medium">Calendar</span>
+    </a>
+    <a href="/auth.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
+      <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+      <span class="text-[10px] font-medium">Profile</span>
+    </a>
+  </nav>
+
+
+  <!-- Main Content Area -->
+  <div class="flex-1 md:ml-72 flex flex-col min-h-screen">
+    
+    <!-- Mobile Back Button -->
+    <div class="md:hidden px-4 pt-6 pb-2">
+      <a href="/" class="inline-flex items-center gap-2 text-brand-600 dark:text-brand-400 font-semibold text-sm bg-brand-50 dark:bg-brand-900/30 px-3 py-1.5 rounded-full">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        Home
+      </a>
+    </div>
+
+    <!-- Group Profile Header -->
+    <div class="px-4 py-6 md:px-10 md:py-12 relative z-10">
+      <div id="loading" class="animate-pulse">Loading profile...</div>
+      
+      <div id="profileContent" class="hidden max-w-6xl w-full mx-auto">
+        <div class="flex flex-col md:flex-row gap-6 md:items-end justify-between mb-8">
+          <div>
+            <div class="flex items-center gap-3 mb-2">
+              <h2 id="pName" class="text-3xl md:text-5xl font-bold tracking-tight">Group Name</h2>
+              <span id="pStatus" class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1 text-xs font-bold rounded-xl whitespace-nowrap">Available</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-4 text-slate-500 dark:text-slate-400 font-medium text-sm md:text-base mt-3">
+              <div class="flex items-center gap-1.5">
+                <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                <span id="pVillage">Village</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                <span id="pMembers">0 members</span>
+              </div>
+              <div id="pRegIdCont" class="hidden items-center gap-1.5">
+                <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                <span id="pRegId" class="font-bold">ID: -</span>
+              </div>
+            </div>
+          </div>
+          <div id="pAction" class="flex flex-wrap items-center gap-4"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="md:col-span-2 space-y-24">
+            <div class="glass-card p-6 rounded-3xl">
+              <h3 class="text-xl font-bold mb-3 text-slate-800 dark:text-slate-100">About Us</h3>
+              <p id="pDesc" class="text-slate-600 dark:text-slate-300 leading-relaxed">No description provided.</p>
+            </div>
+            
+            <div class="glass-card p-6 rounded-3xl">
+              <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                Achievements
+              </h3>
+              <ul id="pAchievements" class="space-y-3">
+                <li class="text-slate-500 dark:text-slate-400 italic">No achievements listed yet.</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="space-y-6">
+            <div class="glass-card p-6 rounded-3xl">
+              <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Dindi Pramukh</h3>
+              <div class="flex items-center gap-4">
+                <div id="pLeadInitial" class="text-3xl font-extrabold text-brand-500 dark:text-brand-400 drop-shadow-sm select-none">X</div>
+                <div>
+                  <div id="pLeadName" class="font-bold text-lg text-slate-800 dark:text-slate-100">Name</div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8">
+          <h3 class="text-2xl font-bold mb-5 text-slate-800 dark:text-slate-100 flex items-center gap-2">
+            <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            Gallery
+          </h3>
+          <div id="pPhotos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <p class="text-slate-500 dark:text-slate-400 italic col-span-full">No photos available.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <script src="/js/main.js?v=2"></script>
+</body>
+</html>
