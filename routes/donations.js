@@ -92,11 +92,24 @@ router.post('/verify', async (req, res) => {
 // POST /api/donations/webhook — Automatic updates from Razorpay
 router.post('/webhook', async (req, res) => {
   const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
-  
-  // Basic validation without signature for now (to see if it hits)
-  // In production, you MUST verify signature
   const signature = req.headers['x-razorpay-signature'];
-  console.log('[WEBHOOK DEBUG] Received Razorpay Webhook:', req.body.event);
+  
+  if (!signature || !req.rawBody) {
+    return res.status(400).send('Missing signature or raw body');
+  }
+
+  // Cryptographically verify the webhook signature
+  const expectedSignature = crypto
+    .createHmac('sha256', secret)
+    .update(req.rawBody)
+    .digest('hex');
+
+  if (expectedSignature !== signature) {
+    console.error('[WEBHOOK ERROR] Invalid Signature - Spoofing Attempt Detected');
+    return res.status(400).send('Invalid signature');
+  }
+
+  console.log('[WEBHOOK SECURE] Received verified Razorpay Webhook:', req.body.event);
 
   if (req.body.event === 'payment.captured') {
     const payment = req.body.payload.payment.entity;
