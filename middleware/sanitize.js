@@ -11,8 +11,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 
 // ── Helpers ──────────────────────────────────────────────
 
-/** Strip HTML tags from a string */
-const stripTags = (str) => str.replace(/<[^>]*>/g, '');
+/** Strip HTML tags from a string while preserving emojis and all unicode characters */
+const stripTags = (str) => str.replace(/<\/?[a-zA-Z][^>]*>/g, '');
 
 /** Trim and strip tags from all string values in an object (shallow) */
 const sanitizeStrings = (obj) => {
@@ -81,7 +81,8 @@ const enforceLimits = (req, res, next) => {
 
   for (const [field, maxLen] of Object.entries(FIELD_LIMITS)) {
     const val = req.body[field];
-    if (typeof val === 'string' && val.length > maxLen) {
+    // Use Array.from() to correctly count emoji and unicode characters (not UTF-16 code units)
+    if (typeof val === 'string' && Array.from(val).length > maxLen) {
       return res.status(400).json({
         error: `Field '${field}' exceeds maximum length of ${maxLen} characters.`
       });

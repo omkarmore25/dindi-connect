@@ -19,6 +19,10 @@ router.get('/config', (req, res) => {
 router.post('/create-order', validateDonation, async (req, res) => {
   const { amount, groupId, groupName, donorName, donorEmail, donorPhone, message } = req.body;
 
+  // Razorpay notes only accept ASCII — strip emojis/unicode for the API call
+  // We still save the full original message (with emojis) to our own database
+  const asciiMessage = (message || '').replace(/[^\x00-\x7F]/g, '').trim();
+
   try {
     const order = await razorpay.orders.create({
       amount: Math.round(amount * 100), // Razorpay uses paise
@@ -28,11 +32,11 @@ router.post('/create-order', validateDonation, async (req, res) => {
         donorEmail,
         donorPhone,
         groupName: groupName || 'Dindi Community',
-        message: message || '',
+        message: asciiMessage, // ASCII-only version for Razorpay
       },
     });
 
-    // Save pending donation
+    // Save pending donation — use the ORIGINAL message with emojis
     const donation = new Donation({
       groupId: groupId || null,
       groupName: groupName || 'Dindi Community',
@@ -40,7 +44,7 @@ router.post('/create-order', validateDonation, async (req, res) => {
       donorEmail,
       donorPhone,
       amount,
-      message: message || '',
+      message: message || '', // Full message with emojis stored in DB
       razorpayOrderId: order.id,
       status: 'pending',
     });
