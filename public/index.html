@@ -110,8 +110,8 @@
       </a>
     </nav>
 
-    <!-- Install App Button (shown only when browser supports PWA install) -->
-    <button id="installPwaBtn" class="hidden mt-4 w-full flex items-center gap-3 px-4 py-3 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl transition shadow-lg shadow-brand-500/30 hover:-translate-y-0.5">
+    <!-- Install App Button — Desktop Sidebar only -->
+    <button id="installPwaBtn" class="hidden md:hidden mt-4 w-full items-center gap-3 px-4 py-3 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl transition shadow-lg shadow-brand-500/30 hover:-translate-y-0.5">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
       Install App
     </button>
@@ -173,6 +173,21 @@
     </main>
   </div>
 
+  <!-- Mobile PWA Install Banner (shown above bottom nav) -->
+  <div id="installMobileBanner" class="md:hidden hidden" style="position:fixed; bottom:6rem; left:50%; transform:translateX(-50%); width:90%; max-width:400px; z-index:60;">
+    <div style="display:flex; align-items:center; gap:12px; background:linear-gradient(135deg,#f97316,#ea580c); color:white; padding:12px 16px; border-radius:18px; box-shadow:0 8px 32px rgba(249,115,22,0.45);">
+      <img src="/images/icon-192.png" style="width:40px;height:40px;border-radius:10px;flex-shrink:0;" alt="Dindi Icon">
+      <div style="flex:1;min-width:0;">
+        <p style="font-weight:700;font-size:14px;margin:0;line-height:1.2;">Install Dindi App</p>
+        <p style="font-size:11px;margin:0;opacity:0.85;line-height:1.3;">Add to Home Screen for quick access</p>
+      </div>
+      <button id="installMobileBtn" style="flex-shrink:0;background:white;color:#ea580c;font-weight:700;font-size:12px;padding:6px 12px;border-radius:10px;border:none;cursor:pointer;">Install</button>
+      <button id="dismissInstallBanner" style="flex-shrink:0;background:none;border:none;color:rgba(255,255,255,0.7);cursor:pointer;padding:4px;display:flex;align-items:center;">
+        <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
+  </div>
+
   <!-- Mobile Floating Bottom Nav (Hidden on md) -->
   <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav rounded-3xl px-6 py-3 flex justify-between items-center shadow-xl z-50 transition-all duration-300 transform">
     <a href="/" class="flex flex-col items-center text-brand-500 transition transform scale-105">
@@ -220,10 +235,10 @@
 
 
 
-  <script src="js/main.js?v=20240404v1"></script>
+  <script src="js/main.js?v=20240425v2"></script>
   <script>
-    // Register Service Worker
-    if ('serviceWorker' in navigator) {
+    // Register Service Worker only on production (not localhost)
+    if ('serviceWorker' in navigator && !location.hostname.includes('localhost') && !location.hostname.includes('127.0.0.1')) {
       navigator.serviceWorker.register('/sw.js').then(() => console.log('[PWA] Service Worker Registered'));
     }
   </script>

@@ -1,24 +1,48 @@
 // --- PWA Install Button Logic ---
 let deferredInstallPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault(); // Stop auto-prompt
+  e.preventDefault();
   deferredInstallPrompt = e;
-  // Show the install button in the sidebar
-  const installBtn = document.getElementById('installPwaBtn');
-  if (installBtn) {
-    installBtn.classList.remove('hidden');
-    installBtn.addEventListener('click', async () => {
-      installBtn.classList.add('hidden');
-      deferredInstallPrompt.prompt();
-      const { outcome } = await deferredInstallPrompt.userChoice;
-      console.log(`[PWA] User ${outcome === 'accepted' ? 'installed' : 'dismissed'} the app.`);
-      deferredInstallPrompt = null;
-    });
+
+  const isMobile = window.innerWidth < 768;
+
+  if (isMobile) {
+    // Mobile: show a beautiful floating banner above the bottom nav
+    const banner = document.getElementById('installMobileBanner');
+    if (banner) {
+      banner.classList.remove('hidden');
+
+      document.getElementById('installMobileBtn')?.addEventListener('click', async () => {
+        banner.classList.add('hidden');
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+      });
+
+      document.getElementById('dismissInstallBanner')?.addEventListener('click', () => {
+        banner.classList.add('hidden');
+      });
+    }
+  } else {
+    // Desktop: show the Install button in the sidebar
+    const installBtn = document.getElementById('installPwaBtn');
+    if (installBtn) {
+      installBtn.classList.remove('hidden');
+      installBtn.classList.add('flex');
+      installBtn.addEventListener('click', async () => {
+        installBtn.classList.add('hidden');
+        installBtn.classList.remove('flex');
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+      });
+    }
   }
 });
 window.addEventListener('appinstalled', () => {
-  console.log('[PWA] App successfully installed!');
   deferredInstallPrompt = null;
+  document.getElementById('installMobileBanner')?.classList.add('hidden');
+  document.getElementById('installPwaBtn')?.classList.add('hidden');
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
