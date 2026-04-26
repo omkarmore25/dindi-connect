@@ -1,3 +1,26 @@
+// --- PWA Install Button Logic ---
+let deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault(); // Stop auto-prompt
+  deferredInstallPrompt = e;
+  // Show the install button in the sidebar
+  const installBtn = document.getElementById('installPwaBtn');
+  if (installBtn) {
+    installBtn.classList.remove('hidden');
+    installBtn.addEventListener('click', async () => {
+      installBtn.classList.add('hidden');
+      deferredInstallPrompt.prompt();
+      const { outcome } = await deferredInstallPrompt.userChoice;
+      console.log(`[PWA] User ${outcome === 'accepted' ? 'installed' : 'dismissed'} the app.`);
+      deferredInstallPrompt = null;
+    });
+  }
+});
+window.addEventListener('appinstalled', () => {
+  console.log('[PWA] App successfully installed!');
+  deferredInstallPrompt = null;
+});
+
 document.addEventListener('DOMContentLoaded', async () => {
   // --- Mobile Nav Scroll Hide/Show ---
   let lastScrollTop = 0;

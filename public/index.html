@@ -13,6 +13,14 @@
   <meta property="og:description" content="Discover, connect, and support traditional Warkari Dindi groups for your next event.">
   <meta property="og:image" content="https://dindi-connect.onrender.com/images/og-image.png">
 
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#f97316">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Dindi">
+  <link rel="apple-touch-icon" href="/images/icon-192.png">
+
   <link href="/css/style.css" rel="stylesheet">
   
   <style>
@@ -101,6 +109,12 @@
         Profile
       </a>
     </nav>
+
+    <!-- Install App Button (shown only when browser supports PWA install) -->
+    <button id="installPwaBtn" class="hidden mt-4 w-full flex items-center gap-3 px-4 py-3 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl transition shadow-lg shadow-brand-500/30 hover:-translate-y-0.5">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+      Install App
+    </button>
 
     <div class="flex items-center gap-3 md:mt-auto md:w-full md:justify-between">
       <!-- Dark mode toggle -->
@@ -207,5 +221,11 @@
 
 
   <script src="js/main.js?v=20240404v1"></script>
+  <script>
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(() => console.log('[PWA] Service Worker Registered'));
+    }
+  </script>
 </body>
 </html>
