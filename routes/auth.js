@@ -14,11 +14,19 @@ const { validateRegister, validateLogin, isValidEmail } = require('../middleware
 router.get('/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-router.get('/google/callback', 
+router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/auth.html?error=google_failed' }),
   (req, res) => {
-    // Successful authentication, redirect to directory
-    res.redirect('/');
+    // Explicitly save session before redirecting to ensure it's persisted 
+    // even if the mobile browser pauses during the "Open in App" prompt.
+    req.session.save((err) => {
+      if (err) {
+        console.error('[ERROR] Session save error:', err);
+        return res.redirect('/auth.html?error=session_save_failed');
+      }
+      console.log(`[DEBUG] Google Auth Callback successful. Redirecting user: ${req.user?._id}`);
+      res.redirect('/');
+    });
   });
 
 // Email/Password Registration
@@ -29,7 +37,7 @@ router.post('/register', validateRegister, async (req, res) => {
     if (user) {
       return res.status(400).json({ error: 'User already exists' });
     }
-    
+
     const hashedPassword = await bcrypt.hash(password, 10);
     user = new User({ email, username, password: hashedPassword, isVerified: false });
     await user.save();
@@ -37,11 +45,8 @@ router.post('/register', validateRegister, async (req, res) => {
     const token = jwt.sign({ userId: user._id.toString() }, process.env.JWT_SECRET, { expiresIn: '1d' });
     const url = `${process.env.APP_URL}/api/auth/verify/${token}`;
 
-    try {
-      await sendVerificationEmail(email, url, username);
-    } catch (emailError) {
-      console.error("Error sending email:", emailError.message);
-    }
+    // Send email in background to prevent UI hang
+    sendVerificationEmail(email, url, username).catch(err => console.error("Background Email Error:", err));
 
     res.status(201).json({ message: 'Registration successful! Please check your email to verify.' });
   } catch (error) {
@@ -63,12 +68,9 @@ router.post('/resend-verification', async (req, res) => {
     const token = jwt.sign({ userId: user._id.toString() }, process.env.JWT_SECRET, { expiresIn: '1d' });
     const url = `${process.env.APP_URL}/api/auth/verify/${token}`;
 
-    try {
-      await sendVerificationEmail(email, url, user.username || 'User');
-      res.json({ message: 'Verification link has been resent to your email!' });
-    } catch (emailError) {
-      res.status(500).json({ error: 'Failed to send email' });
-    }
+    // Send email in background
+    sendVerificationEmail(email, url, user.username || 'User').catch(err => console.error("Background Email Error:", err));
+    res.json({ message: 'Verification link has been resent to your email!' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -79,7 +81,7 @@ router.post('/login', validateLogin, async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    
+
     if (!user || !user.password) {
       return res.status(400).json({ error: 'Invalid credentials' });
     }
@@ -127,17 +129,11 @@ router.post('/forgot-password', async (req, res) => {
     await user.save();
 
     const resetLink = `${process.env.APP_URL}/reset-password.html?token=${token}`;
-    
-    try {
-      await sendPasswordResetEmail(user.email, resetLink, user.username || 'User');
-    } catch (err) {
-      console.error('Error sending reset email:', err);
-      // Reset token if email fails
-      user.resetPasswordToken = undefined;
-      user.resetPasswordExpires = undefined;
-      await user.save();
-      return res.status(500).json({ error: 'Failed to send password reset email. Please try again.' });
-    }
+
+    // Send email in background
+    sendPasswordResetEmail(user.email, resetLink, user.username || 'User').catch(err => {
+      console.error('Background Reset Email Error:', err);
+    });
 
     res.json({ message: 'If that email exists, a reset link has been sent.' });
   } catch (error) {
@@ -149,11 +145,11 @@ router.post('/forgot-password', async (req, res) => {
 router.post('/reset-password', async (req, res) => {
   try {
     const { token, password } = req.body;
-    
+
     if (!token || !password) {
       return res.status(400).json({ error: 'Token and new password are required.' });
     }
-    
+
     if (password.length < 6) {
       return res.status(400).json({ error: 'Password must be at least 6 characters long.' });
     }
@@ -188,7 +184,7 @@ router.get('/verify/:token', async (req, res) => {
 
     user.isVerified = true;
     await user.save();
-    
+
     // Auto-login the user immediately upon clicking the verification link
     req.logIn(user, (err) => {
       if (err) return res.redirect('/auth.html?error=verification_login_failed');

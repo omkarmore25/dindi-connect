@@ -2,7 +2,11 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const dns = require('dns');
-dns.setServers(['8.8.8.8', '8.8.4.4']); // Use Google DNS to resolve Atlas SRV records
+try {
+  dns.setServers(['8.8.8.8', '8.8.4.4']); // Use Google DNS to resolve Atlas SRV records
+} catch (e) {
+  console.warn('DNS server setting failed, using system defaults.');
+}
 const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
@@ -35,7 +39,6 @@ app.use(helmet({
 }));
 
 // Middleware — body size limits to reject oversized payloads
-// Note: We capture req.rawBody specifically to securely verify Razorpay Webhook signatures
 app.use(express.json({ 
   limit: '1mb',
   verify: (req, res, buf) => {
@@ -81,14 +84,22 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL
+    callbackURL: process.env.GOOGLE_CALLBACK_URL || "/api/auth/google/callback",
+    proxy: true
   },
   async (accessToken, refreshToken, profile, done) => {
     try {
+      console.log(`[DEBUG] Google Auth Callback for profile ID: ${profile.id}`);
       let user = await User.findOne({ googleId: profile.id });
+      
       if (!user) {
-        // Try searching by email
-        user = await User.findOne({ email: profile.emails[0].value });
+        const email = profile.emails && profile.emails.length > 0 ? profile.emails[0].value : null;
+        if (!email) {
+          console.error('[ERROR] Google profile did not provide an email.');
+          return done(new Error('No email provided by Google'), null);
+        }
+
+        user = await User.findOne({ email });
         if (user) {
           user.googleId = profile.id;
           user.isVerified = true;
@@ -96,21 +107,25 @@ passport.use(new GoogleStrategy({
         } else {
           user = new User({
             googleId: profile.id,
-            email: profile.emails[0].value,
-            username: profile.emails[0].value.split('@')[0],
-            isVerified: true // Google accounts are implicitly verified
+            email,
+            username: profile.displayName || email.split('@')[0],
+            isVerified: true
           });
           await user.save();
         }
       }
       return done(null, user);
     } catch (err) {
+      console.error('[ERROR] Google Strategy Error:', err);
       return done(err, null);
     }
   }
 ));
 
-passport.serializeUser((user, done) => done(null, user._id));
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findById(id);
@@ -140,8 +155,20 @@ app.use('/api/competitions', competitionsRoutes);
 app.use('/api/donations', donationsRoutes);
 
 // Fallback to index.html for undefined frontend routes (SPA feel)
-app.use((req, res) => {
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: 'API route not found' });
+  }
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error('[FATAL ERROR]', err);
+  res.status(500).json({ 
+    error: 'Internal Server Error', 
+    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong on our end.' 
+  });
 });
 
 // Database Connection & Server Start
@@ -155,4 +182,3 @@ mongoose.connect(process.env.MONGODB_URI)
     });
   })
   .catch((err) => console.error('MongoDB connection error:', err));
-
