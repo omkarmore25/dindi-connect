@@ -11,15 +11,26 @@ const { validateRegister, validateLogin, isValidEmail } = require('../middleware
 // --- Auth Routes ---
 
 // Google OAuth
-router.get('/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google', (req, res, next) => {
+  // Save session before redirecting to Google to ensure the 'state' parameter 
+  // is persisted even if the mobile browser switches apps.
+  req.session.save((err) => {
+    if (err) return next(err);
+    passport.authenticate('google', { scope: ['profile', 'email'], state: false })(req, res, next);
+  });
+});
 
 router.get('/google/callback',
   (req, res, next) => {
+    // If the mobile browser/PWA double-requests this URL, skip auth for the second hit.
+    if (req.isAuthenticated()) {
+      console.log(`[DEBUG] Already authenticated. Skipping second auth attempt.`);
+      return res.redirect('/dashboard.html');
+    }
     console.log(`[DEBUG] Google Callback reached. User-Agent: ${req.headers['user-agent']}`);
     next();
   },
-  passport.authenticate('google', { failureRedirect: '/auth.html?error=google_failed' }),
+  passport.authenticate('google', { failureRedirect: '/auth.html?error=google_failed', state: false }),
   (req, res) => {
     // Explicitly save session before redirecting to ensure it's persisted 
     // even if the mobile browser pauses during the "Open in App" prompt.
