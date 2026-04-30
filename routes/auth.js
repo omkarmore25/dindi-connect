@@ -37,6 +37,7 @@ router.get('/google/callback',
 router.post('/register', validateRegister, async (req, res) => {
   try {
     const { email, password, username } = req.body;
+    console.log(`[DEBUG] Register attempt for: ${email}`);
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ error: 'User already exists' });
@@ -114,6 +115,7 @@ router.post('/login', validateLogin, async (req, res) => {
 router.post('/forgot-password', async (req, res) => {
   try {
     const { email } = req.body;
+    console.log(`[DEBUG] Forgot Password attempt for: ${email}`);
     if (!email || !isValidEmail(email)) {
       return res.status(400).json({ error: 'A valid email is required.' });
     }

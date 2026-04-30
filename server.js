@@ -69,10 +69,11 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  proxy: true, // Required for secure cookies behind Render/Heroku proxies
   cookie: {
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
-    sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'lax',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' is required for some mobile cross-app redirects
     maxAge: 24 * 60 * 60 * 1000 // 1 day
   }
 }));
@@ -170,7 +171,8 @@ app.use((err, req, res, next) => {
   console.error('[FATAL ERROR]', err);
   res.status(500).json({ 
     error: 'Internal Server Error', 
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong on our end.' 
+    message: err.message, // Temporarily show message to help debug
+    path: req.path
   });
 });
 
