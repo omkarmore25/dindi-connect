@@ -2,23 +2,13 @@ const nodemailer = require('nodemailer');
 
 // Create the unified transport pipeline using Gmail
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
+  host: 'smtp.resend.com',
   port: 465,
-  secure: true, // Use SSL (more reliable on Render for Gmail)
-  logger: true,
-  debug: true,
+  secure: true, // Use SSL
   auth: {
-    user: process.env.EMAIL_USER,
+    user: 'resend', // This is always 'resend' for their SMTP
     pass: process.env.EMAIL_PASS
-  },
-  tls: {
-    rejectUnauthorized: false
-  },
-  connectionTimeout: 30000, // Increased to 30s for slow cloud handshakes
-  greetingTimeout: 30000,
-  socketTimeout: 30000,
-  dnsTimeout: 30000,
-  family: 4 // FORCE IPv4 (required for Render)
+  }
 });
 
 /**
@@ -30,7 +20,7 @@ const transporter = nodemailer.createTransport({
 const sendVerificationEmail = async (to, verificationLink, name) => {
     try {
         const mailOptions = {
-            from: `"Dindi Connect" <${process.env.EMAIL_USER}>`,
+            from: 'Dindi Connect <onboarding@resend.dev>',
             to: to,
             subject: 'Verify your Dindi Connect Account ✅',
             html: `
@@ -77,7 +67,7 @@ const sendVerificationEmail = async (to, verificationLink, name) => {
 const sendPasswordResetEmail = async (to, resetLink, name) => {
     try {
         const mailOptions = {
-            from: `"Dindi Connect" <${process.env.EMAIL_USER}>`,
+            from: 'Dindi Connect <onboarding@resend.dev>',
             to: to,
             subject: 'Reset your Dindi Connect Password 🔐',
             html: `
