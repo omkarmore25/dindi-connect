@@ -3,8 +3,8 @@ const nodemailer = require('nodemailer');
 // Create the unified transport pipeline using Gmail
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
-  port: 587,
-  secure: false, // Use STARTTLS
+  port: 465,
+  secure: true, // Use SSL (more reliable on Render for Gmail)
   logger: true,
   debug: true,
   auth: {
@@ -14,11 +14,11 @@ const transporter = nodemailer.createTransport({
   tls: {
     rejectUnauthorized: false
   },
-  connectionTimeout: 10000, // 10 seconds
-  greetingTimeout: 10000,
-  socketTimeout: 10000,
-  dnsTimeout: 10000,
-  family: 4 // FORCE IPv4 to avoid Render's IPv6 routing issues
+  connectionTimeout: 30000, // Increased to 30s for slow cloud handshakes
+  greetingTimeout: 30000,
+  socketTimeout: 30000,
+  dnsTimeout: 30000,
+  family: 4 // FORCE IPv4 (required for Render)
 });
 
 /**
