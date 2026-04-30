@@ -70,12 +70,15 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production', // Requires HTTPS
+    secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'lax',
     maxAge: 24 * 60 * 60 * 1000 // 1 day
   }
 }));
+
+// Log email config on startup (obfuscated)
+console.log(`[INIT] Mailer configured for: ${process.env.EMAIL_USER ? process.env.EMAIL_USER.replace(/.(?=.{4})/g, '*') : 'MISSING'}`);
 
 // Passport Setup
 app.use(passport.initialize());

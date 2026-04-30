@@ -15,6 +15,10 @@ router.get('/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get('/google/callback',
+  (req, res, next) => {
+    console.log(`[DEBUG] Google Callback reached. User-Agent: ${req.headers['user-agent']}`);
+    next();
+  },
   passport.authenticate('google', { failureRedirect: '/auth.html?error=google_failed' }),
   (req, res) => {
     // Explicitly save session before redirecting to ensure it's persisted 
@@ -44,6 +48,7 @@ router.post('/register', validateRegister, async (req, res) => {
 
     const token = jwt.sign({ userId: user._id.toString() }, process.env.JWT_SECRET, { expiresIn: '1d' });
     const url = `${process.env.APP_URL}/api/auth/verify/${token}`;
+    console.log(`[DEBUG] Registration success. Verification URL: ${url}`);
 
     // Send email in background to prevent UI hang
     sendVerificationEmail(email, url, username).catch(err => console.error("Background Email Error:", err));

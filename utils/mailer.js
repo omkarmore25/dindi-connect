@@ -42,13 +42,18 @@ const sendVerificationEmail = async (to, verificationLink, name) => {
             `
         };
 
-        const info = await transporter.sendMail(mailOptions);
-        console.log("Email sent successfully: ", info.messageId);
-        return true;
-    } catch (error) {
-        console.error("Email processing failed: ", error);
-        return false;
-    }
+    const info = await transporter.sendMail(mailOptions);
+    console.log("[MAIL] Email sent successfully:", info.messageId);
+    return true;
+  } catch (error) {
+    console.error("[MAIL ERROR] Full details:", {
+      message: error.message,
+      code: error.code,
+      command: error.command,
+      response: error.response
+    });
+    return false;
+  }
 };
 
 /**
@@ -84,13 +89,17 @@ const sendPasswordResetEmail = async (to, resetLink, name) => {
             `
         };
 
-        const info = await transporter.sendMail(mailOptions);
-        console.log("Password reset email sent successfully: ", info.messageId);
-        return true;
-    } catch (error) {
-        console.error("Password reset email processing failed: ", error);
-        return false;
-    }
+    const info = await transporter.sendMail(mailOptions);
+    console.log("[MAIL] Password reset email sent successfully:", info.messageId);
+    return true;
+  } catch (error) {
+    console.error("[MAIL ERROR] Password reset failure:", {
+      message: error.message,
+      code: error.code,
+      response: error.response
+    });
+    return false;
+  }
 };
 
 module.exports = { sendVerificationEmail, sendPasswordResetEmail };
