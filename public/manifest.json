@@ -17,13 +17,13 @@
   "icons": [
     {
       "src": "/images/icon-192.png",
-      "sizes": "192x192",
+      "sizes": "192x192 512x512 1024x1024",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
       "src": "/images/icon-512.png",
-      "sizes": "512x512",
+      "sizes": "192x192 512x512 1024x1024",
       "type": "image/png",
       "purpose": "any maskable"
     }
@@ -31,14 +31,14 @@
   "screenshots": [
     {
       "src": "/images/og-image.png",
-      "sizes": "1200x630",
+      "sizes": "1024x1024",
       "type": "image/png",
       "form_factor": "wide",
       "label": "Dindi Connect Dashboard"
     },
     {
       "src": "/images/og-image.png",
-      "sizes": "1200x630",
+      "sizes": "1024x1024",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Mobile Support"
