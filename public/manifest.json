@@ -9,47 +9,23 @@
   "background_color": "#0f172a",
   "theme_color": "#f97316",
   "orientation": "portrait",
-  "categories": ["lifestyle", "social", "community"],
+  "categories": [
+    "lifestyle",
+    "social",
+    "community"
+  ],
   "icons": [
     {
-      "src": "images/icon-192.png",
+      "src": "/images/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "images/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "images/icon-512.png",
+      "src": "/images/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "images/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "images/og-image.png",
-      "sizes": "1200x630",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Dindi Connect Dashboard"
-    },
-    {
-      "src": "images/og-image.png",
-      "sizes": "1200x630",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Mobile Support"
+      "purpose": "any maskable"
     }
   ]
 }
