@@ -1,10 +1,12 @@
 // Dindi Connect - Service Worker
-const CACHE_NAME = 'dindi-connect-v3';
+const CACHE_NAME = 'dindi-connect-v6';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/calendar.html',
   '/auth.html',
+  '/contact.html',
+  '/refund-policy.html',
   '/css/style.css',
   '/js/main.js',
   '/images/icon-192.png',

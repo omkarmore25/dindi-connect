@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dindi - Help & Contact</title>
+  <meta name="description"
+    content="Contact the Dindi Connect support team for payment help, technical issues, or general queries.">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#f97316">
+  <link rel="apple-touch-icon" href="/images/icon-192.png">
+  <link href="/css/style.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+
+    body {
+      background-image: radial-gradient(at 0% 0%, rgba(251, 146, 60, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(234, 88, 12, 0.1) 0px, transparent 50%);
+      background-attachment: fixed;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .dark body {
+      background-image: radial-gradient(at 0% 0%, rgba(251, 146, 60, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(79, 70, 229, 0.15) 0px, transparent 50%);
+    }
+
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .dark .glass-nav {
+      background: rgba(15, 23, 42, 0.75);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .dark .glass-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .contact-input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 16px;
+      border: 1.5px solid rgba(148, 163, 184, 0.25);
+      background: rgba(255, 255, 255, 0.6);
+      color: #1e293b;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .dark .contact-input {
+      background: rgba(15, 23, 42, 0.7);
+      color: #f1f5f9;
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .contact-input:focus {
+      outline: none;
+      border-color: #f97316;
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+    }
+
+    .quick-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+      border-radius: 20px;
+      border: 1.5px solid rgba(148, 163, 184, 0.2);
+      background: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      transition: all 0.25s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .dark .quick-btn {
+      background: rgba(15, 23, 42, 0.6);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .quick-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark .quick-btn:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .status-msg {
+      display: none;
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+  </style>
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+</head>
+
+<body
+  class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col md:flex-row pb-32 md:pb-0">
+
+  <!-- Sidebar -->
+  <header
+    class="glass-nav sticky top-0 z-50 w-full md:w-72 md:h-screen md:fixed md:flex md:flex-col md:border-r md:border-b-0 px-4 py-3 md:p-6 shadow-sm flex justify-between items-center md:items-start transition-colors">
+    <div class="flex items-center gap-3">
+      <div
+        class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-400 to-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 font-serif">
+        D</div>
+      <h1
+        class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-red-500">
+        Dindi</h1>
+    </div>
+    <nav class="hidden md:flex flex-col gap-2 mt-10 w-full">
+      <a href="/"
+        class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+          </path>
+        </svg>
+        Home
+      </a>
+      <a href="/calendar.html"
+        class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        Calendar
+      </a>
+      <a href="/auth.html"
+        class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+        </svg>
+        Profile
+      </a>
+      <a href="/contact.html"
+        class="flex items-center gap-3 px-4 py-3 bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-semibold rounded-xl transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z">
+          </path>
+        </svg>
+        Help & Contact
+      </a>
+    </nav>
+    <div class="flex items-center gap-3 md:mt-auto md:w-full md:justify-between">
+      <button id="themeToggle"
+        class="rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition text-slate-500 dark:text-slate-400"
+        aria-label="Toggle Dark Mode">
+        <svg id="themeToggleDarkIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path
+            d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+        </svg>
+        <svg id="themeToggleLightIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="5" />
+          <circle cx="12" cy="3" r="1.5" />
+          <circle cx="12" cy="21" r="1.5" />
+          <circle cx="3" cy="12" r="1.5" />
+          <circle cx="21" cy="12" r="1.5" />
+          <circle cx="5.636" cy="5.636" r="1.5" />
+          <circle cx="18.364" cy="18.364" r="1.5" />
+          <circle cx="5.636" cy="18.364" r="1.5" />
+          <circle cx="18.364" cy="5.636" r="1.5" />
+        </svg>
+      </button>
+      <div id="auth-section" class="text-sm font-medium"></div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="flex-1 md:ml-72 flex flex-col min-h-screen">
+    <main class="flex-1 px-4 py-8 md:px-10 md:py-12 max-w-3xl animate-fade-in">
+
+      <!-- Hero -->
+      <div class="mb-8">
+        <span class="text-brand-500 text-xs font-bold uppercase tracking-widest mb-2 block">🙏 We're Here to Help</span>
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-2">Help & Contact</h2>
+        <p class="text-slate-500 dark:text-slate-400 text-sm md:text-base max-w-xl">Having a payment issue or a
+          technical problem? Reach out to us and we'll get back to you as quickly as possible.</p>
+      </div>
+
+      <!-- Payment Alert -->
+      <div class="glass-card rounded-2xl p-5 mb-8 border-l-4 border-l-amber-500 flex gap-4 items-start">
+        <div
+          class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+            </path>
+          </svg>
+        </div>
+        <div>
+          <p class="font-bold text-slate-800 dark:text-slate-100 text-sm">Payment Issue?</p>
+          <p class="text-slate-500 dark:text-slate-400 text-xs mt-1 leading-relaxed">Please include your <strong
+              class="text-amber-600 dark:text-amber-400">Transaction ID</strong> or <strong
+              class="text-amber-600 dark:text-amber-400">Order ID</strong> when contacting us. You can find it in your
+            bank statement or payment confirmation email. Payments are processed securely via <strong>Razorpay</strong>
+            — we never store your card details.</p>
+        </div>
+      </div>
+
+      <!-- Quick Contact Buttons -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+        <a href="https://wa.me/919420219144?text=Hello%2C%20I%20need%20help%20with%20Dindi%20Connect" target="_blank"
+          class="quick-btn group">
+          <div
+            class="w-11 h-11 rounded-2xl bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-bold text-slate-800 dark:text-slate-100 text-sm">WhatsApp Support</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Chat with us directly</p>
+          </div>
+          <svg class="w-5 h-5 text-slate-300 dark:text-slate-600 ml-auto" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </a>
+
+        <a href="mailto:omkarmore5178@gmail.com?subject=Help%20Request%20-%20Dindi%20Connect" class="quick-btn group">
+          <div
+            class="w-11 h-11 rounded-2xl bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+              </path>
+            </svg>
+          </div>
+          <div>
+            <p class="font-bold text-slate-800 dark:text-slate-100 text-sm">Email Support</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">omkarmore5178@gmail.com</p>
+          </div>
+          <svg class="w-5 h-5 text-slate-300 dark:text-slate-600 ml-auto" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </a>
+      </div>
+
+
+      <!-- Contact Form -->
+      <div class="glass-card rounded-3xl p-6 md:p-8 mb-8">
+        <h3 class="font-bold text-xl text-slate-800 dark:text-slate-100 mb-1">Send Us a Message</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Fill out the form and we'll get back to you on the
+          mobile number or email you provide.</p>
+
+        <form id="contactForm" class="flex flex-col gap-5">
+          <div class="space-y-1.5">
+            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Your Name</label>
+            <input id="cf_name" type="text" placeholder="Full name" class="contact-input" required>
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Mobile Number</label>
+            <input id="cf_mobile" type="tel" placeholder="Your WhatsApp number" class="contact-input" required>
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Reason for Contact</label>
+            <select id="cf_reason" class="contact-input">
+              <option value="">Select a reason...</option>
+              <option value="payment">Payment Issue</option>
+              <option value="refund">Refund Request</option>
+              <option value="profile">Group Profile Help</option>
+              <option value="technical">Technical Glitch / Bug</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Transaction ID (if payment
+              issue)</label>
+            <input id="cf_txn" type="text" placeholder="e.g. pay_XXXXXXXXXXXXXXXX" class="contact-input">
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Your Message</label>
+            <textarea id="cf_message" rows="4" placeholder="Describe your issue in detail..."
+              class="contact-input resize-none" required></textarea>
+          </div>
+
+          <div id="contactStatus" class="status-msg"></div>
+
+          <button type="submit" id="contactSubmitBtn"
+            class="py-4 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/20 transition transform hover:-translate-y-0.5 active:scale-[0.98]">
+            Send Message
+          </button>
+        </form>
+      </div>
+
+      <!-- Business Info (Required for Payment Gateway Compliance) -->
+      <div class="glass-card rounded-2xl p-5 mb-8">
+        <h4 class="font-bold text-slate-800 dark:text-slate-100 text-sm mb-3">Business Information</h4>
+        <div class="space-y-2 text-sm text-slate-500 dark:text-slate-400">
+          <p><span class="font-semibold text-slate-700 dark:text-slate-300">Business Name:</span> Dindi Connect</p>
+          <p><span class="font-semibold text-slate-700 dark:text-slate-300">Email:</span> omkarmore5178@gmail.com</p>
+          <p><span class="font-semibold text-slate-700 dark:text-slate-300">Address:</span> Goa, India</p>
+          <p class="pt-2"><a href="/refund-policy.html" class="text-brand-500 font-bold hover:underline inline-flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+            Refund & Cancellation Policy
+          </a></p>
+        </div>
+      </div>
+
+      <!-- Response Time Info -->
+      <div class="glass-card rounded-2xl p-4 mb-8 flex items-center gap-3">
+        <div class="w-2 h-2 rounded-full bg-green-500 animate-ping shrink-0"></div>
+        <p class="text-sm text-slate-600 dark:text-slate-300">We typically respond within <strong>2–4 hours</strong>
+          during 9 AM – 8 PM (IST).</p>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Mobile Bottom Nav -->
+  <nav
+    class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav rounded-3xl px-4 py-3 flex justify-between items-center shadow-xl z-50">
+    <a href="/" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20">
+        <path
+          d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+        </path>
+      </svg>
+      <span class="text-[10px] font-medium">Home</span>
+    </a>
+    <a href="/calendar.html"
+      class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+      </svg>
+      <span class="text-[10px] font-medium">Calendar</span>
+    </a>
+    <a href="/auth.html"
+      class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+      </svg>
+      <span class="text-[10px] font-medium">Profile</span>
+    </a>
+    <a href="/contact.html" class="flex flex-col items-center text-brand-500 transition transform scale-105">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z">
+        </path>
+      </svg>
+      <span class="text-[10px] font-bold">Help</span>
+    </a>
+  </nav>
+
+  <script src="/js/main.js"></script>
+  <script>
+    // Contact form — sends via WhatsApp for now (no backend needed)
+    document.getElementById('contactForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const btn = document.getElementById('contactSubmitBtn');
+      const status = document.getElementById('contactStatus');
+      const name = document.getElementById('cf_name').value.trim();
+      const mobile = document.getElementById('cf_mobile').value.trim();
+      const reason = document.getElementById('cf_reason').value;
+      const txn = document.getElementById('cf_txn').value.trim();
+      const message = document.getElementById('cf_message').value.trim();
+
+      if (!name || !mobile || !message) return;
+
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+
+      // Compose WhatsApp message
+      const waText = `*Dindi Connect Support Request*\n\n*Name:* ${name}\n*Mobile:* ${mobile}\n*Reason:* ${reason || 'Not specified'}\n*Transaction ID:* ${txn || 'N/A'}\n\n*Message:*\n${message}`;
+      const waUrl = `https://wa.me/919420219144?text=${encodeURIComponent(waText)}`;
+
+      // Show instant status
+      status.style.display = 'block';
+      status.style.background = 'rgba(34,197,94,0.1)';
+      status.style.color = '#16a34a';
+      status.style.border = '1px solid rgba(34,197,94,0.3)';
+      status.textContent = 'Preparing message...';
+      
+      // Redirect almost immediately
+      setTimeout(() => {
+        window.location.href = waUrl;
+      }, 400);
+    });
+  </script>
+</body>
+
+</html>

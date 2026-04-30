@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dindi - Refund & Cancellation Policy</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#f97316">
+  <link rel="apple-touch-icon" href="/images/icon-192.png">
+  <link href="/css/style.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+
+    body {
+      background-image: radial-gradient(at 0% 0%, rgba(251, 146, 60, 0.05) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(234, 88, 12, 0.05) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .dark .glass-nav {
+      background: rgba(15, 23, 42, 0.75);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .dark .glass-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .policy-content h3 {
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      font-size: 1.1rem;
+    }
+
+    .dark .policy-content h3 {
+      color: #f1f5f9;
+    }
+
+    .policy-content p {
+      color: #64748b;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .dark .policy-content p {
+      color: #94a3b8;
+    }
+
+    .policy-content ul {
+      list-style-type: disc;
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+      color: #64748b;
+    }
+
+    .dark .policy-content ul {
+      color: #94a3b8;
+    }
+  </style>
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+</head>
+
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen">
+
+  <header class="glass-nav sticky top-0 z-50 w-full px-4 py-3 flex justify-between items-center shadow-sm">
+    <div class="flex items-center gap-3">
+      <a href="/" class="w-8 h-8 rounded-xl bg-brand-500 text-white flex items-center justify-center font-bold shadow-lg shadow-brand-500/30">D</a>
+      <h1 class="text-lg font-bold">Dindi Connect</h1>
+    </div>
+    <a href="/contact.html" class="text-sm font-semibold text-brand-500 hover:underline">Help Center</a>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 py-12">
+    <div class="mb-10 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3">Refund & Cancellation</h2>
+      <p class="text-slate-500 dark:text-slate-400">Last updated: April 30, 2026</p>
+    </div>
+
+    <div class="glass-card rounded-3xl p-6 md:p-10 policy-content shadow-xl">
+      <p>At Dindi Connect, we value the trust you place in us. Please read this policy carefully before making any payments for our services.</p>
+
+      <h3>1. Refund Eligibility</h3>
+      <p>Refunds are only considered in the following circumstances:</p>
+      <ul>
+        <li>Double payment for the same transaction.</li>
+        <li>Technical failure where money was deducted but the <strong>Booking</strong> or <strong>Contribution</strong> was not recorded in our system.</li>
+        <li>Incorrect amount deducted due to a system glitch.</li>
+      </ul>
+
+      <h3>2. Non-Refundable Items</h3>
+      <p>Please note that the following are <strong>strictly non-refundable</strong>:</p>
+      <ul>
+        <li><strong>Advance Payments:</strong> Advance payments made for booking a group are non-refundable once the booking is confirmed and the group has blocked the date for you.</li>
+        <li><strong>Contributions:</strong> Any voluntary contributions made towards a group or cause are non-refundable.</li>
+        <li><strong>Payment Gateway Fees:</strong> The transaction fees charged by our payment partner (approx. 2-3%) are not returned by the gateway and will be deducted from any eligible refund.</li>
+        <li><strong>Missed Events:</strong> No refunds will be issued if the booked event date has passed.</li>
+      </ul>
+
+      <h3>3. Cancellation Policy</h3>
+      <p>You can cancel your booking or group profile at any time. However:</p>
+      <ul>
+        <li>Cancellations will take effect immediately.</li>
+        <li>No partial refunds are provided for any unused portion of the service or for early cancellations.</li>
+      </ul>
+
+      <h3>4. Refund Process</h3>
+      <p>To request a refund, please contact our support team via the <a href="/contact.html" class="text-brand-500 font-bold hover:underline">Contact Center</a> within 48 hours of the transaction. You must provide your <strong>Transaction ID</strong> and <strong>Mobile Number</strong>.</p>
+      <p>Approved refunds will be processed within <strong>5 to 7 working days</strong> and will be credited back to the original payment source (Bank/UPI/Card).</p>
+
+      <div class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 text-center">
+        <p class="text-xs italic">By using Dindi Connect, you agree to these terms. We reserve the right to modify this policy at any time.</p>
+      </div>
+    </div>
+
+    <div class="mt-8 text-center">
+      <a href="/" class="inline-flex items-center gap-2 text-slate-500 hover:text-brand-500 transition font-medium">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        Back to Home
+      </a>
+    </div>
+  </main>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

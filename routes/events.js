@@ -13,21 +13,26 @@ const requireAuth = (req, res, next) => {
 // GET /api/events - Fetch events
 router.get('/', async (req, res) => {
   try {
+    // AUTOMATIC CLEANUP: Delete events where the date has already passed
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    try {
+      await Event.deleteMany({ date: { $lt: today } });
+    } catch (cleanupErr) {
+      console.error('Failed to auto-cleanup expired events:', cleanupErr);
+    }
+
     let filter = {};
     if (req.query.groupId) {
        filter.performingGroupId = req.query.groupId;
-       // When fetching for a specific group (Dashboard view), we might want all events or just future ones.
-       // Let's sort them by date descending for dashboard.
+       filter.date = { $gte: today }; // Only future events for dashboard too
        const events = await Event.find(filter)
                                  .populate('performingGroupId', 'groupName contactNumber acceptingBookings')
-                                 .sort({ date: -1 });
+                                 .sort({ date: 1 });
        return res.json(events.filter(e => e.performingGroupId != null));
     } else {
        // Only fetch events from today onwards for the main calendar
-       const today = new Date();
-       today.setHours(0, 0, 0, 0);
-       filter.date = { $gte: today };
-       const events = await Event.find(filter)
+       const events = await Event.find({ date: { $gte: today } })
                                  .populate('performingGroupId', 'groupName contactNumber acceptingBookings')
                                  .sort({ date: 1 });
        return res.json(events.filter(e => e.performingGroupId != null));

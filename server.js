@@ -12,6 +12,8 @@ const User = require('./models/User');
 const { generalLimiter, authLimiter } = require('./middleware/rateLimiter');
 const { sanitizeBody, enforceLimits } = require('./middleware/sanitize');
 const helmet = require('helmet');
+const keepAlive = require('./keep_alive');
+
 
 // Validate critical environment variables on startup
 const REQUIRED_ENV = ['SESSION_SECRET', 'JWT_SECRET', 'MONGODB_URI'];
@@ -147,6 +149,10 @@ const PORT = process.env.PORT || 3000;
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('Connected to MongoDB');
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+      keepAlive(); // Start the keep-alive pings
+    });
   })
   .catch((err) => console.error('MongoDB connection error:', err));
+

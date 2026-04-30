@@ -57,11 +57,18 @@
       border: 1px solid rgba(255, 255, 255, 0.4);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
+    .dark .glass-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
     
     .dark .glass-card {
-      background: rgba(30, 41, 59, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
     }
 
     .glass-input {
@@ -109,16 +116,124 @@
       position: absolute;
       top: 0.5rem;
       right: 0.5rem;
-      background: rgba(239, 68, 68, 0.9);
+      background: rgba(239, 68, 68, 0.95);
       color: white;
-      padding: 0.4rem;
-      border-radius: 0.75rem;
-      opacity: 0;
-      transition: all 0.2s;
+      padding: 0.5rem;
+      border-radius: 0.8rem;
+      opacity: 1; /* Always visible for mobile accessibility */
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
     }
-    .photo-container:hover .photo-delete-btn {
-      opacity: 1;
+    .photo-delete-btn:hover {
+      z-index: 20;
     }
+    .photo-delete-btn:hover {
+      transform: scale(1.1);
+      background: #ef4444;
+    }
+    .photo-delete-btn:active {
+      transform: scale(0.9);
+    }
+
+    /* Premium Dashboard Styles to fix contrast issues */
+    .premium-dash-btn {
+      background-color: #ffffff !important;
+      color: #1e293b !important;
+      border: 1px solid #f1f5f9 !important;
+      transition: all 0.3s ease !important;
+    }
+    .dark .premium-dash-btn {
+      background-color: #1e293b !important;
+      color: #f8fafc !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    .premium-dash-btn:hover {
+      background-color: #f97316 !important; /* brand-500 */
+      color: #ffffff !important;
+      border-color: #f97316 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(249, 115, 22, 0.3);
+    }
+    .premium-dash-btn .icon-box {
+      background-color: #fff7ed !important; /* brand-50 */
+      color: #ea580c !important; /* brand-600 */
+    }
+    .dark .premium-dash-btn .icon-box {
+      background-color: rgba(249, 115, 22, 0.1) !important;
+      color: #fb923c !important; /* brand-400 */
+    }
+    .premium-dash-btn:hover .icon-box {
+      background-color: rgba(255, 255, 255, 0.2) !important;
+      color: #ffffff !important;
+    }
+
+    .premium-input {
+      background-color: rgba(255, 255, 255, 0.9) !important;
+      color: #1e293b !important;
+      border: 1px solid #e2e8f0 !important;
+    }
+    .dark .premium-input {
+      background-color: rgba(15, 23, 42, 0.8) !important;
+      color: #f8fafc !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    .premium-input:focus {
+      border-color: #f97316 !important;
+      box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2) !important;
+    }
+
+    #dashDeleteBtn {
+      background-color: #ef4444 !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.39) !important;
+    }
+    #dashDeleteBtn:hover {
+      background-color: #dc2626 !important;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(220, 38, 38, 0.23) !important;
+    }
+    
+    .back-btn-premium {
+      color: #ea580c !important;
+    }
+    .dark .back-btn-premium {
+      color: #fb923c !important;
+    }
+
+
+    .premium-dash-btn svg, .premium-dash-btn div {
+      pointer-events: none !important;
+    }
+
+    .premium-event-card {
+      background-color: #ffffff !important;
+      color: #1e293b !important;
+      border: 1px solid #f1f5f9 !important;
+      padding: 0.75rem 1rem !important;
+      border-radius: 1.25rem !important;
+    }
+    .dark .premium-event-card {
+      background-color: rgba(30, 41, 59, 0.4) !important;
+      color: #f8fafc !important;
+      border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    }
+    .premium-event-card .date-box {
+      background-color: #fff7ed !important;
+      color: #ea580c !important;
+      border: 1px solid #ffedd5 !important;
+      width: 42px !important;
+      height: 42px !important;
+    }
+    .dark .premium-event-card .date-box {
+      background-color: rgba(249, 115, 22, 0.1) !important;
+      color: #fb923c !important;
+      border: 1px solid rgba(249, 115, 22, 0.1) !important;
+    }
+
   </style>
 
   <script>
@@ -149,15 +264,29 @@
         Calendar
       </a>
       <a href="/auth.html" class="flex items-center gap-3 px-4 py-3 bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-semibold rounded-xl transition">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
         Profile
+      </a>
+      <a href="/contact.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        Help & Contact
       </a>
     </nav>
 
     <div class="flex items-center gap-3 md:mt-auto md:w-full md:justify-between">
-      <button id="themeToggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition text-slate-500 dark:text-slate-400" aria-label="Toggle Dark Mode">
-        <svg id="themeToggleDarkIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-        <svg id="themeToggleLightIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 2.32a1 1 0 011.415 1.415l-.707.707a1 1 0 01-1.414-1.414l.707-.707zm-9.855.707a1 1 0 010-1.414l.707-.707a1 1 0 111.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 6a4 4 0 100 8 4 4 0 000-8zm-5 4a1 1 0 11-2 0 1 1 0 012 0zm14 0a1 1 0 11-2 0 1 1 0 012 0zm-5.657 5.657a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-2.32a1 1 0 01-1.415-1.415l.707-.707a1 1 0 011.414 1.414l-.707.707z" clip-rule="evenodd"></path></svg>
+      <button id="themeToggle" class="rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition text-slate-500 dark:text-slate-400" aria-label="Toggle Dark Mode">
+        <svg id="themeToggleDarkIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>
+        <svg id="themeToggleLightIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="5" />
+          <circle cx="12" cy="3" r="1.5" />
+          <circle cx="12" cy="21" r="1.5" />
+          <circle cx="3" cy="12" r="1.5" />
+          <circle cx="21" cy="12" r="1.5" />
+          <circle cx="5.636" cy="5.636" r="1.5" />
+          <circle cx="18.364" cy="18.364" r="1.5" />
+          <circle cx="5.636" cy="18.364" r="1.5" />
+          <circle cx="18.364" cy="5.636" r="1.5" />
+        </svg>
       </button>
     </div>
   </header>
@@ -300,88 +429,180 @@
         </div>
 
         <!-- Owner Dashboard Section -->
-        <div id="ownerDashboardSection" class="hidden glass-card p-6 md:p-8 rounded-3xl mt-4 relative">
-          <button type="button" id="backToListBtn" class="mb-5 inline-flex items-center gap-1.5 text-sm text-brand-600 dark:text-brand-400 font-bold hover:underline transition">
-             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-             Back to My Groups
-          </button>
-          
-          <h3 class="font-bold text-2xl mb-2 text-slate-800 dark:text-slate-100" id="dashGroupName">Your Group</h3>
-          <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Manage your public profile</p>
-
-          <form id="dashUpdateForm" class="flex flex-col gap-4 text-sm">
-            <input type="text" id="dashEditGroupName" placeholder="Group Name" class="p-3.5 glass-input rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-500 transition" required>
-            <input type="text" id="dashLeaderName" placeholder="Dindi Pramukh" class="p-3.5 glass-input rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-500 transition" required>
-            <input type="number" id="dashMemberCount" placeholder="Members Count" class="p-3.5 glass-input rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-500 transition" required>
-            <input type="text" id="dashContact" placeholder="Contact WhatsApp" class="p-3.5 glass-input rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-500 transition" required>
-            <input type="text" id="dashRegId" placeholder="Registration ID / Number (Optional)" class="p-3.5 glass-input rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-500 transition">
-            <textarea id="dashDesc" rows="4" placeholder="About Us Description. E.g. 'We originated in Pandharpur in 2012...'" class="p-3.5 glass-input rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-500 transition resize-none"></textarea>
-            <input type="text" id="dashAchieve" placeholder="Achievements (comma separated)" class="p-3.5 glass-input rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-500 transition">
+        <div id="ownerDashboardSection" class="hidden glass-card rounded-[2.5rem] overflow-hidden animate-fade-in w-full shadow-2xl border-t-4 border-brand-500">
+          <!-- Master Header -->
+          <div class="p-8 md:p-10 border-b border-slate-200 dark:border-brand-500/20 relative overflow-hidden bg-gradient-to-br from-brand-50/80 to-white dark:from-brand-900/20 dark:to-slate-900/40">
+            <div class="absolute -top-20 -right-20 w-64 h-64 bg-brand-500/10 rounded-full blur-[80px] animate-pulse"></div>
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-400 via-red-500 to-brand-600"></div>
             
-            <label class="flex items-center gap-3 mt-2 mb-2 cursor-pointer">
-              <input type="checkbox" id="dashAccepting" class="w-5 h-5 text-brand-500 rounded focus:ring-brand-500 accent-brand-500 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600">
-              <span class="text-slate-600 dark:text-slate-300 font-medium">Open for Invitations</span>
-            </label>
-            
-            <button type="submit" class="py-3.5 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/20 transition transform hover:-translate-y-0.5" id="dashUpdateBtn">Save Changes</button>
-          </form>
-
-          <hr class="my-8 border-slate-200 dark:border-slate-700">
-
-          <form id="dashPhotoForm" class="flex flex-col gap-4 text-sm">
-            <div>
-              <h4 class="font-bold text-slate-800 dark:text-slate-100 text-lg">Add to Gallery</h4>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload photos to show off your performances</p>
+            <button type="button" id="backToListBtn" class="back-btn-premium mb-6 inline-flex items-center gap-2 text-sm font-bold hover:gap-3 transition-all group">
+               <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+               Back to My Groups
+            </button>
+            <h3 class="font-bold text-3xl md:text-4xl text-slate-900 dark:text-white tracking-tight leading-tight" id="dashGroupName">Your Group</h3>
+            <div class="flex items-center gap-2 mt-2">
+              <span class="w-2 h-2 rounded-full bg-brand-500 animate-ping"></span>
+              <p class="text-[10px] text-brand-600 dark:text-brand-400 font-black uppercase tracking-[0.2em]">Management Dashboard</p>
             </div>
-            
-            <div class="relative">
-              <input type="file" id="dashPhotoFile" accept="image/*" class="w-full p-3 glass-input rounded-xl cursor-pointer file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-900/30 dark:file:text-brand-400 transition" required>
-            </div>
-            
-            <button type="submit" class="py-3.5 bg-slate-800 dark:bg-slate-700 text-white font-bold rounded-2xl shadow-md hover:bg-slate-900 dark:hover:bg-slate-600 transition hover:-translate-y-0.5" id="dashPhotoBtn">Upload Photo</button>
-          </form>
-
-          <div id="dashPhotoGallery" class="mt-6 grid grid-cols-2 gap-4">
-             <!-- Photos with delete buttons injected here -->
           </div>
 
-          <hr class="my-8 border-slate-200 dark:border-slate-700">
-
-          <div class="mb-6">
-            <h4 class="font-bold text-slate-800 dark:text-slate-100 text-lg">Upcoming Performances</h4>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Manage events where your group is performing</p>
-          </div>
-
-          <form id="dashEventForm" class="flex flex-col gap-4 text-sm mb-6 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700">
-            <input type="text" id="dashEventTemple" placeholder="Event / Temple Name" class="p-3.5 glass-input rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-500 transition bg-white dark:bg-slate-900" required>
-            <input type="text" id="dashEventVillage" placeholder="Village / Location" class="p-3.5 glass-input rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-500 transition bg-white dark:bg-slate-900" required>
-            <div>
-              <label class="block text-xs text-slate-500 mb-1 ml-1">Event Date</label>
-              <input type="date" id="dashEventDate" class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-500 transition bg-white dark:bg-slate-900" required>
-            </div>
+          <!-- Master Content Area -->
+          <div class="p-6 md:p-8 bg-white/30 dark:bg-slate-900/50">
             
-            <div class="mt-2 relative z-0">
-              <label class="block text-xs text-slate-500 mb-2 ml-1">Map Location (Optional) - Search or click on the map</label>
-              <button type="button" id="openDashMapBtn" class="w-full p-3.5 glass-input rounded-xl border border-brand-200 dark:border-brand-800 text-brand-600 dark:text-brand-400 font-bold hover:bg-brand-50 dark:hover:bg-brand-900/30 transition flex items-center justify-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                <span id="dashMapBtnText">Pick Location on Map</span>
+            <!-- SUB-SELECTION MENU -->
+            <div id="dashMenuState" class="grid grid-cols-1 gap-5 animate-fade-in">
+              <button type="button" id="showEditProfileBtn" class="premium-dash-btn flex items-center gap-5 p-7 rounded-[2rem] group transition-all duration-500 text-left relative overflow-hidden shadow-lg">
+                <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                <div class="icon-box w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-all duration-500 shadow-inner border border-brand-100/50 dark:border-brand-800/50 pointer-events-none">
+                  <svg class="w-8 h-8 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                </div>
+                <div class="flex-1 relative z-10 pointer-events-none">
+                  <h4 class="font-bold text-xl tracking-tight pointer-events-none">Edit Profile</h4>
+                  <p class="opacity-70 text-sm mt-0.5 pointer-events-none">Update details, bio, and gallery</p>
+                </div>
+                <div class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 dark:bg-slate-700/50 group-hover:bg-white/20 text-slate-400 group-hover:text-white transition-all pointer-events-none">
+                  <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
               </button>
-              <input type="hidden" id="dashEventLat">
-              <input type="hidden" id="dashEventLng">
-              <button type="button" id="dashEventClearMap" class="w-full mt-2 p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/30 rounded-xl font-bold hover:bg-red-100 dark:hover:bg-red-900/40 transition hidden">Clear Location</button>
-            </div>
-            
-            <button type="submit" class="py-3 bg-brand-100 hover:bg-brand-200 dark:bg-brand-900/30 dark:hover:bg-brand-900/50 text-brand-700 dark:text-brand-400 font-bold rounded-xl shadow-sm transition" id="dashEventBtn">Add Event</button>
-          </form>
 
-          <div id="dashEventsList" class="flex flex-col gap-3">
-             <!-- Events injected here -->
+              <button type="button" id="showManageEventsBtn" class="premium-dash-btn flex items-center gap-5 p-7 rounded-[2rem] group transition-all duration-500 text-left relative overflow-hidden shadow-lg">
+                <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                <div class="icon-box w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-all duration-500 shadow-inner border border-brand-100/50 dark:border-brand-800/50 pointer-events-none">
+                  <svg class="w-8 h-8 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <div class="flex-1 relative z-10 pointer-events-none">
+                  <h4 class="font-bold text-xl tracking-tight pointer-events-none">Performances</h4>
+                  <p class="opacity-70 text-sm mt-0.5 pointer-events-none">Add or remove upcoming events</p>
+                </div>
+                <div class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 dark:bg-slate-700/50 group-hover:bg-white/20 text-slate-400 group-hover:text-white transition-all pointer-events-none">
+                  <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+              </button>
+            </div>
+
+            <!-- EDIT PROFILE SECTION -->
+            <div id="dashEditProfileState" class="hidden animate-fade-in">
+              <button type="button" class="backToDashMenu mb-6 inline-flex items-center gap-2 text-sm text-brand-600 dark:text-brand-400 font-bold hover:gap-3 transition-all group">
+                <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Back to Dashboard
+              </button>
+              
+              <form id="dashUpdateForm" class="flex flex-col gap-5 text-sm animate-fade-in">
+                <div class="space-y-1.5">
+                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Group Name</label>
+                  <input type="text" id="dashEditGroupName" placeholder="Group Name" class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Dindi Pramukh</label>
+                  <input type="text" id="dashLeaderName" placeholder="Dindi Pramukh" class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Members Count</label>
+                  <input type="number" id="dashMemberCount" placeholder="Members Count" class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">WhatsApp Contact</label>
+                  <input type="text" id="dashContact" placeholder="Contact WhatsApp" class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Registration ID (Optional)</label>
+                  <input type="text" id="dashRegId" placeholder="Registration ID / Number" class="premium-input w-full p-4 rounded-2xl focus:outline-none transition">
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">About Our Group</label>
+                  <textarea id="dashDesc" rows="4" placeholder="E.g. 'We originated in Pandharpur in 2012...'" class="premium-input w-full p-4 rounded-2xl focus:outline-none transition resize-none"></textarea>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Achievements (Comma separated)</label>
+                  <input type="text" id="dashAchieve" placeholder="Best Dindi Award 2023, Pandharpur Yatra..." class="premium-input w-full p-4 rounded-2xl focus:outline-none transition">
+                </div>
+                
+                <label class="flex items-center gap-3 mt-2 cursor-pointer">
+                  <input type="checkbox" id="dashAccepting" class="w-5 h-5 text-brand-500 rounded focus:ring-brand-500 accent-brand-500 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600">
+                  <span class="text-slate-600 dark:text-slate-300 font-medium">Open for Invitations</span>
+                </label>
+                
+                <button type="submit" class="py-3.5 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/20 transition transform hover:-translate-y-0.5" id="dashUpdateBtn">Save Changes</button>
+              </form>
+
+              <hr class="my-8 border-slate-200 dark:border-brand-500/20">
+
+              <form id="dashPhotoForm" class="flex flex-col gap-4 text-sm">
+                <div>
+                  <h4 class="font-bold text-slate-800 dark:text-slate-100 text-lg">Add to Gallery</h4>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload photos to show off your performances</p>
+                </div>
+                
+                <div class="relative">
+                  <input type="file" id="dashPhotoFile" accept="image/*" class="w-full p-3 glass-input rounded-xl cursor-pointer file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-900/30 dark:file:text-brand-400 transition" required>
+                </div>
+                
+                <button type="submit" class="py-3.5 bg-slate-800 dark:bg-slate-700 text-white font-bold rounded-2xl shadow-md hover:bg-slate-900 dark:hover:bg-slate-600 transition hover:-translate-y-0.5" id="dashPhotoBtn">Upload Photo</button>
+              </form>
+
+              <div id="dashPhotoGallery" class="mt-6 grid grid-cols-2 gap-4">
+                 <!-- Photos injected here -->
+              </div>
+            </div>
+
+            <!-- MANAGE EVENTS SECTION -->
+            <div id="dashEventsState" class="hidden animate-fade-in">
+              <button type="button" class="backToDashMenu mb-6 inline-flex items-center gap-2 text-sm text-brand-600 dark:text-brand-400 font-bold hover:gap-3 transition-all group">
+                <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Back to Dashboard
+              </button>
+
+              <div class="mb-8 text-left">
+                <h4 class="font-bold text-slate-900 dark:text-white text-2xl tracking-tight leading-tight">Upcoming Performances</h4>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Keep your performance schedule up to date</p>
+              </div>
+
+              <form id="dashEventForm" class="flex flex-col gap-5 mb-10 bg-brand-50/20 dark:bg-brand-900/10 p-6 rounded-[2rem] border border-brand-100 dark:border-brand-500/20 shadow-inner animate-fade-in">
+                <div class="space-y-1.5">
+                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Event / Temple Name</label>
+                  <input type="text" id="dashEventTemple" placeholder="Enter name..." class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Village / Location</label>
+                  <input type="text" id="dashEventVillage" placeholder="Village name..." class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Event Date</label>
+                  <input type="date" id="dashEventDate" class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Map Location (Optional)</label>
+                  <button type="button" id="openDashMapBtn" class="premium-dash-btn w-full p-4 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-sm group">
+                    <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span id="dashMapBtnText">Pick Location on Map</span>
+                  </button>
+                  <input type="hidden" id="dashEventLat">
+                  <input type="hidden" id="dashEventLng">
+                  <button type="button" id="dashEventClearMap" class="w-full mt-2 p-3 bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400 border border-red-200/30 rounded-xl font-bold hover:bg-red-100 transition hidden">Clear Location</button>
+                </div>
+                <button type="submit" class="py-4 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/20 transition transform hover:-translate-y-0.5 active:scale-[0.98]" id="dashEventBtn">Add Event to Schedule</button>
+              </form>
+
+              <div id="dashEventsList" class="flex flex-col gap-3">
+                 <!-- Events injected here -->
+              </div>
+            </div>
           </div>
-          
-          <div class="mt-8 text-center pt-8 border-t border-red-100 dark:border-red-900/20">
-             <button type="button" id="dashDeleteBtn" class="text-sm text-red-500 hover:text-red-700 font-bold px-4 py-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition">Permanently Delete Group</button>
+
+          <!-- Master Footer -->
+          <div class="p-8 border-t border-slate-200 dark:border-brand-500/10 text-center bg-slate-50/50 dark:bg-slate-900/50">
+             <button type="button" id="dashDeleteBtn" class="w-full py-4 bg-red-500 hover:bg-red-600 text-white font-bold rounded-2xl shadow-lg shadow-red-500/20 transition-all transform hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2 group">
+               <svg class="w-5 h-5 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+               Permanently Delete Group
+             </button>
           </div>
         </div>
+
+
+
+
+
+
 
         <!-- Organizer - My Competitions List -->
         <div id="myCompetitionsListSection" class="hidden glass-card p-6 md:p-8 rounded-3xl mt-4">
@@ -500,6 +721,26 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-geosearch@3.11.1/dist/bundle.min.js"></script>
   
-  <script src="/js/main.js?v=7"></script>
+  <!-- Mobile Floating Bottom Nav -->
+  <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav rounded-3xl px-4 py-3 flex justify-between items-center shadow-xl z-50">
+    <a href="/" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+      <span class="text-[10px] font-medium">Home</span>
+    </a>
+    <a href="/calendar.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+      <span class="text-[10px] font-medium">Calendar</span>
+    </a>
+    <a href="/auth.html" class="flex flex-col items-center text-brand-500 transition transform scale-105">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+      <span class="text-[10px] font-bold">Profile</span>
+    </a>
+    <a href="/contact.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+      <span class="text-[10px] font-medium">Help</span>
+    </a>
+  </nav>
+
+  <script src="/js/main.js?v=8"></script>
 </body>
 </html>

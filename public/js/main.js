@@ -255,7 +255,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         const message = encodeURIComponent(`Hello, I found your Dindi group (${g.groupName}) on Dindi. Are you available for a performance?`);
         
         if (g.acceptingBookings) {
-          innerFlex.innerHTML = `<a href="https://wa.me/${g.contactNumber}?text=${message}" target="_blank" 
+          const waLink = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+            ? `whatsapp://send?phone=${g.contactNumber}&text=${message}`
+            : `https://wa.me/${g.contactNumber}?text=${message}`;
+            
+          innerFlex.innerHTML = `<a href="${waLink}" target="_blank" 
           class="flex-1 text-center bg-green-500 hover:bg-green-600 text-white py-3.5 rounded-2xl font-bold transition transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-green-500/20 flex items-center justify-center gap-2">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.012 2C6.486 2 2 6.486 2 12.013c0 1.77.464 3.447 1.341 4.954L2 22l5.194-1.319A9.957 9.957 0 0012.012 22C17.538 22 22 17.538 22 12.013 22 6.486 17.538 2 12.012 2zM17.135 15.65c-.237.669-1.378 1.28-1.895 1.332-.516.052-.942.278-3.042-.596-2.531-1.054-4.148-3.666-4.272-3.832-.124-.165-1.021-1.353-1.021-2.584 0-1.231.639-1.839.866-2.066.227-.227.495-.284.66-.284.165 0 .33 0 .474.008.155.008.361-.061.567.433.216.516.732 1.802.794 1.925.062.124.103.268.021.433-.082.165-.124.268-.247.412-.124.144-.258.319-.371.433-.124.124-.258.258-.113.505.144.247.639 1.061 1.371 1.711.948.845 1.741 1.103 1.989 1.226.247.124.392.103.536-.062.144-.165.618-.721.783-.969.165-.247.33-.206.556-.124.227.082 1.443.68 1.69.804.247.124.412.185.474.288.062.103.062.608-.175 1.278z"/></svg>
             Invite via WhatsApp
@@ -506,12 +510,44 @@ document.addEventListener('DOMContentLoaded', async () => {
               const container = document.getElementById('myGroupsContainer');
               const regSection = document.getElementById('groupRegistrationSection');
               const editSection = document.getElementById('ownerDashboardSection');
+                         // Dashboard Sections
+              const editMenu = document.getElementById('dashMenuState');
+              const editProfile = document.getElementById('dashEditProfileState');
+              const editEvents = document.getElementById('dashEventsState');
               
               const showList = () => {
                  listSection.classList.remove('hidden');
                  regSection.classList.add('hidden');
                  editSection.classList.add('hidden');
+                 // Reset dash to menu state
+                 editMenu.classList.remove('hidden');
+                 editProfile.classList.add('hidden');
+                 editEvents.classList.add('hidden');
               };
+
+              // DASHBOARD MENU NAVIGATION
+              document.getElementById('showEditProfileBtn').onclick = (e) => {
+                 e.preventDefault();
+                 editMenu.classList.add('hidden');
+                 editProfile.classList.remove('hidden');
+                 editEvents.classList.add('hidden');
+              };
+              
+              document.getElementById('showManageEventsBtn').onclick = (e) => {
+                 e.preventDefault();
+                 editMenu.classList.add('hidden');
+                 editEvents.classList.remove('hidden');
+                 editProfile.classList.add('hidden');
+              };
+
+              document.querySelectorAll('.backToDashMenu').forEach(btn => {
+                 btn.onclick = (e) => {
+                    e.preventDefault();
+                    editMenu.classList.remove('hidden');
+                    editProfile.classList.add('hidden');
+                    editEvents.classList.add('hidden');
+                 };
+              });
               
               document.getElementById('showRegisterBtn').onclick = () => {
                  listSection.classList.add('hidden');
@@ -521,6 +557,8 @@ document.addEventListener('DOMContentLoaded', async () => {
               
               document.getElementById('cancelRegisterBtn').onclick = showList;
               document.getElementById('backToListBtn').onclick = showList;
+
+
 
               if (groups.length === 0) {
                  listSection.classList.add('hidden');
@@ -666,18 +704,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 }
                                 events.forEach(evt => {
                                    const div = document.createElement('div');
-                                   div.className = 'glass-input p-3 rounded-xl flex justify-between items-center bg-white dark:bg-slate-900 shadow-sm border border-slate-100 dark:border-slate-800';
+                                   div.className = 'premium-event-card flex items-center justify-between shadow-sm hover:shadow-md transition-all group mb-2';
                                    const evtDate = new Date(evt.date);
-                                   div.className = 'glass-card p-3 rounded-xl flex items-center justify-between text-xs border border-slate-100 dark:border-slate-800';
-                                   div.innerHTML = `
-                                     <div>
-                                        <div class="font-bold text-slate-700 dark:text-slate-200">${evt.templeName}</div>
-                                        <div class="text-slate-500">${new Date(evt.date).toLocaleDateString()} - ${evt.village}</div>
-                                     </div>
-                                     <button class="text-red-500 hover:text-red-700 p-2 ml-2 transition">
-                                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                     </button>
-                                   `;
+                                    div.innerHTML = `
+                                      <div class="flex items-center gap-3">
+                                         <div class="date-box rounded-xl flex flex-col items-center justify-center shrink-0">
+                                            <span class="text-[9px] font-black uppercase leading-none">${evtDate.toLocaleString('default', { month: 'short' })}</span>
+                                            <span class="text-base font-bold leading-none mt-0.5">${evtDate.getDate()}</span>
+                                         </div>
+                                         <div class="min-w-0">
+                                            <div class="font-bold text-sm truncate">${evt.templeName}</div>
+                                            <div class="text-[10px] opacity-60 font-medium truncate">${evt.village}</div>
+                                         </div>
+                                      </div>
+                                      <button class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all active:scale-90 shrink-0" title="Remove Event">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                      </button>
+                                    `;
                                    div.querySelector('button').onclick = async () => {
                                       if(await showConfirm('Remove this event?')) {
                                          try {
@@ -1249,7 +1292,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             statusBadge.textContent = 'Open for Invitations';
             
             const message = encodeURIComponent(`Hello, I found your Dindi group (${group.groupName}) on Dindi. Are you available for a performance?`);
-            actionBtn.innerHTML = `<a href="https://wa.me/${group.contactNumber}?text=${message}" target="_blank" 
+            const waLink = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+              ? `whatsapp://send?phone=${group.contactNumber}&text=${message}`
+              : `https://wa.me/${group.contactNumber}?text=${message}`;
+
+            actionBtn.innerHTML = `<a href="${waLink}" target="_blank" 
               class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3.5 rounded-2xl font-bold transition transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-green-500/20">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.012 2C6.486 2 2 6.486 2 12.013c0 1.77.464 3.447 1.341 4.954L2 22l5.194-1.319A9.957 9.957 0 0012.012 22C17.538 22 22 17.538 22 12.013 22 6.486 17.538 2 12.012 2zM17.135 15.65c-.237.669-1.378 1.28-1.895 1.332-.516.052-.942.278-3.042-.596-2.531-1.054-4.148-3.666-4.272-3.832-.124-.165-1.021-1.353-1.021-2.584 0-1.231.639-1.839.866-2.066.227-.227.495-.284.66-.284.165 0 .33 0 .474.008.155.008.361-.061.567.433.216.516.732 1.802.794 1.925.062.124.103.268.021.433-.082.165-.124.268-.247.412-.124.144-.258.319-.371.433-.124.124-.258.258-.113.505.144.247.639 1.061 1.371 1.711.948.845 1.741 1.103 1.989 1.226.247.124.392.103.536-.062.144-.165.618-.721.783-.969.165-.247.33-.206.556-.124.227.082 1.443.68 1.69.804.247.124.412.185.474.288.062.103.062.608-.175 1.278z"/></svg>
                 Invite via WhatsApp
