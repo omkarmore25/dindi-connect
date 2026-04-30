@@ -67,13 +67,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Session Setup
 app.use(session({
   secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
+  resave: true, // Force session to be saved back to the store
+  saveUninitialized: true, // Force a session to be created even if empty
   proxy: true, // Required for secure cookies behind Render/Heroku proxies
   cookie: {
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' is required for some mobile cross-app redirects
+    sameSite: 'lax',
     maxAge: 24 * 60 * 60 * 1000 // 1 day
   }
 }));
