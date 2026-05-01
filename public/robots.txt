@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://dindi-connect.onrender.com/sitemap.xml
