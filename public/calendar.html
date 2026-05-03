@@ -151,9 +151,10 @@
       </div>
       
       <!-- Section Tabs -->
-      <div class="flex p-1.5 bg-slate-100 dark:bg-slate-800/50 rounded-2xl mb-6 max-w-sm">
-        <button id="tabPerformances" class="calendar-section-tab tab-active flex-1 py-2.5 rounded-xl text-sm font-bold transition-all" data-section="events">Performances</button>
-        <button id="tabCompetitions" class="calendar-section-tab flex-1 py-2.5 rounded-xl text-sm font-bold transition-all text-slate-500 dark:text-slate-400 hover:text-brand-500" data-section="competitions">Competitions</button>
+      <div class="flex p-1.5 bg-slate-100 dark:bg-slate-800/50 rounded-2xl mb-6 max-w-full overflow-x-auto no-scrollbar">
+        <button id="tabPerformances" class="calendar-section-tab tab-active px-4 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap" data-section="events">Performances</button>
+        <button id="tabCompetitions" class="calendar-section-tab px-4 py-2.5 rounded-xl text-sm font-bold transition-all text-slate-500 dark:text-slate-400 hover:text-brand-500 whitespace-nowrap" data-section="competitions">Competitions</button>
+        <button id="tabCommunityEvents" class="calendar-section-tab px-4 py-2.5 rounded-xl text-sm font-bold transition-all text-slate-500 dark:text-slate-400 hover:text-brand-500 whitespace-nowrap" data-section="community-events">Community Events</button>
       </div>
 
       <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2 mb-2" id="calendarTypeFilters">
@@ -250,6 +251,49 @@
     </div>
   </div>
 
+  <div id="community-event-row-template" class="hidden">
+    <div class="flex gap-4 sm:gap-8 items-start relative z-10 animate-fade-in group cursor-pointer ce-card-btn">
+      <div class="flex flex-col items-center glass-card rounded-2xl min-w-[72px] py-3 mt-1 shadow-lg shadow-blue-500/10 group-hover:scale-105 transition duration-300">
+        <span class="text-xs font-bold text-blue-500 uppercase tracking-wide ce-month-slot">MMM</span>
+        <span class="text-3xl font-black text-slate-800 dark:text-slate-100 mt-1 ce-day-slot">DD</span>
+      </div>
+      
+      <div class="glass-card flex-1 p-5 rounded-3xl transition duration-300 hover:shadow-xl hover:shadow-blue-500/5 group-hover:-translate-y-1">
+        <h4 class="font-bold text-xl text-slate-800 dark:text-slate-100 flex items-center gap-2 flex-wrap">
+          <span class="ce-title-slot">Event Name</span>
+          <span class="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400 ce-type-slot shrink-0">Type</span>
+        </h4>
+        
+        <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-sm mt-2 font-medium">
+          <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          <span class="ce-location-slot">Location</span>
+        </div>
+
+        <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-sm mt-1 font-medium">
+          <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span class="ce-time-slot">Time</span>
+        </div>
+        
+        <p class="text-sm text-slate-600 dark:text-slate-300 mt-3 ce-desc-slot line-clamp-2">Description</p>
+        
+        <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700/50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+          <div class="text-sm font-medium text-slate-600 dark:text-slate-300">
+            By: <span class="font-bold text-blue-600 dark:text-blue-400 ce-organizer-slot">Organizer</span>
+          </div>
+          
+          <div class="text-sm text-slate-500 dark:text-slate-400 mt-2 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            <span class="ce-contact-slot">Contact Person</span>
+            <span class="text-slate-300">|</span>
+            <a href="#" class="text-blue-500 font-bold hover:underline ce-contact-number-slot">Phone</a>
+          </div>
+          
+          <div class="flex flex-wrap gap-2 ce-badges-slot"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Mobile Floating Bottom Nav -->
   <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav mobile-bottom-nav rounded-3xl px-6 py-3 flex justify-between items-center shadow-xl transition-all duration-300 transform">
     <a href="/" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
@@ -275,7 +319,7 @@
   </nav>
 
 
-  <script src="/js/main.js?v=51.61"></script>
+  <script src="/js/main.js?v=52.01"></script>
   
   
   

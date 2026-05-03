@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme');
+      if (t === 'traditional') document.documentElement.classList.add('traditional');
+      else if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
+    })();
+  </script>
+  <style>
+    html.dark { background-color: #0f172a !important; }
+    html.traditional { background-color: #1A3636 !important; }
+  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Community Event - Vandan</title>
+  <link href="/css/style.css?v=13" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+    body { background-image: radial-gradient(at 0% 0%, rgba(251,146,60,0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(234,88,12,0.1) 0px, transparent 50%); background-attachment: fixed; font-family: 'Outfit', sans-serif; }
+    .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .photo-del-btn { position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; background: #ef4444; color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 2px solid white; cursor: pointer; transition: all 0.2s ease; z-index: 20; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+    .photo-del-btn:hover { background: #dc2626; transform: scale(1.1); }
+    .photo-del-btn svg { width: 16px; height: 16px; }
+    .traditional .glass-card, .traditional input, .traditional textarea, .traditional select { background-color: #234040 !important; border-color: rgba(200,169,126,0.4) !important; color: #C8A97E !important; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen md:flex md:flex-row">
+
+  <header class="glass-nav sticky top-0 z-50 w-full md:w-72 md:h-screen md:fixed md:flex md:flex-col md:border-r border-slate-200 dark:border-slate-800 px-4 py-3 md:p-6 shadow-2xl flex justify-between items-center md:items-start transition-colors">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-400 to-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg font-serif">V</div>
+      <h1 class="text-xl md:text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-red-500 tracking-tighter">Vandan</h1>
+    </div>
+    <nav class="hidden md:flex flex-col gap-2 mt-10 w-full">
+      <a href="/" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 dark:hover:bg-slate-800 rounded-xl transition font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>Home</a>
+      <a href="/calendar.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 dark:hover:bg-slate-800 rounded-xl transition font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>Calendar</a>
+      <a href="/dashboard.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 dark:hover:bg-slate-800 rounded-xl transition font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>Dashboard</a>
+      <a href="/auth.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 dark:hover:bg-slate-800 rounded-xl transition font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>Profile</a>
+      <a href="/contact.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 dark:hover:bg-slate-800 rounded-xl transition font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>Help & Contact</a>
+    </nav>
+    <div class="flex items-center gap-3 md:mt-auto md:w-full md:justify-between">
+      <button id="themeToggle" class="rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition text-slate-500 dark:text-slate-400" aria-label="Toggle Dark Mode">
+        <svg id="themeToggleDarkIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"/></svg>
+        <svg id="themeToggleLightIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><circle cx="12" cy="3" r="1.5"/><circle cx="12" cy="21" r="1.5"/><circle cx="3" cy="12" r="1.5"/><circle cx="21" cy="12" r="1.5"/><circle cx="5.636" cy="5.636" r="1.5"/><circle cx="18.364" cy="18.364" r="1.5"/><circle cx="5.636" cy="18.364" r="1.5"/><circle cx="18.364" cy="5.636" r="1.5"/></svg>
+      </button>
+      <div id="auth-section" class="hidden md:block"></div>
+    </div>
+  </header>
+
+  <div class="flex-1 md:ml-72 flex flex-col min-h-screen pb-32 md:pb-8 px-4 md:px-8 py-8">
+    <div class="max-w-3xl w-full mx-auto animate-fade-in">
+      <div id="loadingState" class="py-20 text-center">
+        <div class="inline-block relative w-16 h-16"><div class="absolute inset-0 border-4 border-slate-200 dark:border-slate-800 rounded-full"></div><div class="absolute inset-0 border-4 border-blue-500 rounded-full border-t-transparent animate-spin"></div></div>
+      </div>
+      <div id="formContent" class="hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-slate-200/50 dark:border-slate-800/50 shadow-2xl">
+        <div class="mb-8 border-b border-slate-100 dark:border-slate-800 pb-5">
+          <h2 class="text-3xl font-black text-slate-900 dark:text-slate-100 mb-1">Edit Community Event</h2>
+          <p class="text-slate-500 dark:text-slate-400">Update your event details and manage posters.</p>
+        </div>
+        <form id="editCEForm" class="space-y-6">
+          <div>
+            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Event Name</label>
+            <input type="text" id="eName" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-slate-800 dark:text-slate-100 font-medium" required>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Organizer</label>
+              <input type="text" id="eOrganizer" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-slate-800 dark:text-slate-100 font-medium" required>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Event Type</label>
+              <select id="eType" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-slate-800 dark:text-slate-100 font-medium">
+                <option value="Dindi">Dindi</option>
+                <option value="Bhajan">Bhajan</option>
+                <option value="Kirtan">Kirtan</option>
+                <option value="Music">Music</option>
+                <option value="Workshop">Workshop</option>
+                <option value="Cultural">Cultural</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Venue / Location</label>
+            <input type="text" id="eVenue" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-slate-800 dark:text-slate-100 font-medium" required>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Start Date</label>
+              <input type="date" id="eDate" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-slate-800 dark:text-slate-100 font-medium" required>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">End Date <span class="text-slate-400 font-normal">(leave blank if 1 day)</span></label>
+              <input type="date" id="eEndDate" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-slate-800 dark:text-slate-100 font-medium">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Description</label>
+            <textarea id="eDesc" rows="6" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-slate-800 dark:text-slate-100 font-medium" required></textarea>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Contact Person</label>
+              <input type="text" id="eContact" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-slate-800 dark:text-slate-100 font-medium" required>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Contact Number</label>
+              <input type="tel" id="eContactNum" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-slate-800 dark:text-slate-100 font-medium" required>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Registration Deadline</label>
+            <input type="date" id="eDeadline" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-slate-800 dark:text-slate-100 font-medium" required>
+          </div>
+
+          <!-- Photo Gallery -->
+          <div class="border-t border-slate-100 dark:border-slate-800 pt-6">
+            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Event Poster / Gallery</label>
+            <div id="editCEGallery" class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4 min-h-[40px]"></div>
+            <input type="file" id="editCEPhotos" accept="image/*" multiple class="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer text-sm font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+            <button type="submit" id="editCESubmitBtn" class="w-full bg-blue-500 text-white font-bold py-4 rounded-xl shadow-xl shadow-blue-500/20 hover:bg-blue-600 transition flex items-center justify-center gap-2 text-lg">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav mobile-bottom-nav rounded-3xl px-6 py-3 flex justify-between items-center shadow-xl transition-all duration-300 transform">
+    <a href="/" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+      <span class="text-[10px] font-medium">Home</span>
+    </a>
+    <a href="/calendar.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+      <span class="text-[10px] font-medium">Calendar</span>
+    </a>
+    <a href="/dashboard.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+       <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+       <span class="text-[10px] font-medium">Dash</span>
+    </a>
+    <a href="/auth.html" class="flex flex-col items-center text-brand-500 transition transform scale-105">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+      <span class="text-[10px] font-bold">Profile</span>
+    </a>
+    <a href="/contact.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+      <span class="text-[10px] font-medium">Help</span>
+    </a>
+  </nav>
+
+  <script src="/js/main.js?v=51.95"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const evId = urlParams.get('id');
+      if (!evId) return window.location.href = '/dashboard.html';
+
+      const uRes = await fetch('/api/auth/current_user');
+      const uData = await uRes.json();
+      if (!uData.isAuthenticated) return window.location.href = '/';
+      const user = uData.user;
+
+      const eRes = await fetch('/api/community-events/' + evId);
+      if (!eRes.ok) return window.location.href = '/dashboard.html';
+      const ev = await eRes.json();
+      if (ev.userId !== user._id) return window.location.href = '/dashboard.html';
+
+      document.getElementById('loadingState').classList.add('hidden');
+      document.getElementById('formContent').classList.remove('hidden');
+
+      // Populate fields
+      document.getElementById('eName').value = ev.eventName || '';
+      document.getElementById('eOrganizer').value = ev.organizer || '';
+      document.getElementById('eType').value = ev.eventType || 'Other';
+      document.getElementById('eVenue').value = ev.venue || '';
+      document.getElementById('eDate').value = ev.date ? ev.date.split('T')[0] : '';
+      document.getElementById('eEndDate').value = ev.endDate ? ev.endDate.split('T')[0] : '';
+      document.getElementById('eDeadline').value = ev.deadline ? ev.deadline.split('T')[0] : '';
+      document.getElementById('eDesc').value = ev.description || '';
+      document.getElementById('eContact').value = ev.contact || '';
+      document.getElementById('eContactNum').value = ev.contactNumber || '';
+
+      // Gallery
+      const gallery = document.getElementById('editCEGallery');
+      let toDelete = [];
+      (ev.photos || []).forEach(url => {
+        const div = document.createElement('div');
+        div.className = 'relative aspect-square border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden';
+        div.innerHTML = `<img src="${url}" class="w-full h-full object-cover">` +
+          `<button type="button" class="photo-del-btn" data-url="${url}" title="Delete Photo">` +
+          `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>` +
+          `</button>`;
+        gallery.appendChild(div);
+      });
+
+      document.addEventListener('click', (e) => {
+        const delBtn = e.target.closest('.photo-del-btn');
+        if (delBtn) {
+          toDelete.push(delBtn.dataset.url);
+          delBtn.closest('.relative').remove();
+        }
+      });
+
+      document.getElementById('editCEForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('editCESubmitBtn');
+        btn.disabled = true; btn.textContent = 'Saving...';
+        try {
+          const endDateVal = document.getElementById('eEndDate').value;
+          const payload = {
+            eventName: document.getElementById('eName').value,
+            organizer: document.getElementById('eOrganizer').value,
+            eventType: document.getElementById('eType').value,
+            venue: document.getElementById('eVenue').value,
+            date: document.getElementById('eDate').value,
+            endDate: endDateVal || null,
+            deadline: document.getElementById('eDeadline').value,
+            description: document.getElementById('eDesc').value,
+            contact: document.getElementById('eContact').value,
+            contactNumber: document.getElementById('eContactNum').value,
+            deletePhotos: toDelete
+          };
+
+          await fetch('/api/community-events/' + evId, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          // Upload new photos
+          const photos = document.getElementById('editCEPhotos').files;
+          for (let f of photos) {
+            const fd = new FormData();
+            fd.append('photo', f);
+            await fetch('/api/community-events/' + evId + '/photos', { method: 'POST', body: fd });
+          }
+
+          window.location.href = '/manage-community-event.html?id=' + evId;
+        } catch(err) {
+          alert('Failed to save changes.');
+          btn.disabled = false;
+          btn.textContent = 'Save Changes';
+        }
+      };
+    });
+  </script>
+</body>
+</html>

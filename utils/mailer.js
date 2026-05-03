@@ -125,4 +125,47 @@ const sendBookingEmail = async (to, groupName, bookingDetails) => {
     }
 };
 
-module.exports = { sendVerificationEmail, sendPasswordResetEmail, sendBookingEmail };
+const sendReportEmail = async (groupName, village, reason, reporterName, reporterPhone) => {
+    try {
+        console.log(`[MAIL] Attempting to send report email to admin via Brevo`);
+        const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+            method: 'POST',
+            headers: {
+                'api-key': process.env.EMAIL_PASS,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                sender: { name: "Vandan Reports", email: process.env.EMAIL_USER },
+                to: [{ email: process.env.ADMIN_EMAIL || process.env.EMAIL_USER, name: "Admin" }],
+                subject: `🚨 New Report for Group: ${groupName}`,
+                htmlContent: `
+                    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
+                        <h2 style="color: #ef4444;">New Group Report</h2>
+                        <p>A user has reported a group on the platform.</p>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin-bottom: 8px;"><strong>Group Name:</strong> ${groupName}</li>
+                            <li style="margin-bottom: 8px;"><strong>Village:</strong> ${village}</li>
+                            <li style="margin-bottom: 8px;"><strong>Reason:</strong> ${reason}</li>
+                            <li style="margin-bottom: 8px;"><strong>Reporter Name:</strong> ${reporterName || 'Anonymous'}</li>
+                            <li style="margin-bottom: 8px;"><strong>Reporter Phone:</strong> ${reporterPhone || 'Not provided'}</li>
+                        </ul>
+                    </div>
+                `
+            })
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            console.log("[MAIL] Report email sent successfully via Brevo:", data.messageId);
+            return true;
+        } else {
+            console.error("[MAIL ERROR] Brevo API Error:", data);
+            return false;
+        }
+    } catch (error) {
+        console.error("[MAIL ERROR] Fatal Exception:", error.message);
+        return false;
+    }
+};
+
+module.exports = { sendVerificationEmail, sendPasswordResetEmail, sendBookingEmail, sendReportEmail };

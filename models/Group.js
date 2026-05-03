@@ -58,4 +58,6 @@ const GroupSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
+GroupSchema.index({ groupName: 1, village: 1, groupType: 1 }, { unique: true });
+
 module.exports = mongoose.model('Group', GroupSchema);

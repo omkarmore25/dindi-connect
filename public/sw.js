@@ -1,5 +1,5 @@
 // Vandan - Service Worker
-const CACHE_NAME = 'vandan-v51.61'; 
+const CACHE_NAME = 'vandan-v52.07'; 
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -10,7 +10,11 @@ const STATIC_ASSETS = [
   '/competition.html',
   '/manage-competition.html',
   '/edit-competition.html',
+  '/community-event.html',
+  '/manage-community-event.html',
+  '/edit-community-event.html',
   '/book-group.html',
+  '/report.html',
   '/reset-password.html',
   '/contact.html',
   '/refund-policy.html',

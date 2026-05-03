@@ -3,26 +3,32 @@
 
 <head>
   <script>
-    (function() {
+    (function () {
       var t = localStorage.getItem('theme');
       if (t === 'traditional') document.documentElement.classList.add('traditional');
       else if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
     })();
   </script>
   <style>
-    html.dark { background-color: #0f172a !important; }
-    html.traditional { background-color: #1A3636 !important; }
+    html.dark {
+      background-color: #0f172a !important;
+    }
+
+    html.traditional {
+      background-color: #1A3636 !important;
+    }
   </style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vandan - Help & Contact</title>
   <meta name="description"
     content="Contact the Vandan support team for payment help, technical issues, or general queries.">
-  
+
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://dindi-connect.onrender.com/contact.html">
   <meta property="og:title" content="Vandan - Help & Contact">
-  <meta property="og:description" content="Contact the Vandan support team for payment help, technical issues, or general queries.">
+  <meta property="og:description"
+    content="Contact the Vandan support team for payment help, technical issues, or general queries.">
   <meta property="og:image" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=5">
   <meta property="og:image:secure_url" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=5">
   <meta property="og:image:type" content="image/jpeg">
@@ -35,7 +41,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://dindi-connect.onrender.com/contact.html">
   <meta name="twitter:title" content="Vandan - Help & Contact">
-  <meta name="twitter:description" content="Contact the Vandan support team for payment help, technical issues, or general queries.">
+  <meta name="twitter:description"
+    content="Contact the Vandan support team for payment help, technical issues, or general queries.">
   <meta name="twitter:image" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=5">
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#f97316">
@@ -55,14 +62,12 @@
     }
 
 
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 
-    .dark 
-
-    .animate-fade-in {
+    .dark .animate-fade-in {
       animation: fadeIn 0.4s ease-out forwards;
     }
 
@@ -138,7 +143,7 @@
       margin-top: 10px;
     }
   </style>
-  
+
 </head>
 
 <body
@@ -175,7 +180,11 @@
       </a>
       <a href="/dashboard.html"
         class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+          </path>
+        </svg>
         Dashboard
       </a>
       <a href="/auth.html"
@@ -284,7 +293,7 @@
           </div>
           <div>
             <p class="font-bold text-slate-800 dark:text-slate-100 text-sm">Email Support</p>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">omkarmore5178@gmail.com</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">vandancommunitysupport@gmail.com</p>
           </div>
           <svg class="w-5 h-5 text-slate-300 dark:text-slate-600 ml-auto" fill="none" stroke="currentColor"
             viewBox="0 0 24 24">
@@ -345,12 +354,18 @@
         <h4 class="font-bold text-slate-800 dark:text-slate-100 text-sm mb-3">Business Information</h4>
         <div class="space-y-2 text-sm text-slate-500 dark:text-slate-400">
           <p><span class="font-semibold text-slate-700 dark:text-slate-300">Business Name:</span> Vandan</p>
-          <p><span class="font-semibold text-slate-700 dark:text-slate-300">Email:</span> omkarmore5178@gmail.com</p>
+          <p><span class="font-semibold text-slate-700 dark:text-slate-300">Email:</span>
+            vandancommunitysupport@gmail.com</p>
           <p><span class="font-semibold text-slate-700 dark:text-slate-300">Address:</span> Goa, India</p>
-          <p class="pt-2"><a href="/refund-policy.html" class="text-brand-500 font-bold hover:underline inline-flex items-center gap-1.5">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-            Refund & Cancellation Policy
-          </a></p>
+          <p class="pt-2"><a href="/refund-policy.html"
+              class="text-brand-500 font-bold hover:underline inline-flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                </path>
+              </svg>
+              Refund & Cancellation Policy
+            </a></p>
         </div>
       </div>
 
@@ -365,7 +380,8 @@
   </div>
 
   <!-- Mobile Bottom Nav -->
-  <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav mobile-bottom-nav rounded-3xl px-6 py-3 flex justify-between items-center shadow-xl transition-all duration-300 transform">
+  <nav
+    class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav mobile-bottom-nav rounded-3xl px-6 py-3 flex justify-between items-center shadow-xl transition-all duration-300 transform">
     <a href="/" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
       <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20">
         <path
@@ -382,12 +398,21 @@
       </svg>
       <span class="text-[10px] font-medium">Calendar</span>
     </a>
-    <a href="/dashboard.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
-       <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-       <span class="text-[10px] font-medium">Dash</span>
+    <a href="/dashboard.html"
+      class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+        </path>
+      </svg>
+      <span class="text-[10px] font-medium">Dash</span>
     </a>
-    <a href="/auth.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
-      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+    <a href="/auth.html"
+      class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+      </svg>
       <span class="text-[10px] font-medium">Profile</span>
     </a>
     <a href="/contact.html" class="flex flex-col items-center text-brand-500 transition transform scale-105">
@@ -400,7 +425,7 @@
     </a>
   </nav>
 
-  <script src="/js/main.js?v=51.61"></script>
+  <script src="/js/main.js?v=51.95"></script>
   <script>
     // Contact form — sends via WhatsApp for now (no backend needed)
     document.getElementById('contactForm').addEventListener('submit', function (e) {
@@ -428,7 +453,7 @@
       status.style.color = '#16a34a';
       status.style.border = '1px solid rgba(34,197,94,0.3)';
       status.textContent = 'Preparing message...';
-      
+
       // Redirect almost immediately
       setTimeout(() => {
         window.location.href = waUrl;
@@ -436,63 +461,32 @@
     });
   </script>
 
-  
-  
-  
+
+
+
   <!-- PWA Install Banner (Mobile) -->
-  <div id="installMobileBanner" class="hidden md:hidden fixed bottom-24 left-0 right-0 mx-auto w-[90%] max-w-sm glass-card p-4 rounded-2xl shadow-2xl border border-brand-200/50 dark:border-brand-500/30 animate-fade-in" style="z-index: 9999;">
+  <div id="installMobileBanner"
+    class="hidden md:hidden fixed bottom-24 left-0 right-0 mx-auto w-[90%] max-w-sm glass-card p-4 rounded-2xl shadow-2xl border border-brand-200/50 dark:border-brand-500/30 animate-fade-in"
+    style="z-index: 9999;">
     <div class="flex items-center gap-4">
-      <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-500 to-orange-500 text-white flex items-center justify-center font-bold text-xl shrink-0 shadow-lg shadow-brand-500/20">V</div>
+      <div
+        class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-500 to-orange-500 text-white flex items-center justify-center font-bold text-xl shrink-0 shadow-lg shadow-brand-500/20">
+        V</div>
       <div class="flex-1 min-w-0">
         <h4 class="text-sm font-black text-slate-800 dark:text-slate-100">Install Vandan</h4>
         <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate">Fast, secure & offline access</p>
       </div>
       <div class="flex items-center gap-2">
         <button id="dismissInstallBanner" class="p-2 text-slate-400 hover:text-slate-600 transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
         </button>
-        <button id="installMobileBtn" class="px-4 py-2 bg-brand-500 text-white text-[10px] font-black rounded-lg shadow-lg shadow-brand-500/30">INSTALL</button>
+        <button id="installMobileBtn"
+          class="px-4 py-2 bg-brand-500 text-white text-[10px] font-black rounded-lg shadow-lg shadow-brand-500/30">INSTALL</button>
       </div>
     </div>
   </div>
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

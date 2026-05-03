@@ -102,6 +102,9 @@ router.post('/', requireAuth, validateGroup, async (req, res) => {
     await newGroup.save();
     res.status(201).json(newGroup);
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({ error: 'A group with this name already exists in your village! If you are the real owner please contact us.' });
+    }
     res.status(500).json({ error: error.message });
   }
 });
@@ -155,6 +158,9 @@ router.put('/:id', requireAuth, validateObjectIdParam('id'), async (req, res) =>
     await group.save();
     res.json(group);
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({ error: 'A group with this name already exists in your village! If you are the real owner please contact us.' });
+    }
     res.status(500).json({ error: error.message });
   }
 });

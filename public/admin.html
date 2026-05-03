@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme');
+      if (t === 'traditional') document.documentElement.classList.add('traditional');
+      else if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
+    })();
+  </script>
+  <style>
+    html.dark { background-color: #0f172a !important; }
+    html.traditional { background-color: #1A3636 !important; }
+  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vandan - Admin Dashboard</title>
+  <link href="/css/style.css?v=13" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-image: radial-gradient(at 0% 0%, rgba(251,146,60,0.1) 0px, transparent 50%),
+                        radial-gradient(at 100% 0%, rgba(234,88,12,0.1) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+    .dark body {
+      background-image: radial-gradient(at 0% 0%, rgba(251,146,60,0.15) 0px, transparent 50%),
+                        radial-gradient(at 100% 100%, rgba(79,70,229,0.15) 0px, transparent 50%);
+    }
+    .admin-tab.active {
+      background-color: #f97316 !important;
+      color: white !important;
+    }
+    .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .glass-input {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      color: #1e293b !important;
+    }
+    .dark .glass-input {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white !important;
+    }
+    .glass-input::placeholder {
+      color: rgba(0, 0, 0, 0.4);
+    }
+    .dark .glass-input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen">
+
+  <div id="adminAuthSection" class="min-h-screen flex items-center justify-center p-6">
+    <div class="glass-card p-8 rounded-3xl w-full max-w-md shadow-2xl animate-fade-in">
+      <div class="text-center mb-8">
+        <div class="w-16 h-16 bg-brand-500 text-white rounded-2xl flex items-center justify-center text-3xl font-black mx-auto mb-4 shadow-lg shadow-brand-500/20">V</div>
+        <h2 class="text-2xl font-black text-slate-800 dark:text-white">Admin Access</h2>
+        <p class="text-slate-500 dark:text-slate-400 text-sm">Secure dashboard for Vandan administrators</p>
+      </div>
+      <form id="adminLoginForm" class="space-y-4">
+        <input type="email" id="adminEmail" placeholder="Admin Email" class="w-full p-4 glass-input rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 transition" required>
+        <input type="password" id="adminPassword" placeholder="Password" class="w-full p-4 glass-input rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 transition" required>
+        <button type="submit" class="w-full py-4 bg-brand-500 text-white font-bold rounded-2xl shadow-lg hover:bg-brand-600 transition hover:-translate-y-0.5">Login to Dashboard</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="adminDashboardSection" class="hidden min-h-screen pb-24">
+    <nav class="sticky top-0 z-50 glass-nav border-b border-white/20 dark:border-slate-800/50 px-6 py-4 flex justify-between items-center backdrop-blur-md">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-brand-500 text-white rounded-xl flex items-center justify-center font-black text-xl">V</div>
+        <span class="font-bold text-lg hidden sm:block">Admin Panel</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="/auth.html" class="text-sm font-bold text-slate-500 hover:text-brand-500 transition">Back to Website</a>
+        <button id="adminLogoutBtn" class="text-sm font-bold text-red-500 hover:text-red-600 transition">Logout</button>
+      </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-6 mt-8">
+      <div class="flex flex-wrap gap-4 mb-8">
+        <div class="glass-card p-6 rounded-3xl flex-1 min-w-[200px] border border-white/40 dark:border-slate-800/40">
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Total Users</p>
+          <h3 id="statUsers" class="text-3xl font-black text-brand-500">...</h3>
+        </div>
+        <div class="glass-card p-6 rounded-3xl flex-1 min-w-[200px] border border-white/40 dark:border-slate-800/40">
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Total Groups</p>
+          <h3 id="statGroups" class="text-3xl font-black text-blue-500">...</h3>
+        </div>
+        <div class="glass-card p-6 rounded-3xl flex-1 min-w-[200px] border border-white/40 dark:border-slate-800/40">
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Active Reports</p>
+          <h3 id="statReports" class="text-3xl font-black text-red-500">...</h3>
+        </div>
+      </div>
+
+      <div class="flex p-1.5 bg-slate-200/50 dark:bg-slate-800/50 rounded-2xl mb-8 w-fit mx-auto sm:mx-0 overflow-x-auto max-w-full">
+        <button class="admin-tab active px-6 py-3 rounded-xl text-sm font-bold transition-all whitespace-nowrap" data-tab="reports">Reports</button>
+        <button class="admin-tab px-6 py-3 rounded-xl text-sm font-bold transition-all text-slate-500 dark:text-slate-400 whitespace-nowrap" data-tab="users">Users</button>
+        <button class="admin-tab px-6 py-3 rounded-xl text-sm font-bold transition-all text-slate-500 dark:text-slate-400 whitespace-nowrap" data-tab="groups">Groups</button>
+        <button class="admin-tab px-6 py-3 rounded-xl text-sm font-bold transition-all text-slate-500 dark:text-slate-400 whitespace-nowrap" data-tab="events">Performances</button>
+        <button class="admin-tab px-6 py-3 rounded-xl text-sm font-bold transition-all text-slate-500 dark:text-slate-400 whitespace-nowrap" data-tab="competitions">Competitions</button>
+        <button class="admin-tab px-6 py-3 rounded-xl text-sm font-bold transition-all text-slate-500 dark:text-slate-400 whitespace-nowrap" data-tab="communityEvents">Community Events</button>
+      </div>
+
+      <div id="tabContentReports" class="admin-tab-content space-y-4">
+        <div class="flex flex-col gap-4" id="reportsList">
+           <div class="text-center py-20 text-slate-500">Loading reports...</div>
+        </div>
+      </div>
+
+      <div id="tabContentUsers" class="admin-tab-content hidden space-y-4">
+        <div class="overflow-x-auto glass-card rounded-3xl p-4 border border-white/40 dark:border-slate-800/40">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800">
+                <th class="px-4 py-4">Name</th>
+                <th class="px-4 py-4">Email</th>
+                <th class="px-4 py-4">Joined</th>
+                <th class="px-4 py-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <!-- Users injected here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="tabContentGroups" class="admin-tab-content hidden space-y-4">
+        <div class="flex flex-col gap-4" id="groupsList">
+           <!-- Groups injected here -->
+        </div>
+      </div>
+
+      <div id="tabContentEvents" class="admin-tab-content hidden space-y-4">
+        <div class="flex flex-col gap-4" id="eventsList">
+           <!-- Performances injected here -->
+        </div>
+      </div>
+
+      <div id="tabContentCompetitions" class="admin-tab-content hidden space-y-4">
+        <div class="flex flex-col gap-4" id="competitionsList">
+           <!-- Competitions injected here -->
+        </div>
+      </div>
+
+      <div id="tabContentCommunityEvents" class="admin-tab-content hidden space-y-4">
+        <div class="flex flex-col gap-4" id="communityEventsList">
+           <!-- Community Events injected here -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="statusMessage" class="fixed top-24 left-1/2 -translate-x-1/2 px-6 py-3 rounded-2xl shadow-xl font-bold text-sm hidden z-[10000] animate-fade-in"></div>
+
+  <div id="confirmModal" class="custom-modal-overlay hidden">
+    <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-2xl max-w-sm w-full mx-4 border border-slate-200 dark:border-slate-700 text-center">
+      <h3 class="text-xl font-bold text-slate-800 dark:text-slate-100 mb-2">Confirm Action</h3>
+      <p id="confirmMessage" class="text-slate-500 dark:text-slate-400 text-sm mb-6"></p>
+      <div class="flex gap-3">
+        <button id="confirmCancelBtn" class="flex-1 py-3 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-600 transition">Cancel</button>
+        <button id="confirmOkBtn" class="flex-1 py-3 custom-delete-btn font-bold rounded-xl shadow-lg transition">Execute</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/main.js?v=52.07"></script>
+</body>
+</html>

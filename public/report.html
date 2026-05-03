@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Group - Vandan</title>
+    <link href="/css/style.css?v=13" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap');
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-image: radial-gradient(at 0% 0%, rgba(239, 68, 68, 0.1) 0px, transparent 50%),
+                              radial-gradient(at 100% 100%, rgba(249, 115, 22, 0.1) 0px, transparent 50%);
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.8);
+            border-color: rgba(51, 65, 85, 0.5);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    <script>
+        (function() {
+          var t = localStorage.getItem('theme');
+          if (t === 'traditional') document.documentElement.classList.add('traditional');
+          else if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
+        })();
+    </script>
+    <style>
+        html.traditional { background-color: #1A3636 !important; }
+        .traditional body {
+            background-image: radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.1) 0px, transparent 50%),
+                              radial-gradient(at 100% 100%, rgba(26, 54, 54, 0.1) 0px, transparent 50%);
+        }
+        .traditional .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: #D4AF37;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased p-4 md:p-8">
+    <div class="max-w-md mx-auto py-6 animate-fade-in">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <button onclick="window.history.back()" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-800 text-slate-500 shadow-sm border border-slate-200 dark:border-slate-700 hover:text-brand-500 hover:border-brand-500 transition-all duration-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            </button>
+            <h1 class="text-xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-widest">Report Group</h1>
+            <div class="w-12"></div>
+        </div>
+
+        <div class="glass-card p-6 md:p-10 rounded-[3rem] shadow-2xl border border-white dark:border-slate-800/50 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+            
+            <div class="w-20 h-20 rounded-[2.5rem] bg-red-500 text-white flex items-center justify-center mb-6 shadow-2xl shadow-red-500/30 mx-auto relative z-10">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+
+            <div class="text-center mb-8 relative z-10">
+                <p class="text-[10px] font-black text-red-500 uppercase tracking-[0.3em] mb-1">Alert Submission</p>
+                <h2 id="targetGroupName" class="text-2xl font-black text-slate-800 dark:text-slate-100">Loading Group...</h2>
+                <p class="text-slate-500 dark:text-slate-400 text-xs font-medium mt-1">Please provide accurate details for our review</p>
+            </div>
+
+            <form id="reportForm" class="space-y-6 relative z-10">
+                <input type="hidden" id="groupId" name="groupId">
+                <input type="hidden" id="groupName" name="groupName">
+                <input type="hidden" id="village" name="village">
+
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-2.5 ml-1">Reason for Reporting</label>
+                    <div class="relative">
+                        <select id="reason" required class="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-2xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-brand-500/10 transition appearance-none font-bold text-sm">
+                            <option value="" disabled selected>Select a reason</option>
+                            <option value="Fake Group">Fake Group</option>
+                            <option value="Duplicate Group">Duplicate Group</option>
+                            <option value="Wrong Information">Wrong Information</option>
+                            <option value="Inappropriate Content">Inappropriate Content</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <div class="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="grid grid-cols-1 gap-5">
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-2.5 ml-1">Your Name (Optional)</label>
+                        <input type="text" id="reporterName" placeholder="Enter your name" class="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-2xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-brand-500/10 transition font-bold text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-2.5 ml-1">Your Phone (Optional)</label>
+                        <input type="tel" id="reporterPhone" placeholder="Enter phone number" class="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-2xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-brand-500/10 transition font-bold text-sm">
+                    </div>
+                </div>
+
+                <div id="statusMsg" class="hidden p-4 rounded-2xl text-center text-sm font-black animate-fade-in border"></div>
+
+                <button type="submit" id="submitBtn" style="background-color: #dc2626 !important; color: white !important; display: block !important; opacity: 1 !important; visibility: visible !important;" class="w-full py-5 font-black rounded-2xl shadow-2xl shadow-red-500/30 hover:scale-[1.02] active:scale-95 transition-all duration-300 mt-4 tracking-[0.2em] text-xs uppercase">SUBMIT REPORT</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const gId = params.get('groupId');
+            const gName = params.get('groupName');
+            const gVillage = params.get('village');
+
+            if (!gId) {
+                window.location.href = '/index.html';
+                return;
+            }
+
+            document.getElementById('groupId').value = gId;
+            document.getElementById('groupName').value = gName;
+            document.getElementById('village').value = gVillage;
+            document.getElementById('targetGroupName').textContent = gName;
+
+            const form = document.getElementById('reportForm');
+            const btn = document.getElementById('submitBtn');
+            const status = document.getElementById('statusMsg');
+
+            form.onsubmit = async (e) => {
+                e.preventDefault();
+                btn.disabled = true;
+                const originalText = btn.textContent;
+                btn.textContent = 'SUBMITTING...';
+                status.classList.add('hidden');
+
+                try {
+                    const payload = {
+                        groupId: document.getElementById('groupId').value,
+                        groupName: document.getElementById('groupName').value,
+                        village: document.getElementById('village').value,
+                        reason: document.getElementById('reason').value,
+                        reportedBy: document.getElementById('reporterName').value,
+                        reporterPhone: document.getElementById('reporterPhone').value
+                    };
+
+                    const res = await fetch('/api/reports', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await res.json();
+                    status.classList.remove('hidden');
+
+                    if (res.ok) {
+                        status.className = 'p-5 rounded-2xl text-center text-xs font-black bg-green-500/10 text-green-500 border-green-500/20 block tracking-widest';
+                        status.textContent = (data.message || 'REPORT SUBMITTED SUCCESSFULLY').toUpperCase();
+                        btn.style.display = 'none';
+                        setTimeout(() => window.location.href = '/index.html', 2000);
+                    } else {
+                        status.className = 'p-5 rounded-2xl text-center text-xs font-black bg-red-500/10 text-red-500 border-red-500/20 block tracking-widest';
+                        status.textContent = (data.error || 'FAILED TO SUBMIT REPORT').toUpperCase();
+                        btn.disabled = false;
+                        btn.textContent = originalText;
+                    }
+                } catch (err) {
+                    status.classList.remove('hidden');
+                    status.className = 'p-5 rounded-2xl text-center text-xs font-black bg-red-500/10 text-red-500 border-red-500/20 block tracking-widest';
+                    status.textContent = 'NETWORK ERROR. PLEASE TRY AGAIN.';
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                }
+            };
+        });
+    </script>
+</body>
+</html>

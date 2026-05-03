@@ -36,11 +36,11 @@ router.get('/', async (req, res) => {
     today.setHours(0, 0, 0, 0);
 
     let filter = { date: { $gte: today } };
-    
+
     if (req.query.type && req.query.type !== 'All') {
       filter.eventType = req.query.type;
     }
-    
+
     if (req.query.search) {
       const searchRegex = new RegExp(escapeRegex(req.query.search), 'i');
       filter.$or = [
@@ -50,8 +50,8 @@ router.get('/', async (req, res) => {
     }
 
     const comps = await Competition.find(filter)
-                                   .populate('registeredGroups', 'groupName village ownerId')
-                                   .sort({ date: 1 });
+      .populate('registeredGroups', 'groupName village ownerId')
+      .sort({ date: 1 });
     res.json(comps);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -62,7 +62,7 @@ router.get('/', async (req, res) => {
 router.get('/my-competitions', isAuthenticated, async (req, res) => {
   try {
     const comps = await Competition.find({ organizerId: req.user._id })
-                                   .populate('registeredGroups', 'groupName village leaderName contactNumber');
+      .populate('registeredGroups', 'groupName village leaderName contactNumber');
     res.json(comps);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -74,14 +74,14 @@ router.get('/:id', validateObjectIdParam('id'), async (req, res) => {
   try {
     const comp = await Competition.findById(req.params.id);
     if (!comp) return res.status(404).json({ error: 'Competition not found' });
-    
+
     // Check if the user is the organizer
     const isOrganizer = req.isAuthenticated() && req.user && comp.organizerId.toString() === req.user._id.toString();
-    
+
     // If organizer, populate contact info. If not, only basic info.
     const populateFields = isOrganizer ? 'groupName village leaderName contactNumber' : 'groupName village ownerId';
     await comp.populate('registeredGroups', populateFields);
-    
+
     res.json(comp);
   } catch (error) {
     if (error.kind === 'ObjectId') return res.status(404).json({ error: 'Competition not found' });
@@ -97,7 +97,7 @@ router.post('/', isAuthenticated, validateCompetition, async (req, res) => {
     }
 
     const { title, description, location, date, registrationDeadline } = req.body;
-    
+
     if (!title) return res.status(400).json({ error: 'Title is required' });
 
     const compData = {
@@ -108,7 +108,7 @@ router.post('/', isAuthenticated, validateCompetition, async (req, res) => {
       registrationDeadline,
       organizerId: req.user._id,
       registeredGroups: [],
-      photos: [] 
+      photos: []
     };
 
     if (req.body.locationCoordinates && req.body.locationCoordinates.lat !== undefined && req.body.locationCoordinates.lng !== undefined) {
@@ -140,7 +140,7 @@ router.post('/:id/register', isAuthenticated, validateObjectIdParam('id'), async
     if (!comp) {
       return res.status(404).json({ error: 'Competition not found' });
     }
-    
+
     if (new Date() > new Date(comp.registrationDeadline)) {
       return res.status(400).json({ error: 'The registration deadline for this event has passed.' });
     }
@@ -230,43 +230,43 @@ router.put('/:id', isAuthenticated, validateObjectIdParam('id'), async (req, res
 
 // POST /api/competitions/:id/photos - Upload a single photo
 router.post('/:id/photos', isAuthenticated, validateObjectIdParam('id'), upload.single('photo'), async (req, res) => {
-   try {
-     console.log('[PHOTO UPLOAD] id:', req.params.id, 'File:', req.file ? req.file.filename : 'MISSING');
-     const comp = await Competition.findOne({ _id: req.params.id, organizerId: req.user._id });
-     if (!comp) return res.status(404).json({ error: 'Competition not found' });
-     if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+  try {
+    console.log('[PHOTO UPLOAD] id:', req.params.id, 'File:', req.file ? req.file.filename : 'MISSING');
+    const comp = await Competition.findOne({ _id: req.params.id, organizerId: req.user._id });
+    if (!comp) return res.status(404).json({ error: 'Competition not found' });
+    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
-     // Optimize image using Sharp
-     const webpBuffer = await sharp(req.file.buffer)
-       .resize(1200, null, { withoutEnlargement: true }) // Max width 1200, auto height
-       .webp({ quality: 80 }) // Compress to 80% quality WebP
-       .toBuffer();
+    // Optimize image using Sharp
+    const webpBuffer = await sharp(req.file.buffer)
+      .resize(1200, null, { withoutEnlargement: true }) // Max width 1200, auto height
+      .webp({ quality: 80 }) // Compress to 80% quality WebP
+      .toBuffer();
 
-     // Upload optimized buffer to Cloudinary
-     const uploadToCloudinary = (buffer) => {
-       return new Promise((resolve, reject) => {
-         const uploadStream = cloudinary.uploader.upload_stream(
-           { folder: 'dindi-competitions', format: 'webp' },
-           (error, result) => {
-             if (result) resolve(result);
-             else reject(error);
-           }
-         );
-         uploadStream.end(buffer);
-       });
-     };
+    // Upload optimized buffer to Cloudinary
+    const uploadToCloudinary = (buffer) => {
+      return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { folder: 'dindi-competitions', format: 'webp' },
+          (error, result) => {
+            if (result) resolve(result);
+            else reject(error);
+          }
+        );
+        uploadStream.end(buffer);
+      });
+    };
 
-     const cloudinaryResult = await uploadToCloudinary(webpBuffer);
-     const photoUrl = cloudinaryResult.secure_url;
+    const cloudinaryResult = await uploadToCloudinary(webpBuffer);
+    const photoUrl = cloudinaryResult.secure_url;
 
-     comp.photos.push(photoUrl);
-     await comp.save();
-     console.log('[PHOTO UPLOAD] Success:', photoUrl);
-     res.json({ photoUrl, comp });
-   } catch(e) {
-     console.error('[PHOTO UPLOAD] Error:', e.message);
-     res.status(500).json({ error: e.message });
-   }
+    comp.photos.push(photoUrl);
+    await comp.save();
+    console.log('[PHOTO UPLOAD] Success:', photoUrl);
+    res.json({ photoUrl, comp });
+  } catch (e) {
+    console.error('[PHOTO UPLOAD] Error:', e.message);
+    res.status(500).json({ error: e.message });
+  }
 });
 
 // DELETE /api/competitions/:id - Delete a competition
