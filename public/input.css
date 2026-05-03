@@ -1,3 +1,459 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* TRADITIONAL THEME OVERRIDES */
+html.traditional {
+  background-color: #1A3636 !important;
+  color: #C8A97E !important;
+  background-image: none !important;
+}
+
+html.traditional body {
+  background-color: #1A3636 !important;
+  color: #C8A97E !important;
+  background-image: none !important;
+}
+
+html.traditional .bg-slate-50,
+html.traditional .bg-white,
+html.traditional .bg-slate-100,
+html.traditional .dark\:bg-slate-900,
+html.traditional .dark\:bg-slate-800,
+html.traditional .glass-card,
+html.traditional .glass-nav {
+  background-color: #234040 !important;
+  backdrop-filter: none !important;
+  border: 1px solid rgba(200, 169, 126, 0.4) !important;
+}
+
+html.traditional header.glass-nav {
+  background-color: #1A3636 !important;
+  border-right-color: #C8A97E !important;
+  border-bottom-color: #C8A97E !important;
+}
+
+html.traditional .mobile-bottom-nav {
+  background-color: #1A3636 !important;
+  border-color: #C8A97E !important;
+}
+
+html.traditional .text-slate-900,
+html.traditional .text-slate-800,
+html.traditional .text-slate-700,
+html.traditional .text-slate-600,
+html.traditional .text-slate-500,
+html.traditional .text-slate-400,
+html.traditional .dark\:text-slate-100,
+html.traditional .dark\:text-slate-200,
+html.traditional .dark\:text-slate-300,
+html.traditional .dark\:text-slate-400,
+html.traditional .dark\:text-slate-500 {
+  color: #C8A97E !important;
+}
+
+html.traditional .calendar-section-tab.tab-active {
+  background-color: #f97316 !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+html.traditional .calendar-section-tab:not(.tab-active) {
+  color: rgba(200, 169, 126, 0.7) !important;
+}
+
+html.traditional .flex.p-1\.5.bg-slate-100 {
+  background-color: #1A3636 !important;
+  border: 1.5px solid rgba(200, 169, 126, 0.3) !important;
+}
+
+html.traditional .border-slate-200,
+html.traditional .dark\:border-slate-800,
+html.traditional .border-brand-500,
+html.traditional .border-brand-200\/50,
+html.traditional .dark\:border-brand-500\/30,
+html.traditional .border-t,
+html.traditional .border-b,
+html.traditional .border-r,
+html.traditional .border-l {
+  border-color: #C8A97E !important;
+}
+
+html.traditional input,
+html.traditional select,
+html.traditional textarea,
+html.traditional .glass-input,
+html.traditional .quick-btn {
+  background-color: #1A3636 !important;
+  color: #C8A97E !important;
+  border-color: #C8A97E !important;
+  border-width: 1px !important;
+}
+
+html.traditional input::placeholder,
+html.traditional textarea::placeholder {
+  color: rgba(200, 169, 126, 0.6) !important;
+}
+
+
+html.traditional .bg-slate-200,
+html.traditional .bg-slate-100,
+html.traditional .bg-gray-50,
+html.traditional .bg-gray-100,
+html.traditional .bg-gray-200,
+html.traditional .dark\:bg-slate-700,
+html.traditional .dark\:bg-slate-600 {
+  background-color: #234040 !important;
+}
+
+html.traditional .border-slate-100,
+html.traditional .border-slate-300,
+html.traditional .dark\:border-slate-600,
+html.traditional .dark\:border-slate-700 {
+  border-color: #C8A97E !important;
+}
+
+html.traditional * {
+  --input-text-color: #C8A97E !important;
+}
+
+html.traditional .text-gray-900,
+html.traditional .text-gray-800,
+html.traditional .text-gray-700,
+html.traditional .text-gray-600,
+html.traditional .text-gray-500,
+html.traditional .dark\:text-gray-100,
+html.traditional .dark\:text-gray-200,
+html.traditional .dark\:text-gray-300,
+html.traditional .dark\:text-gray-400 {
+  color: #C8A97E !important;
+}
+
+
+/* RESTORED STYLES */
+.nav-hidden {
+  transform: translate(-50%, 150%) !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mobile-bottom-nav {
+  z-index: 9999 !important;
+}
+
+html.traditional .mobile-bottom-nav {
+  background-color: #234040 !important;
+  border: 1px solid #C8A97E !important;
+}
+
+/* RESTORED MODAL STYLES */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  padding: 1.5rem;
+}
+
+.modal-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  max-width: 450px;
+  width: 100%;
+  padding: 2.5rem;
+  text-align: center;
+  transform: scale(0.9);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-backdrop.active .modal-content {
+  transform: scale(1);
+}
+
+.modal-btn {
+  padding: 1rem;
+  border-radius: 1.25rem;
+  font-weight: 800;
+  transition: all 0.2s ease;
+}
+
+.btn-accept {
+  background: #f97316;
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(249, 115, 22, 0.2);
+}
+
+.btn-reject {
+  background: #ef4444;
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.2);
+}
+
+.btn-secondary {
+  background: rgba(15, 23, 42, 0.05);
+  color: #64748b;
+}
+
+.dark .btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+}
+
+/* TRADITIONAL MODAL OVERRIDES */
+html.traditional .modal-backdrop {
+  background: rgba(26, 54, 54, 0.8) !important;
+}
+
+html.traditional .modal-content {
+  background-color: #234040 !important;
+  border: 1px solid #C8A97E !important;
+}
+
+html.traditional .btn-secondary {
+  background: rgba(200, 169, 126, 0.1) !important;
+  color: #C8A97E !important;
+}
+
+/* GLOBAL DASHBOARD OVERRIDES for Traditional Mode */
+html.traditional .premium-dash-btn {
+  background-color: #234040 !important;
+  color: #C8A97E !important;
+  border: 1px solid rgba(200, 169, 126, 0.2) !important;
+}
+
+html.traditional .premium-input {
+  background-color: rgba(35, 64, 64, 0.8) !important;
+  color: #C8A97E !important;
+  border: 1px solid rgba(200, 169, 126, 0.2) !important;
+}
+
+html.traditional .premium-dash-btn .icon-box {
+  background-color: rgba(200, 169, 126, 0.1) !important;
+  color: #C8A97E !important;
+  border: 1px solid rgba(200, 169, 126, 0.2) !important;
+}
+
+html.traditional .premium-dash-btn div:last-child {
+  background-color: rgba(200, 169, 126, 0.05) !important;
+  color: #C8A97E !important;
+}
+
+html.traditional .premium-event-card {
+  background-color: #234040 !important;
+  color: #C8A97E !important;
+  border: 1px solid rgba(200, 169, 126, 0.2) !important;
+}
+
+html.traditional .premium-event-card .date-box {
+  background-color: rgba(200, 169, 126, 0.1) !important;
+  color: #C8A97E !important;
+  border: 1px solid rgba(200, 169, 126, 0.1) !important;
+}
+
+html.traditional .back-btn-premium {
+  color: #f97316 !important;
+}
+
+html.traditional .nav-tab-inactive {
+  background-color: rgba(200, 169, 126, 0.1) !important;
+  color: #C8A97E !important;
+  border-color: rgba(200, 169, 126, 0.2) !important;
+}
+
+/* Sidebar Theme Overrides */
+html.traditional header {
+  background-color: #1A3636 !important;
+  border-right-color: rgba(200, 169, 126, 0.2) !important;
+}
+
+/* User Badge in Sidebar */
+.user-badge {
+  transition: all 0.3s ease;
+}
+html.traditional .user-badge {
+  background-color: rgba(200, 169, 126, 0.1) !important;
+  color: #C8A97E !important;
+  border-color: rgba(200, 169, 126, 0.3) !important;
+}
+
+/* Glass System */
+.glass-nav { 
+  background: rgba(255, 255, 255, 0.75); 
+  backdrop-filter: blur(16px); 
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s ease;
+}
+.dark .glass-nav {
+  background: rgba(15, 23, 42, 0.8) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s ease;
+}
+.dark .glass-card {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Traditional Mode Background Fixes */
+html.traditional .bg-white\/30,
+html.traditional .bg-white\/40,
+html.traditional .bg-white\/50,
+html.traditional .bg-slate-50,
+html.traditional .dark\:bg-slate-900\/50,
+html.traditional .bg-slate-900\/50,
+html.traditional .dark\:bg-slate-900\/40,
+html.traditional .bg-slate-900\/40,
+html.traditional .dark\:bg-slate-800\/80,
+html.traditional .bg-slate-800\/80 {
+  background-color: #234040 !important;
+  border: 1px solid rgba(200, 169, 126, 0.3) !important;
+}
+
+html.traditional .bg-brand-50\/20,
+html.traditional .dark\:bg-brand-900\/10 {
+  background-color: rgba(200, 169, 126, 0.05) !important;
+  border-color: rgba(200, 169, 126, 0.2) !important;
+}
+
+html.traditional tr:hover,
+html.traditional .hover\:bg-slate-50:hover {
+  background-color: rgba(200, 169, 126, 0.1) !important;
+}
+
+html.traditional .bg-slate-800,
+html.traditional .dark\:bg-slate-700 {
+  background-color: #234040 !important;
+  border: 1px solid rgba(200, 169, 126, 0.3) !important;
+}
+
+/* Enhanced visibility for cards and inputs */
+html.traditional .glass-card,
+html.traditional .premium-event-card,
+html.traditional .glass-input,
+html.traditional input {
+  border: 1.5px solid rgba(200, 169, 126, 0.5) !important;
+  background-color: #234040 !important;
+}
+
+/* Support Banner Custom Style */
+.support-banner {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
+}
+
+.support-banner::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  bottom: 20%;
+  width: 5px;
+  background: #ea580c;
+  border-radius: 0 100px 100px 0;
+}
+
+.dark .support-banner {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+html.traditional .support-banner {
+  background-color: #234040 !important;
+  border: 1.5px solid rgba(200, 169, 126, 0.5) !important;
+}
+
+html.traditional .support-banner::before {
+  background: #C8A97E !important;
+}
+
+/* Fix double border in search specifically, but keep for other inputs */
+html.traditional .glass-card #searchInput,
+html.traditional .glass-card #calendarSearchInput,
+html.traditional .glass-card input[type="text"]#searchInput,
+html.traditional .glass-card input[type="text"]#calendarSearchInput {
+  border: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Ensure other inputs in Traditional Mode are visible */
+html.traditional .glass-input,
+html.traditional input:not(#searchInput) {
+  border: 1.5px solid rgba(200, 169, 126, 0.5) !important;
+  background-color: #234040 !important;
+}
+
+/* Improve Light Mode visibility for glass inputs */
+.glass-input {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+html.traditional .support-banner .w-14.h-14.rounded-full {
+  background-color: #1A3636 !important;
+  border: 1.5px solid rgba(200, 169, 126, 0.4) !important;
+  color: #C8A97E !important;
+}
+/* Ensure multi-line descriptions work everywhere */
+.whitespace-pre-wrap,
+#pDesc,
+.comp-desc-slot {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Remove hover effect from filter buttons as requested */
+.filter-btn {
+  transition: none !important;
+  transform: none !important;
+}
+
+.filter-btn:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Specifically for the inactive ones, keep their base colors on hover */
+.filter-btn:not(.active):hover {
+  background-color: white !important;
+}
+.dark .filter-btn:not(.active):hover {
+  background-color: rgba(30, 41, 59, 1) !important;
+}
+html.traditional .filter-btn:not(.active):hover {
+  background-color: #234040 !important;
+}
+
+/* Also remove hover from active to prevent flickers */
+.filter-btn.active:hover {
+  background-color: #f97316 !important; /* Keep brand-500 */
+}
+/* Ensure PWA banner never shows on PC */
+@media (min-width: 768px) {
+  #installMobileBanner {
+    display: none !important;
+  }
+}

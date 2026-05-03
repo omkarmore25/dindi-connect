@@ -139,10 +139,10 @@ const validateLogin = (req, res, next) => {
 };
 
 const validateGroup = (req, res, next) => {
-  const { groupName, village, leaderName, contactNumber, memberCount } = req.body;
+  const { groupName, village, email, leaderName, contactNumber, memberCount } = req.body;
 
-  if (!groupName || !village || !leaderName || !contactNumber) {
-    return res.status(400).json({ error: 'Group name, village, leader name, and contact number are required.' });
+  if (!groupName || !village || !email || !leaderName || !contactNumber) {
+    return res.status(400).json({ error: 'Group name, village, email, leader name, and contact number are required.' });
   }
   if (memberCount !== undefined) {
     const count = Number(memberCount);

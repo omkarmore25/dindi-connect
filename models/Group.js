@@ -9,6 +9,16 @@ const GroupSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  email: {
+    type: String,
+    required: true,
+  },
+  groupType: {
+    type: String,
+    enum: ['Dindi', 'Bhajan', 'Kirtan'],
+    required: true,
+    default: 'Dindi'
+  },
   leaderName: {
     type: String,
     required: true,

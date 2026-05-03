@@ -61,8 +61,28 @@ app.use((req, res, next) => {
   next();
 });
 
+// Cache control middleware - prevent stale HTML and API data
+app.use((req, res, next) => {
+  const isHtml = req.path.endsWith('.html') || req.path === '/' || !req.path.includes('.');
+  const isApi = req.path.startsWith('/api/');
+  
+  if (isHtml || isApi) {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
+  next();
+});
+
 // Serve static files from 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), {
+  maxAge: '1d',
+  setHeaders: (res, path) => {
+    if (path.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
+  }
+}));
 
 // Session Setup
 app.use(session({
@@ -98,29 +118,16 @@ passport.use(new GoogleStrategy({
       
       if (!user) {
         const email = profile.emails && profile.emails.length > 0 ? profile.emails[0].value : null;
-        if (!email) {
-          console.error('[ERROR] Google profile did not provide an email.');
-          return done(new Error('No email provided by Google'), null);
-        }
-
-        user = await User.findOne({ email });
-        if (user) {
-          user.googleId = profile.id;
-          user.isVerified = true;
-          await user.save();
-        } else {
-          user = new User({
-            googleId: profile.id,
-            email,
-            username: profile.displayName || email.split('@')[0],
-            isVerified: true
-          });
-          await user.save();
-        }
+        user = new User({
+          googleId: profile.id,
+          displayName: profile.displayName,
+          email: email,
+          avatar: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : null
+        });
+        await user.save();
       }
       return done(null, user);
     } catch (err) {
-      console.error('[ERROR] Google Strategy Error:', err);
       return done(err, null);
     }
   }
@@ -139,51 +146,25 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-// Routes
+// Import and use routes
 const authRoutes = require('./routes/auth');
-const groupsRoutes = require('./routes/groups');
-const eventsRoutes = require('./routes/events');
-const competitionsRoutes = require('./routes/competitions');
-const donationsRoutes = require('./routes/donations');
-
-// Rate limiting
-app.use('/api', generalLimiter);                    // 100 req / 15 min on all API routes
-app.use('/api/auth/login', authLimiter);            // 5 req / 15 min on login
-app.use('/api/auth/register', authLimiter);         // 5 req / 15 min on register
-app.use('/api/auth/resend-verification', authLimiter); // 5 req / 15 min on resend
+const groupRoutes = require('./routes/groups');
+const bookingRoutes = require('./routes/bookings');
+const eventRoutes = require('./routes/events');
+const competitionRoutes = require('./routes/competitions');
 
 app.use('/api/auth', authRoutes);
-app.use('/api/groups', groupsRoutes);
-app.use('/api/events', eventsRoutes);
-app.use('/api/competitions', competitionsRoutes);
-app.use('/api/donations', donationsRoutes);
+app.use('/api/groups', groupRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/events', eventRoutes);
+app.use('/api/competitions', competitionRoutes);
 
-// Fallback to index.html for undefined frontend routes (SPA feel)
-app.use((req, res, next) => {
-  if (req.path.startsWith('/api')) {
-    return res.status(404).json({ error: 'API route not found' });
-  }
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Global Error Handler
-app.use((err, req, res, next) => {
-  console.error('[FATAL ERROR]', err);
-  res.status(500).json({ 
-    error: 'Internal Server Error', 
-    message: err.message, // Temporarily show message to help debug
-    path: req.path
-  });
-});
-
-// Database Connection & Server Start
-const PORT = process.env.PORT || 3000;
+// Database Connection
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log('Connected to MongoDB');
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-      keepAlive(); // Start the keep-alive pings
-    });
-  })
-  .catch((err) => console.error('MongoDB connection error:', err));
+  .then(() => console.log('[INIT] Connected to MongoDB Atlas'))
+  .catch(err => console.error('[INIT] MongoDB Connection Error:', err));
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`[INIT] Server running on port ${PORT}`);
+});

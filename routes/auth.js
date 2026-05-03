@@ -5,6 +5,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const User = require('../models/User');
+const Group = require('../models/Group');
+const Booking = require('../models/Booking');
+const Event = require('../models/Event');
 const { sendVerificationEmail, sendPasswordResetEmail } = require('../utils/mailer');
 const { validateRegister, validateLogin, isValidEmail } = require('../middleware/sanitize');
 
@@ -219,6 +222,41 @@ router.get('/logout', (req, res) => {
     if (err) return res.status(500).json({ error: 'Failed to logout' });
     res.redirect('/');
   });
+});
+
+// Permanent Account Deletion
+router.delete('/delete-account', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ error: 'Not authenticated' });
+  }
+
+  const userId = req.user._id.toString();
+  try {
+    // 1. Find all groups owned by this user
+    const groups = await Group.find({ ownerId: userId });
+    const groupIds = groups.map(g => g._id);
+
+    // 2. Delete all related data for these groups
+    await Booking.deleteMany({ groupId: { $in: groupIds } });
+    await Event.deleteMany({ performingGroupId: { $in: groupIds } });
+    await Group.deleteMany({ ownerId: userId });
+
+    // 3. Delete the user record
+    await User.findByIdAndDelete(userId);
+
+    // 4. Manually destroy session to ensure clean exit
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('[ERROR] Session destruction failed:', err);
+        return res.status(500).json({ error: 'Failed to fully clear session.' });
+      }
+      res.clearCookie('connect.sid'); // Clear session cookie
+      res.json({ message: 'Account and all related data deleted successfully.' });
+    });
+  } catch (error) {
+    console.error('[ERROR] Account deletion failed:', error);
+    res.status(500).json({ error: 'Deletion failed: ' + error.message });
+  }
 });
 
 // Current User Info

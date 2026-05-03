@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Event = require('../models/Event');
 const Group = require('../models/Group');
-const { validateEvent, validateObjectIdParam } = require('../middleware/sanitize');
+const { validateEvent, validateObjectIdParam, escapeRegex } = require('../middleware/sanitize');
 
 // Middleware to check if user is authenticated
 const requireAuth = (req, res, next) => {
@@ -25,17 +25,30 @@ router.get('/', async (req, res) => {
     let filter = {};
     if (req.query.groupId) {
        filter.performingGroupId = req.query.groupId;
-       filter.date = { $gte: today }; // Only future events for dashboard too
+       filter.date = { $gte: today };
        const events = await Event.find(filter)
-                                 .populate('performingGroupId', 'groupName contactNumber acceptingBookings')
+                                 .populate('performingGroupId', 'groupName contactNumber acceptingBookings groupType')
                                  .sort({ date: 1 });
        return res.json(events.filter(e => e.performingGroupId != null));
     } else {
-       // Only fetch events from today onwards for the main calendar
-       const events = await Event.find({ date: { $gte: today } })
-                                 .populate('performingGroupId', 'groupName contactNumber acceptingBookings')
+       let events = await Event.find({ date: { $gte: today } })
+                                 .populate('performingGroupId', 'groupName contactNumber acceptingBookings groupType')
                                  .sort({ date: 1 });
-       return res.json(events.filter(e => e.performingGroupId != null));
+       
+       events = events.filter(e => e.performingGroupId != null);
+       
+       if (req.query.type && req.query.type !== 'All') {
+          events = events.filter(e => e.performingGroupId.groupType === req.query.type);
+       }
+       if (req.query.search) {
+          const searchLower = req.query.search.toLowerCase();
+          events = events.filter(e => 
+             e.templeName.toLowerCase().includes(searchLower) ||
+             e.village.toLowerCase().includes(searchLower) ||
+             e.performingGroupId.groupName.toLowerCase().includes(searchLower)
+          );
+       }
+       return res.json(events);
     }
   } catch (error) {
     res.status(500).json({ error: error.message });

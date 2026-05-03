@@ -1,8 +1,8 @@
 {
-  "name": "Dindi Connect",
-  "short_name": "Dindi",
-  "description": "Discover, connect, and support traditional Warkari Dindi groups.",
-  "id": "dindi-connect-pwa",
+  "name": "Vandan",
+  "short_name": "Vandan",
+  "description": "Discover, connect, and support traditional Warkari groups.",
+  "id": "vandan-pwa",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -16,13 +16,13 @@
   ],
   "icons": [
     {
-      "src": "/images/icon-192.png",
+      "src": "/images/icon-192.png?v=10",
       "sizes": "192x192 512x512 1024x1024",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/images/icon-512.png",
+      "src": "/images/icon-512.png?v=10",
       "sizes": "192x192 512x512 1024x1024",
       "type": "image/png",
       "purpose": "any maskable"
@@ -30,14 +30,14 @@
   ],
   "screenshots": [
     {
-      "src": "/images/og-image.png",
+      "src": "/images/og-image.png?v=5",
       "sizes": "1024x1024",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Dindi Connect Dashboard"
+      "label": "Vandan Dashboard"
     },
     {
-      "src": "/images/og-image.png",
+      "src": "/images/og-image.png?v=5",
       "sizes": "1024x1024",
       "type": "image/png",
       "form_factor": "narrow",

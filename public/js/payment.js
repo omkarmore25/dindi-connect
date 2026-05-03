@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
-  const groupName = urlParams.get('groupName') || 'Dindi Community (General)';
+  const groupName = urlParams.get('groupName') || 'Vandan Community (General)';
   const groupId = urlParams.get('groupId') || '';
 
   // Set UI

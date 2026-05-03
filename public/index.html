@@ -1,142 +1,169 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en">
+
 <head>
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme');
+      if (t === 'traditional') document.documentElement.classList.add('traditional');
+      else if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
+    })();
+  </script>
+  <style>
+    html.dark { background-color: #0f172a !important; }
+    html.traditional { background-color: #1A3636 !important; }
+  </style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dindi - Home</title>
-  <meta name="description" content="Discover, connect, and support traditional Warkari Dindi groups.">
-  
+  <title>Vandan - Home</title>
+  <meta name="description" content="Bring the divine essence of traditional Bhakti to your sacred gatherings. Discover, connect, and support authentic groups carrying forward centuries of devotion.">
+
   <!-- Open Graph / Social Sharing Tags -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://dindi-connect.onrender.com/">
-  <meta property="og:title" content="Dindi - The Warkari Community Platform">
-  <meta property="og:description" content="Discover, connect, and support traditional Warkari Dindi groups for your next event.">
-  <meta property="og:image" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=1">
-  <meta property="og:image:secure_url" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=1">
+  <meta property="og:title" content="Vandan">
+  <meta property="og:description"
+    content="Bring the divine essence of traditional Bhakti to your sacred gatherings. Discover, connect, and support authentic groups carrying forward centuries of devotion.">
+  <meta property="og:image" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=5">
+  <meta property="og:image:secure_url" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=5">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Dindi Connect - Warkari Community Platform">
-  <meta property="og:site_name" content="Dindi Connect">
+  <meta property="og:image:alt" content="Vandan - Warkari Community Platform">
+  <meta property="og:site_name" content="Vandan">
 
   <!-- Twitter Card Tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://dindi-connect.onrender.com/">
-  <meta name="twitter:title" content="Dindi - The Warkari Community Platform">
-  <meta name="twitter:description" content="Discover, connect, and support traditional Warkari Dindi groups for your next event.">
-  <meta name="twitter:image" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=1">
+  <meta name="twitter:title" content="Vandan">
+  <meta name="twitter:description"
+    content="Bring the divine essence of traditional Bhakti to your sacred gatherings. Discover, connect, and support authentic groups carrying forward centuries of devotion.">
+  <meta name="twitter:image" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=5">
 
   <!-- PWA -->
-  <link rel="manifest" href="/manifest.json">
+  <link rel="manifest" href="/manifest.json?v=9">
   <meta name="theme-color" content="#f97316">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Dindi">
+  <meta name="apple-mobile-web-app-title" content="Vandan">
   <link rel="apple-touch-icon" href="/images/icon-192.png">
 
-  <link href="/css/style.css" rel="stylesheet">
-  
+  <link href="/css/style.css?v=13" rel="stylesheet">
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
-    
-    /* Background gradients */
+
     body {
-      background-image: radial-gradient(at 0% 0%, rgba(251,146,60,0.1) 0px, transparent 50%),
-                        radial-gradient(at 100% 0%, rgba(234,88,12,0.1) 0px, transparent 50%);
+      background-image: radial-gradient(at 0% 0%, rgba(251, 146, 60, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(234, 88, 12, 0.1) 0px, transparent 50%);
       background-attachment: fixed;
       transition: background-color 0.3s ease, color 0.3s ease;
     }
-    
-    /* Dark mode background variations */
+
     .dark body {
-      background-image: radial-gradient(at 0% 0%, rgba(251,146,60,0.15) 0px, transparent 50%),
-                        radial-gradient(at 100% 100%, rgba(79,70,229,0.15) 0px, transparent 50%);
+      background-image: radial-gradient(at 0% 0%, rgba(251, 146, 60, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(79, 70, 229, 0.15) 0px, transparent 50%);
     }
 
-    .glass-nav { 
-      background: rgba(255, 255, 255, 0.75); 
-      backdrop-filter: blur(16px); 
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    }
-    
-    .dark .glass-nav {
-      background: rgba(15, 23, 42, 0.75);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
     }
 
-    .glass-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    }
-    
-    .dark .glass-card {
-      background: rgba(30, 41, 59, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
 
-    /* Hide scrollbar for cleaner look on desktop sidebar */
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   </style>
 
-  <!-- Prevent FOUC for Dark Mode -->
-  <script>
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  </script>
-  <!-- Razorpay Checkout -->
+  
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col md:flex-row pb-32 md:pb-0">
 
-  <!-- Desktop Sidebar / Mobile Top Nav -->
-  <header class="glass-nav sticky top-0 z-50 w-full md:w-72 md:h-screen md:fixed md:flex md:flex-col md:border-r md:border-b-0 px-4 py-3 md:p-6 shadow-sm flex justify-between items-center md:items-start transition-colors">
+<body
+  class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen md:flex md:flex-row">
+
+  <header
+    class="glass-nav sticky top-0 z-50 w-full md:w-72 md:h-screen md:fixed md:flex md:flex-col md:border-r md:border-b-0 px-4 py-3 md:p-6 shadow-sm flex justify-between items-center md:items-start transition-colors">
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-400 to-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 font-serif">D</div>
-      <h1 class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-red-500">Dindi</h1>
+      <div
+        class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-400 to-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 font-serif">
+        V</div>
+      <h1
+        class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-red-500">
+        Vandan</h1>
     </div>
 
-    <!-- Desktop Navigation Links -->
     <nav class="hidden md:flex flex-col gap-2 mt-10 w-full">
-      <a href="/" class="flex items-center gap-3 px-4 py-3 bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-semibold rounded-xl transition">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+      <a href="/"
+        class="flex items-center gap-3 px-4 py-3 bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-semibold rounded-xl transition">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+          </path>
+        </svg>
         Home
       </a>
-      <a href="/calendar.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+      <a href="/calendar.html"
+        class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
         Calendar
       </a>
-      <a href="/auth.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+      <a href="/dashboard.html"
+        class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+          </path>
+        </svg>
+        Dashboard
+      </a>
+      <a href="/auth.html"
+        class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+        </svg>
         Profile
       </a>
-      <a href="/contact.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+      <a href="/contact.html"
+        class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z">
+          </path>
+        </svg>
         Help & Contact
       </a>
+
     </nav>
 
-    <!-- Install App Button — Desktop Sidebar only -->
-    <button id="installPwaBtn" class="hidden md:hidden mt-4 w-full items-center gap-3 px-4 py-3 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl transition shadow-lg shadow-brand-500/30 hover:-translate-y-0.5">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-      Install App
-    </button>
-
     <div class="flex items-center gap-3 md:mt-auto md:w-full md:justify-between">
-      <!-- Dark mode toggle -->
-      <button id="themeToggle" class="rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition text-slate-500 dark:text-slate-400" aria-label="Toggle Dark Mode">
-        <svg id="themeToggleDarkIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>
+      <button id="themeToggle"
+        class="rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition text-slate-500 dark:text-slate-400"
+        aria-label="Toggle Dark Mode">
+        <svg id="themeToggleDarkIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path
+            d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+        </svg>
         <svg id="themeToggleLightIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="5" />
           <circle cx="12" cy="3" r="1.5" />
@@ -149,130 +176,181 @@
           <circle cx="18.364" cy="5.636" r="1.5" />
         </svg>
       </button>
-
-
       <div id="auth-section" class="text-sm font-medium"></div>
     </div>
   </header>
 
-  <!-- Main Content Area -->
-  <div class="flex-1 md:ml-72 flex flex-col min-h-screen">
-    
-    <!-- Hero Section with Search -->
+  
+      
+
+  <div class="flex-1 md:ml-72 flex flex-col min-h-screen pb-32 md:pb-8">
     <div class="px-4 py-8 md:px-10 md:py-12 relative z-10 transition-colors">
-      <!-- Hero Banner -->
       <div class="glass-card rounded-3xl p-6 md:p-10 mb-8 relative overflow-hidden border-l-4 border-l-brand-500">
         <div class="relative z-10">
-          <span class="text-brand-500 text-xs font-bold uppercase tracking-widest mb-2 block">🙏 Wari Tradition</span>
+          <span class="text-brand-500 text-xs font-bold uppercase tracking-widest mb-2 block">🙏 RAM KRISHNA HARI 🙏</span>
           <h2 class="text-3xl md:text-4xl font-bold mb-3 tracking-tight">Find a Group</h2>
-          <p class="text-slate-500 dark:text-slate-400 text-sm md:text-base max-w-xl leading-relaxed">Discover local Dindi performances for your next event. Connect with traditional groups carrying forward centuries of devotion.</p>
+          <p class="text-slate-500 dark:text-slate-400 text-sm md:text-base max-w-xl leading-relaxed">Bring the divine essence of traditional Bhakti to your sacred gatherings. Connect with traditional groups carrying forward centuries of devotion.</p>
         </div>
-      </div>
-      
-      <div class="relative max-w-2xl mb-8">
-        <input type="text" id="searchInput" placeholder="Search by village..." 
-          class="w-full pl-12 pr-4 py-4 rounded-2xl glass-card focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500 transition text-slate-700 dark:text-slate-200 placeholder-slate-400">
-        <svg class="w-6 h-6 text-slate-400 absolute left-4 top-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
       </div>
 
-      <!-- Community Support Banner -->
-      <div class="glass-card max-w-2xl p-6 rounded-3xl flex flex-col md:flex-row items-center gap-6 border-l-4 border-l-brand-500">
-        <div class="w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0 shadow-sm">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+      <div class="max-w-2xl mb-8 flex items-center glass-card rounded-2xl px-4 focus-within:ring-2 focus-within:ring-brand-500 transition-all group">
+        <svg class="w-5 h-5 text-slate-400 group-focus-within:text-brand-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Search by village or name..." style="background-color: transparent !important; color: inherit;" class="w-full py-4 pl-3 bg-transparent border-none focus:outline-none focus:ring-0 text-slate-700 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500">
+      </div>
+
+      <div id="groupTypeFilters" class="flex gap-2 overflow-x-auto no-scrollbar pb-2 mb-8">
+        <button class="filter-btn active px-4 py-2 rounded-full text-sm font-bold bg-brand-500 text-white shadow-md transition whitespace-nowrap" data-type="All">All</button>
+        <button class="filter-btn px-4 py-2 rounded-full text-sm font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700  transition whitespace-nowrap" data-type="Dindi">Dindi</button>
+        <button class="filter-btn px-4 py-2 rounded-full text-sm font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700  transition whitespace-nowrap" data-type="Bhajan">Bhajan</button>
+        <button class="filter-btn px-4 py-2 rounded-full text-sm font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700  transition whitespace-nowrap" data-type="Kirtan">Kirtan</button>
+      </div>
+
+      <!-- Support Banner -->
+          <div
+        class="support-banner max-w-2xl p-6 rounded-3xl flex flex-col md:flex-row items-center gap-6 relative overflow-hidden">
+        <div
+          class="w-14 h-14 rounded-full bg-slate-50/50 dark:bg-slate-800/50 text-brand-500 flex items-center justify-center shrink-0 shadow-inner border border-white/20 dark:border-slate-700/50">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+            </path>
+          </svg>
         </div>
         <div>
-          <h3 class="font-bold text-lg text-slate-800 dark:text-slate-100">Support the Dindi Community</h3>
+          <h3 class="font-bold text-lg text-slate-800 dark:text-slate-100">Support the Vandan Community</h3>
         </div>
-        <a href="/payment.html?groupName=Dindi Community (General)" class="w-full md:w-auto px-6 py-3 bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 font-bold rounded-xl shadow-lg hover:bg-slate-700 dark:hover:bg-slate-100 transition shrink-0 flex items-center justify-center">Contribute</a>
+        <a href="/payment.html?groupName=Vandan Community (General)"
+          class="ml-auto w-full md:w-auto px-8 py-3.5 bg-[#1e293b] text-white font-bold rounded-2xl shadow-xl hover:bg-slate-900 transition shrink-0 flex items-center justify-center tracking-wide">Contribute</a>
       </div>
     </div>
 
-    <!-- Group Directory Feed -->
-    <main class="flex-1 px-4 md:px-10 pb-28 md:pb-10">
+    <main class="flex-1 px-4 md:px-10 pb-10">
       <div class="flex justify-between items-center mb-6">
         <h3 class="font-semibold text-xl text-slate-700 dark:text-slate-200">Available Groups</h3>
         <span id="groupCount" class="text-xs font-bold text-brand-600 bg-brand-100 dark:text-brand-400 dark:bg-brand-900/40 px-3 py-1.5 rounded-full shadow-sm">0</span>
       </div>
-      
-      <!-- Responsive Grid for Desktop, Column for Mobile -->
+
       <div id="groupsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        <!-- Loading skeletons handled by JS -->
       </div>
     </main>
   </div>
 
-  <!-- Mobile PWA Install Banner (shown above bottom nav) -->
-  <div id="installMobileBanner" class="md:hidden hidden" style="position:fixed; bottom:6rem; left:50%; transform:translateX(-50%); width:90%; max-width:400px; z-index:60;">
-    <div style="display:flex; align-items:center; gap:12px; background:linear-gradient(135deg,#f97316,#ea580c); color:white; padding:12px 16px; border-radius:18px; box-shadow:0 8px 32px rgba(249,115,22,0.45);">
-      <img src="/images/icon-192.png" style="width:40px;height:40px;border-radius:10px;flex-shrink:0;" alt="Dindi Icon">
-      <div style="flex:1;min-width:0;">
-        <p style="font-weight:700;font-size:14px;margin:0;line-height:1.2;">Install Dindi App</p>
-        <p style="font-size:11px;margin:0;opacity:0.85;line-height:1.3;">Add to Home Screen for quick access</p>
-      </div>
-      <button id="installMobileBtn" style="flex-shrink:0;background:white;color:#ea580c;font-weight:700;font-size:12px;padding:6px 12px;border-radius:10px;border:none;cursor:pointer;">Install</button>
-      <button id="dismissInstallBanner" style="flex-shrink:0;background:none;border:none;color:rgba(255,255,255,0.7);cursor:pointer;padding:4px;display:flex;align-items:center;">
-        <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- Mobile Floating Bottom Nav (Hidden on md) -->
-  <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav rounded-3xl px-4 py-3 flex justify-between items-center shadow-xl z-50 transition-all duration-300 transform">
+  <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav mobile-bottom-nav rounded-3xl px-6 py-3 flex justify-between items-center shadow-xl transition-all duration-300 transform">
     <a href="/" class="flex flex-col items-center text-brand-500 transition transform scale-105">
-      <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+      <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+      </svg>
       <span class="text-[10px] font-bold">Home</span>
     </a>
     <a href="/calendar.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
-      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+      </svg>
       <span class="text-[10px] font-medium">Calendar</span>
     </a>
+    <a href="/dashboard.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+      </svg>
+      <span class="text-[10px] font-medium">Dash</span>
+    </a>
     <a href="/auth.html" id="profileTab" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
-      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+      </svg>
       <span class="text-[10px] font-medium">Profile</span>
     </a>
-    <a href="/contact.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
-      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+    <a href="/contact.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0 a4 4 0 11-8 0 4 4 0 018 0z"></path>
+      </svg>
       <span class="text-[10px] font-medium">Help</span>
     </a>
   </nav>
 
-  <!-- TEMPLATE: Group Card -->
   <div id="group-card-template" class="hidden">
     <div class="glass-card p-6 rounded-3xl flex flex-col gap-4 animate-fade-in hover:-translate-y-1 transition duration-300">
       <div class="flex justify-between items-start">
         <div>
-          <h4 class="font-bold text-xl text-slate-800 dark:text-slate-100 group-name-slot">Name</h4>
+          <h4 class="font-bold text-xl text-slate-800 dark:text-slate-100 flex items-center gap-2">
+            <span class="group-name-slot">Name</span>
+            <span class="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400 group-type-slot">Dindi</span>
+          </h4>
           <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-sm mt-1 font-medium">
-            <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
             <span class="group-village-slot">Village</span>
           </div>
         </div>
         <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs px-2.5 py-1.5 rounded-xl font-bold group-members-slot ring-1 ring-slate-200 dark:ring-slate-700">0 mem</span>
       </div>
-      
-      <a href="#" class="group-profile-link text-sm text-slate-600 dark:text-slate-400 flex items-center gap-3 bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-2xl ring-1 ring-slate-100 dark:ring-slate-700/50 hover:bg-brand-50 dark:hover:bg-brand-900/20 hover:text-brand-600 dark:hover:text-brand-400 transition cursor-pointer">
+
+      <a href="#" class="group-profile-link text-sm text-slate-600 dark:text-slate-400 flex items-center gap-3 bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-2xl ring-1 ring-slate-100 dark:ring-slate-700/50  dark:hover:bg-brand-900/20 hover:text-brand-600 dark:hover:text-brand-400 transition cursor-pointer">
         <span class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-100 to-orange-100 dark:from-brand-900/50 dark:to-orange-900/50 text-brand-600 dark:text-brand-400 flex flex-shrink-0 items-center justify-center font-bold text-sm shadow-sm border border-brand-200 dark:border-brand-800 group-initial-slot">X</span>
-        <span class="font-medium truncate group-leader-slot">Dindi Pramukh</span>
-        <svg class="w-4 h-4 ml-auto opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        <span class="font-medium truncate group-leader-slot">Pramukh</span>
+        <svg class="w-4 h-4 ml-auto opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
       </a>
 
       <div class="flex gap-2 mt-auto pt-2 group-action-slot">
         <div class="flex gap-2 w-full">
-          <!-- WhatsApp Button inserted by JS -->
         </div>
-        <!-- Donate Button inserted by JS -->
       </div>
     </div>
   </div>
 
+  <script src="/js/main.js?v=51.61"></script>
 
-
-  <script src="js/main.js?v=20240425v2"></script>
-  <script>
-    // Register Service Worker only on production (not localhost)
-    if ('serviceWorker' in navigator && !location.hostname.includes('localhost') && !location.hostname.includes('127.0.0.1')) {
-      navigator.serviceWorker.register('/sw.js').then(() => console.log('[PWA] Service Worker Registered'));
-    }
-  </script>
+    
+  
+  
+  <!-- PWA Install Banner (Mobile) -->
+  <div id="installMobileBanner" class="hidden md:hidden fixed bottom-24 left-0 right-0 mx-auto w-[90%] max-w-sm glass-card p-4 rounded-2xl shadow-2xl border border-brand-200/50 dark:border-brand-500/30 animate-fade-in" style="z-index: 9999;">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-500 to-orange-500 text-white flex items-center justify-center font-bold text-xl shrink-0 shadow-lg shadow-brand-500/20">V</div>
+      <div class="flex-1 min-w-0">
+        <h4 class="text-sm font-black text-slate-800 dark:text-slate-100">Install Vandan</h4>
+        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate">Fast, secure & offline access</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="dismissInstallBanner" class="p-2 text-slate-400 hover:text-slate-600 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <button id="installMobileBtn" class="px-4 py-2 bg-brand-500 text-white text-[10px] font-black rounded-lg shadow-lg shadow-brand-500/30">INSTALL</button>
+      </div>
+    </div>
+  </div>
 </body>
+
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

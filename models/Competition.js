@@ -9,6 +9,12 @@ const CompetitionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  eventType: {
+    type: String,
+    enum: ['Dindi', 'Bhajan', 'Kirtan'],
+    required: true,
+    default: 'Dindi'
+  },
   location: {
     type: String,
     required: true,

@@ -1,29 +1,40 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en">
 <head>
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme');
+      if (t === 'traditional') document.documentElement.classList.add('traditional');
+      else if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
+    })();
+  </script>
+  <style>
+    html.dark { background-color: #0f172a !important; }
+    html.traditional { background-color: #1A3636 !important; }
+  </style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dindi - Calendar</title>
-  <meta name="description" content="Find upcoming Dindi competitions, Wari events, and cultural gatherings near you.">
+  <title>Vandan - Calendar</title>
+  <meta name="description" content="Find upcoming competitions, Wari events, and cultural gatherings near you.">
   
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://dindi-connect.onrender.com/calendar.html">
-  <meta property="og:title" content="Dindi - Event Calendar">
-  <meta property="og:description" content="Find upcoming Dindi competitions, Wari events, and cultural gatherings near you.">
-  <meta property="og:image" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=1">
-  <meta property="og:image:secure_url" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=1">
+  <meta property="og:title" content="Vandan - Event Calendar">
+  <meta property="og:description" content="Find upcoming competitions, Wari events, and cultural gatherings near you.">
+  <meta property="og:image" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=5">
+  <meta property="og:image:secure_url" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=5">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Dindi Connect Event Calendar">
-  <meta property="og:site_name" content="Dindi Connect">
+  <meta property="og:image:alt" content="Vandan Event Calendar">
+  <meta property="og:site_name" content="Vandan">
 
   <!-- Twitter Card Tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://dindi-connect.onrender.com/calendar.html">
-  <meta name="twitter:title" content="Dindi - Event Calendar">
-  <meta name="twitter:description" content="Find upcoming Dindi competitions, Wari events, and cultural gatherings near you.">
-  <meta name="twitter:image" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=1">
+  <meta name="twitter:title" content="Vandan - Event Calendar">
+  <meta name="twitter:description" content="Find upcoming competitions, Wari events, and cultural gatherings near you.">
+  <meta name="twitter:image" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=5">
 
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json">
@@ -31,7 +42,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="/images/icon-192.png">
   
-  <link href="/css/style.css" rel="stylesheet">
+  <link href="/css/style.css?v=13" rel="stylesheet">
   
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
@@ -48,55 +59,43 @@
                         radial-gradient(at 100% 100%, rgba(79,70,229,0.15) 0px, transparent 50%);
     }
 
-    .glass-nav { 
-      background: rgba(255, 255, 255, 0.75); 
-      backdrop-filter: blur(16px); 
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    }
     
-    .dark .glass-nav {
-      background: rgba(15, 23, 42, 0.75);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
+    
+    .dark 
 
-    .glass-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    }
     
-    .dark .glass-card {
-      background: rgba(30, 41, 59, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-    }
+    
+    .dark 
 
     .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Fix active tab text visibility */
+    .calendar-section-tab.tab-active {
+      background-color: white !important;
+      color: #ea580c !important; /* brand-600 */
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    }
+    .dark .calendar-section-tab.tab-active {
+      background-color: #f97316 !important; /* brand-500 */
+      color: #ffffff !important;
+    }
   </style>
 
-  <script>
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  </script>
+  
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col md:flex-row pb-32 md:pb-0">
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen md:flex md:flex-row">
 
   <!-- Desktop Sidebar / Mobile Top Nav -->
   <header class="glass-nav sticky top-0 z-50 w-full md:w-72 md:h-screen md:fixed md:flex md:flex-col md:border-r md:border-b-0 px-4 py-3 md:p-6 shadow-sm flex justify-between items-center md:items-start transition-colors">
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-400 to-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 font-serif">D</div>
-      <h1 class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-red-500">Dindi</h1>
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-400 to-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 font-serif">V</div>
+      <h1 class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-red-500">Vandan</h1>
     </div>
 
     <!-- Desktop Navigation Links -->
     <nav class="hidden md:flex flex-col gap-2 mt-10 w-full">
-      <a href="/" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
+      <a href="/" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
         Home
       </a>
@@ -104,11 +103,15 @@
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
         Calendar
       </a>
-      <a href="/auth.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
+      <a href="/dashboard.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+        Dashboard
+      </a>
+      <a href="/auth.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
         Profile
       </a>
-      <a href="/contact.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
+      <a href="/contact.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
         Help & Contact
       </a>
@@ -133,55 +136,43 @@
   </header>
 
   <!-- Main Content Area -->
-  <div class="flex-1 md:ml-72 flex flex-col min-h-screen">
+  <div class="flex-1 md:ml-72 flex flex-col min-h-screen pb-32 md:pb-8">
     
     <!-- Hero Section -->
     <div class="px-4 py-8 md:px-10 md:py-12 relative z-10 transition-colors">
       <h2 class="text-3xl md:text-4xl font-bold mb-3 tracking-tight">Calendar</h2>
-      <p class="text-slate-500 dark:text-slate-400 text-sm md:text-base max-w-xl">See where Dindi groups are performing or register for upcoming competitions.</p>
+      <p class="text-slate-500 dark:text-slate-400 text-sm md:text-base max-w-xl mb-6">See where groups are performing or register for upcoming competitions.</p>
       
-      <!-- Tabs -->
-      <div class="flex gap-4 mt-6 border-b border-slate-200 dark:border-slate-700/50 pb-2">
-        <button id="tabEventsBtn" class="text-brand-600 dark:text-brand-400 font-bold border-b-2 border-brand-500 pb-2 transition">Upcoming Performances</button>
-        <button id="tabCompsBtn" class="text-slate-500 dark:text-slate-400 font-bold border-b-2 border-transparent hover:text-slate-700 dark:hover:text-slate-300 pb-2 transition">Competitions</button>
+      <div class="max-w-2xl mb-8 flex items-center glass-card rounded-2xl px-4 focus-within:ring-2 focus-within:ring-brand-500 transition-all group">
+        <svg class="w-5 h-5 text-slate-400 group-focus-within:text-brand-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        <input type="text" id="calendarSearchInput" placeholder="Search by name or location..." 
+          style="background-color: transparent !important; color: inherit;"
+          class="w-full py-4 pl-3 bg-transparent border-none focus:outline-none focus:ring-0 text-slate-700 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500">
+      </div>
+      
+      <!-- Section Tabs -->
+      <div class="flex p-1.5 bg-slate-100 dark:bg-slate-800/50 rounded-2xl mb-6 max-w-sm">
+        <button id="tabPerformances" class="calendar-section-tab tab-active flex-1 py-2.5 rounded-xl text-sm font-bold transition-all" data-section="events">Performances</button>
+        <button id="tabCompetitions" class="calendar-section-tab flex-1 py-2.5 rounded-xl text-sm font-bold transition-all text-slate-500 dark:text-slate-400 hover:text-brand-500" data-section="competitions">Competitions</button>
+      </div>
+
+      <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2 mb-2" id="calendarTypeFilters">
+        <button class="filter-btn active px-4 py-2 rounded-full text-sm font-bold bg-brand-500 text-white shadow-md transition whitespace-nowrap" data-type="All">All</button>
+        <button class="filter-btn px-4 py-2 rounded-full text-sm font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700  transition whitespace-nowrap" data-type="Dindi">Dindi</button>
+        <button class="filter-btn px-4 py-2 rounded-full text-sm font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700  transition whitespace-nowrap" data-type="Bhajan">Bhajan</button>
+        <button class="filter-btn px-4 py-2 rounded-full text-sm font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700  transition whitespace-nowrap" data-type="Kirtan">Kirtan</button>
       </div>
     </div>
 
     <!-- Events List -->
     <main class="flex-1 px-4 md:px-10 pb-28 md:pb-10 relative">
-      <!-- Events Container -->
-      <div id="eventsContainer" class="flex flex-col gap-6 relative max-w-3xl">
+      <!-- Unified Calendar Container -->
+      <div id="calendarContainer" class="flex flex-col gap-6 relative max-w-3xl mt-4">
         <div class="absolute left-[36px] top-6 bottom-6 w-0.5 bg-brand-200 dark:bg-brand-900/50 hidden sm:block rounded-full"></div>
-        <!-- Events injected here -->
-      </div>
-      
-      <!-- Competitions Container (Hidden by default) -->
-      <div id="competitionsContainer" class="hidden flex flex-col gap-6 relative max-w-3xl">
-        <div class="absolute left-[36px] top-6 bottom-6 w-0.5 bg-orange-200 dark:bg-orange-900/50 hidden sm:block rounded-full"></div>
-        <!-- Competitions injected here -->
+        <!-- Items injected here -->
       </div>
     </main>
   </div>
-
-  <!-- Mobile Floating Bottom Nav -->
-  <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav rounded-3xl px-4 py-3 flex justify-between items-center shadow-xl z-50 transition-all duration-300 transform">
-    <a href="/" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
-      <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-      <span class="text-[10px] font-medium">Home</span>
-    </a>
-    <a href="/calendar.html" class="flex flex-col items-center text-brand-500 transition transform scale-105">
-      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-      <span class="text-[10px] font-bold">Calendar</span>
-    </a>
-    <a href="/auth.html" id="profileTab" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
-      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-      <span class="text-[10px] font-medium">Profile</span>
-    </a>
-    <a href="/contact.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
-      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-      <span class="text-[10px] font-medium">Help</span>
-    </a>
-  </nav>
 
   <!-- TEMPLATE: Event Row -->
   <div id="event-row-template" class="hidden">
@@ -194,7 +185,10 @@
       
       <!-- Event Details Card -->
       <div class="glass-card flex-1 p-5 rounded-3xl transition duration-300 hover:shadow-xl hover:shadow-brand-500/5 group-hover:-translate-y-1">
-        <h4 class="font-bold text-xl text-slate-800 dark:text-slate-100 event-temple-slot">Temple Name</h4>
+        <h4 class="font-bold text-xl text-slate-800 dark:text-slate-100 flex items-center gap-2">
+          <span class="event-temple-slot">Temple Name</span>
+          <span class="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400 event-type-slot">Event</span>
+        </h4>
         <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-sm mt-1">
           <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
           <span class="event-village-slot">Village</span>
@@ -231,7 +225,10 @@
         </div>
         
         <div class="p-5 flex-1">
-          <h4 class="font-bold text-xl text-slate-800 dark:text-slate-100 comp-title-slot">Comp Title</h4>
+          <h4 class="font-bold text-xl text-slate-800 dark:text-slate-100 flex items-center gap-2">
+            <span class="comp-title-slot">Comp Title</span>
+            <span class="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-orange-100 text-orange-600 dark:bg-orange-900/40 dark:text-orange-400 comp-type-slot">Competition</span>
+          </h4>
           <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-sm mt-1">
             <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
             <span class="comp-location-slot">Location</span>
@@ -253,8 +250,88 @@
     </div>
   </div>
 
+  <!-- Mobile Floating Bottom Nav -->
+  <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav mobile-bottom-nav rounded-3xl px-6 py-3 flex justify-between items-center shadow-xl transition-all duration-300 transform">
+    <a href="/" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+      <span class="text-[10px] font-medium">Home</span>
+    </a>
+    <a href="/calendar.html" class="flex flex-col items-center text-brand-500 transition transform scale-105">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+      <span class="text-[10px] font-bold">Calendar</span>
+    </a>
+    <a href="/dashboard.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+       <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+       <span class="text-[10px] font-medium">Dash</span>
+    </a>
+    <a href="/auth.html" id="profileTab" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+      <span class="text-[10px] font-medium">Profile</span>
+    </a>
+    <a href="/contact.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+      <span class="text-[10px] font-medium">Help</span>
+    </a>
+  </nav>
 
 
-  <script src="/js/main.js"></script>
+  <script src="/js/main.js?v=51.61"></script>
+  
+  
+  
+  <!-- PWA Install Banner (Mobile) -->
+  <div id="installMobileBanner" class="hidden md:hidden fixed bottom-24 left-0 right-0 mx-auto w-[90%] max-w-sm glass-card p-4 rounded-2xl shadow-2xl border border-brand-200/50 dark:border-brand-500/30 animate-fade-in" style="z-index: 9999;">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-500 to-orange-500 text-white flex items-center justify-center font-bold text-xl shrink-0 shadow-lg shadow-brand-500/20">V</div>
+      <div class="flex-1 min-w-0">
+        <h4 class="text-sm font-black text-slate-800 dark:text-slate-100">Install Vandan</h4>
+        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate">Fast, secure & offline access</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="dismissInstallBanner" class="p-2 text-slate-400 hover:text-slate-600 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <button id="installMobileBtn" class="px-4 py-2 bg-brand-500 text-white text-[10px] font-black rounded-lg shadow-lg shadow-brand-500/30">INSTALL</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

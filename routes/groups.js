@@ -32,10 +32,19 @@ const requireAuth = (req, res, next) => {
 router.get('/', async (req, res) => {
   try {
     let filter = {};
-    if (req.query.village) {
-      // Case-insensitive partial match
-      filter.village = { $regex: new RegExp(escapeRegex(req.query.village), 'i') };
+    const searchQuery = req.query.search || req.query.village; // Fallback to village
+    if (searchQuery) {
+      // Case-insensitive partial match on village or groupName
+      filter.$or = [
+        { village: { $regex: new RegExp(escapeRegex(searchQuery), 'i') } },
+        { groupName: { $regex: new RegExp(escapeRegex(searchQuery), 'i') } }
+      ];
     }
+    
+    if (req.query.type && req.query.type !== 'All') {
+      filter.groupType = req.query.type;
+    }
+
     const groups = await Group.find(filter).sort({ createdAt: -1 });
     res.json(groups);
   } catch (error) {
@@ -67,12 +76,18 @@ router.get('/:id', validateObjectIdParam('id'), async (req, res) => {
 // POST /api/groups - Register a new Dindi
 router.post('/', requireAuth, validateGroup, async (req, res) => {
   try {
-    console.log('[DEBUG] POST /api/groups body:', req.body);
-    const { groupName, village, leaderName, contactNumber, memberCount, registrationId, acceptingBookings, description, achievements, photos } = req.body;
+    console.log('[DEBUG] POST /api/groups - Request Body:', JSON.stringify(req.body, null, 2));
+    const { groupName, village, email, groupType, leaderName, contactNumber, memberCount, registrationId, acceptingBookings, description, achievements, photos } = req.body;
+    
+    if (!email) {
+      console.error('[ERROR] Email is missing in req.body!');
+    }
     
     const newGroup = new Group({
       groupName,
       village,
+      email,
+      groupType: groupType || 'Dindi',
       leaderName,
       contactNumber,
       memberCount,
@@ -101,9 +116,11 @@ router.put('/:id', requireAuth, validateObjectIdParam('id'), async (req, res) =>
     }
 
     console.log('[DEBUG] PUT /api/groups/:id body:', req.body);
-    const { groupName, leaderName, memberCount, contactNumber, registrationId, description, achievements, acceptingBookings, photos } = req.body;
+    const { groupName, email, groupType, leaderName, memberCount, contactNumber, registrationId, description, achievements, acceptingBookings, photos } = req.body;
     
     if (groupName !== undefined) group.groupName = groupName;
+    if (email !== undefined) group.email = email;
+    if (groupType !== undefined) group.groupType = groupType;
     if (leaderName !== undefined) group.leaderName = leaderName;
     if (memberCount !== undefined) group.memberCount = memberCount;
     if (contactNumber !== undefined) group.contactNumber = contactNumber;

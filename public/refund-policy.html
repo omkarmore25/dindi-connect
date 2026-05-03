@@ -1,14 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en">
 
 <head>
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme');
+      if (t === 'traditional') document.documentElement.classList.add('traditional');
+      else if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
+    })();
+  </script>
+  <style>
+    html.dark { background-color: #0f172a !important; }
+    html.traditional { background-color: #1A3636 !important; }
+  </style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dindi - Refund & Cancellation Policy</title>
+  <title>Vandan - Refund & Cancellation Policy</title>
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#f97316">
   <link rel="apple-touch-icon" href="/images/icon-192.png">
-  <link href="/css/style.css" rel="stylesheet">
+  <link href="/css/style.css?v=13" rel="stylesheet">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
 
@@ -17,27 +28,13 @@
       background-attachment: fixed;
     }
 
-    .glass-nav {
-      background: rgba(255, 255, 255, 0.75);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    }
+    
 
-    .dark .glass-nav {
-      background: rgba(15, 23, 42, 0.75);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
+    .dark 
 
-    .glass-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-    }
+    
 
-    .dark .glass-card {
-      background: rgba(30, 41, 59, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
+    .dark 
 
     .policy-content h3 {
       font-weight: 700;
@@ -72,22 +69,24 @@
     .dark .policy-content ul {
       color: #94a3b8;
     }
-  </style>
-  <script>
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+    .traditional .policy-content h3 {
+      color: #C8A97E !important;
     }
-  </script>
+
+    .traditional .policy-content p,
+    .traditional .policy-content ul {
+      color: rgba(200, 169, 126, 0.8) !important;
+    }
+  </style>
+  
 </head>
 
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen">
 
   <header class="glass-nav sticky top-0 z-50 w-full px-4 py-3 flex justify-between items-center shadow-sm">
     <div class="flex items-center gap-3">
-      <a href="/" class="w-8 h-8 rounded-xl bg-brand-500 text-white flex items-center justify-center font-bold shadow-lg shadow-brand-500/30">D</a>
-      <h1 class="text-lg font-bold">Dindi Connect</h1>
+      <a href="/" class="w-8 h-8 rounded-xl bg-brand-500 text-white flex items-center justify-center font-bold shadow-lg shadow-brand-500/30">V</a>
+      <h1 class="text-lg font-bold">Vandan</h1>
     </div>
     <a href="/contact.html" class="text-sm font-semibold text-brand-500 hover:underline">Help Center</a>
   </header>
@@ -99,7 +98,7 @@
     </div>
 
     <div class="glass-card rounded-3xl p-6 md:p-10 policy-content shadow-xl">
-      <p>At Dindi Connect, we value the trust you place in us. Please read this policy carefully before making any payments for our services.</p>
+      <p>At Vandan, we value the trust you place in us. Please read this policy carefully before making any payments for our services.</p>
 
       <h3>1. Refund Eligibility</h3>
       <p>Refunds are only considered in the following circumstances:</p>
@@ -129,8 +128,8 @@
       <p>To request a refund, please contact our support team via the <a href="/contact.html" class="text-brand-500 font-bold hover:underline">Contact Center</a> within 48 hours of the transaction. You must provide your <strong>Transaction ID</strong> and <strong>Mobile Number</strong>.</p>
       <p>Approved refunds will be processed within <strong>5 to 7 working days</strong> and will be credited back to the original payment source (Bank/UPI/Card).</p>
 
-      <div class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 text-center">
-        <p class="text-xs italic">By using Dindi Connect, you agree to these terms. We reserve the right to modify this policy at any time.</p>
+      <div class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-200 dark:border-slate-800 text-center">
+        <p class="text-xs italic">By using Vandan, you agree to these terms. We reserve the right to modify this policy at any time.</p>
       </div>
     </div>
 
@@ -142,6 +141,63 @@
     </div>
   </main>
 
-  <script src="/js/main.js"></script>
+  <script src="/js/main.js?v=51.61"></script>
+  
+  
+  
+  <!-- PWA Install Banner (Mobile) -->
+  <div id="installMobileBanner" class="hidden md:hidden fixed bottom-24 left-0 right-0 mx-auto w-[90%] max-w-sm glass-card p-4 rounded-2xl shadow-2xl border border-brand-200/50 dark:border-brand-500/30 animate-fade-in" style="z-index: 9999;">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-500 to-orange-500 text-white flex items-center justify-center font-bold text-xl shrink-0 shadow-lg shadow-brand-500/20">V</div>
+      <div class="flex-1 min-w-0">
+        <h4 class="text-sm font-black text-slate-800 dark:text-slate-100">Install Vandan</h4>
+        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate">Fast, secure & offline access</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="dismissInstallBanner" class="p-2 text-slate-400 hover:text-slate-600 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <button id="installMobileBtn" class="px-4 py-2 bg-brand-500 text-white text-[10px] font-black rounded-lg shadow-lg shadow-brand-500/30">INSTALL</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

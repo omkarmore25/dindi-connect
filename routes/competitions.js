@@ -7,7 +7,7 @@ const path = require('path');
 const fs = require('fs');
 const sharp = require('sharp');
 const cloudinary = require('../utils/cloudinary');
-const { validateCompetition, validateObjectIdParam, isValidObjectId } = require('../middleware/sanitize');
+const { validateCompetition, validateObjectIdParam, isValidObjectId, escapeRegex } = require('../middleware/sanitize');
 
 // Configure Multer for memory storage
 const storage = multer.memoryStorage();
@@ -35,7 +35,21 @@ router.get('/', async (req, res) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const comps = await Competition.find({ date: { $gte: today } })
+    let filter = { date: { $gte: today } };
+    
+    if (req.query.type && req.query.type !== 'All') {
+      filter.eventType = req.query.type;
+    }
+    
+    if (req.query.search) {
+      const searchRegex = new RegExp(escapeRegex(req.query.search), 'i');
+      filter.$or = [
+        { title: { $regex: searchRegex } },
+        { location: { $regex: searchRegex } }
+      ];
+    }
+
+    const comps = await Competition.find(filter)
                                    .populate('registeredGroups', 'groupName village ownerId')
                                    .sort({ date: 1 });
     res.json(comps);

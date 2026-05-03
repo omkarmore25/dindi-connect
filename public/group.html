@@ -1,29 +1,40 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en">
 <head>
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme');
+      if (t === 'traditional') document.documentElement.classList.add('traditional');
+      else if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
+    })();
+  </script>
+  <style>
+    html.dark { background-color: #0f172a !important; }
+    html.traditional { background-color: #1A3636 !important; }
+  </style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Group Profile - Dindi</title>
-  <meta name="description" content="View this Dindi group's profile, contact details, photos, and availability.">
+  <title>Group Profile - Vandan</title>
+  <meta name="description" content="View this group's profile, contact details, photos, and availability.">
   
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://dindi-connect.onrender.com/">
-  <meta property="og:title" content="Dindi - Group Profile">
-  <meta property="og:description" content="View this Dindi group's profile, contact details, photos, and availability.">
-  <meta property="og:image" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=1">
-  <meta property="og:image:secure_url" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=1">
+  <meta property="og:title" content="Vandan - Group Profile">
+  <meta property="og:description" content="View this group's profile, contact details, photos, and availability.">
+  <meta property="og:image" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=5">
+  <meta property="og:image:secure_url" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=5">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Dindi Connect Group Profile">
-  <meta property="og:site_name" content="Dindi Connect">
+  <meta property="og:image:alt" content="Vandan Group Profile">
+  <meta property="og:site_name" content="Vandan">
 
   <!-- Twitter Card Tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://dindi-connect.onrender.com/">
-  <meta name="twitter:title" content="Dindi - Group Profile">
-  <meta name="twitter:description" content="View this Dindi group's profile, contact details, photos, and availability.">
-  <meta name="twitter:image" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=1">
+  <meta name="twitter:title" content="Vandan - Group Profile">
+  <meta name="twitter:description" content="View this group's profile, contact details, photos, and availability.">
+  <meta name="twitter:image" content="https://dindi-connect.onrender.com/images/social-preview.jpg?v=5">
 
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json">
@@ -31,7 +42,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="/images/icon-192.png">
   
-  <link href="/css/style.css" rel="stylesheet">
+  <link href="/css/style.css?v=13" rel="stylesheet">
   
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
@@ -48,65 +59,47 @@
                         radial-gradient(at 100% 100%, rgba(79,70,229,0.15) 0px, transparent 50%);
     }
 
-    .glass-nav { 
-      background: rgba(255, 255, 255, 0.75); 
-      backdrop-filter: blur(16px); 
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    }
     
-    .dark .glass-nav {
-      background: rgba(15, 23, 42, 0.75);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
+    
+    .dark 
 
-    .glass-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    }
     
-    .dark .glass-card {
-      background: rgba(30, 41, 59, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-    }
+    
+    .dark 
   </style>
 
-  <script>
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  </script>
+  
   <!-- Razorpay Checkout -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col md:flex-row pb-32 md:pb-0">
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen md:flex md:flex-row">
 
   <!-- Desktop Sidebar / Mobile Top Nav -->
   <header class="glass-nav sticky top-0 z-50 w-full md:w-72 md:h-screen md:fixed md:flex md:flex-col md:border-r md:border-b-0 px-4 py-3 md:p-6 shadow-sm flex justify-between items-center md:items-start transition-colors">
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-400 to-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 font-serif">D</div>
-      <h1 class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-red-500">Dindi</h1>
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-400 to-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 font-serif">V</div>
+      <h1 class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-red-500">Vandan</h1>
     </div>
 
     <!-- Desktop Navigation Links -->
     <nav class="hidden md:flex flex-col gap-2 mt-10 w-full">
-      <a href="/" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
+      <a href="/" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
         <svg class="w-5 h-5 font-bold" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
         Home
       </a>
-      <a href="/calendar.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
+      <a href="/calendar.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
         Calendar
       </a>
-      <a href="/auth.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
+      <a href="/dashboard.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+        Dashboard
+      </a>
+      <a href="/auth.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
         Profile
       </a>
-      <a href="/contact.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">
+      <a href="/contact.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
         Help & Contact
       </a>
@@ -127,33 +120,11 @@
           <circle cx="18.364" cy="5.636" r="1.5" />
         </svg>
       </button>
-      <div id="auth-section"></div>
-    </div>
   </header>
-
-  <!-- Mobile Floating Bottom Nav -->
-  <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav rounded-3xl px-4 py-3 flex justify-between items-center shadow-xl z-50 transition-all duration-300 transform">
-    <a href="/" class="flex flex-col items-center text-brand-500 transition transform scale-105">
-      <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-      <span class="text-[10px] font-bold">Home</span>
-    </a>
-    <a href="/calendar.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
-      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-      <span class="text-[10px] font-medium">Calendar</span>
-    </a>
-    <a href="/auth.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
-      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-      <span class="text-[10px] font-medium">Profile</span>
-    </a>
-    <a href="/contact.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
-      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-      <span class="text-[10px] font-medium">Help</span>
-    </a>
-  </nav>
 
 
   <!-- Main Content Area -->
-  <div class="flex-1 md:ml-72 flex flex-col min-h-screen">
+  <div class="flex-1 md:ml-72 flex flex-col min-h-screen pb-32 md:pb-8">
     
     <!-- Mobile Back Button -->
     <div class="md:hidden px-4 pt-6 pb-2">
@@ -192,33 +163,28 @@
           <div id="pAction" class="flex flex-wrap items-center gap-4"></div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="md:col-span-2 space-y-24">
-            <div class="glass-card p-6 rounded-3xl">
-              <h3 class="text-xl font-bold mb-3 text-slate-800 dark:text-slate-100">About Us</h3>
-              <p id="pDesc" class="text-slate-600 dark:text-slate-300 leading-relaxed">No description provided.</p>
-            </div>
-            
-            <div class="glass-card p-6 rounded-3xl">
-              <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
-                Achievements
-              </h3>
-              <ul id="pAchievements" class="space-y-3">
-                <li class="text-slate-500 dark:text-slate-400 italic">No achievements listed yet.</li>
-              </ul>
-            </div>
+        <div class="flex flex-col gap-6">
+          <div class="glass-card p-6 rounded-3xl">
+            <h3 class="text-xl font-bold mb-3 text-slate-800 dark:text-slate-100">About Us</h3>
+            <p id="pDesc" class="text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">No description provided.</p>
           </div>
           
-          <div class="space-y-6">
-            <div class="glass-card p-6 rounded-3xl">
-              <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Dindi Pramukh</h3>
-              <div class="flex items-center gap-4">
-                <div id="pLeadInitial" class="text-3xl font-extrabold text-brand-500 dark:text-brand-400 drop-shadow-sm select-none">X</div>
-                <div>
-                  <div id="pLeadName" class="font-bold text-lg text-slate-800 dark:text-slate-100">Name</div>
-
-                </div>
+          <div class="glass-card p-6 rounded-3xl">
+            <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100 flex items-center gap-2">
+              <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+              Achievements
+            </h3>
+            <ul id="pAchievements" class="space-y-3">
+              <li class="text-slate-500 dark:text-slate-400 italic">No achievements listed yet.</li>
+            </ul>
+          </div>
+          
+          <div class="glass-card p-6 rounded-3xl">
+            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Pramukh</h3>
+            <div class="flex items-center gap-4">
+              <div id="pLeadInitial" class="text-3xl font-extrabold text-brand-500 dark:text-brand-400 drop-shadow-sm select-none">X</div>
+              <div>
+                <div id="pLeadName" class="font-bold text-lg text-slate-800 dark:text-slate-100">Name</div>
               </div>
             </div>
           </div>
@@ -238,8 +204,87 @@
     </div>
   </div>
 
+  <!-- Mobile Floating Bottom Nav -->
+  <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav mobile-bottom-nav rounded-3xl px-6 py-3 flex justify-between items-center shadow-xl transition-all duration-300 transform">
+    <a href="/" class="flex flex-col items-center text-brand-500 transition transform scale-105">
+      <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+      <span class="text-[10px] font-bold">Home</span>
+    </a>
+    <a href="/calendar.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+      <span class="text-[10px] font-medium">Calendar</span>
+    </a>
+    <a href="/dashboard.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+       <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+       <span class="text-[10px] font-medium">Dash</span>
+    </a>
+    <a href="/auth.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+      <span class="text-[10px] font-medium">Profile</span>
+    </a>
+    <a href="/contact.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+      <span class="text-[10px] font-medium">Help</span>
+    </a>
+  </nav>
 
-
-  <script src="/js/main.js?v=2"></script>
+  <script src="/js/main.js?v=51.61"></script>
+  
+  
+  
+  <!-- PWA Install Banner (Mobile) -->
+  <div id="installMobileBanner" class="hidden md:hidden fixed bottom-24 left-0 right-0 mx-auto w-[90%] max-w-sm glass-card p-4 rounded-2xl shadow-2xl border border-brand-200/50 dark:border-brand-500/30 animate-fade-in" style="z-index: 9999;">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-500 to-orange-500 text-white flex items-center justify-center font-bold text-xl shrink-0 shadow-lg shadow-brand-500/20">V</div>
+      <div class="flex-1 min-w-0">
+        <h4 class="text-sm font-black text-slate-800 dark:text-slate-100">Install Vandan</h4>
+        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate">Fast, secure & offline access</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="dismissInstallBanner" class="p-2 text-slate-400 hover:text-slate-600 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <button id="installMobileBtn" class="px-4 py-2 bg-brand-500 text-white text-[10px] font-black rounded-lg shadow-lg shadow-brand-500/30">INSTALL</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,11 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en">
 <head>
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme');
+      if (t === 'traditional') document.documentElement.classList.add('traditional');
+      else if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
+    })();
+  </script>
+  <style>
+    html.dark { background-color: #0f172a !important; }
+    html.traditional { background-color: #1A3636 !important; }
+  </style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Event - Dindi</title>
+  <title>Manage Competition - Vandan</title>
   
-  <link href="/css/style.css" rel="stylesheet">
+  <link href="/css/style.css?v=13" rel="stylesheet">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
     
@@ -31,29 +42,44 @@
       overscroll-behavior: none;
     }
 
-    .glass-nav { 
-      background: rgba(255, 255, 255, 0.75); 
-      backdrop-filter: blur(16px); 
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    }
     
-    .dark .glass-nav {
-      background: rgba(15, 23, 42, 0.75);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
+    
+    .dark 
 
-    .glass-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    }
     
-    .dark .glass-card {
-      background: rgba(30, 41, 59, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    
+    .dark 
+
+    /* Traditional Mode Overrides */
+    .traditional .glass-card, 
+    .traditional #headerCard {
+       background-color: #234040 !important;
+       border-color: #C8A97E !important;
+       color: #C8A97E !important;
+    }
+    .traditional h2, .traditional h3, .traditional th {
+       color: #C8A97E !important;
+    }
+    .traditional #headerCard span {
+       background-color: rgba(200, 169, 126, 0.1) !important;
+       color: #C8A97E !important;
+    }
+    .traditional table {
+       border-color: rgba(200, 169, 126, 0.2) !important;
+    }
+    .traditional thead tr {
+       background-color: rgba(200, 169, 126, 0.05) !important;
+       border-color: rgba(200, 169, 126, 0.2) !important;
+    }
+    .traditional tbody tr {
+       border-color: rgba(200, 169, 126, 0.1) !important;
+       color: #C8A97E !important;
+    }
+    .traditional tbody tr:hover {
+       background-color: rgba(200, 169, 126, 0.05) !important;
+    }
+    .traditional td {
+       color: #C8A97E !important;
     }
 
     .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
@@ -65,62 +91,68 @@
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
   </style>
-  <script>
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  </script>
+  
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col md:flex-row pb-32 md:pb-0">
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen md:flex md:flex-row">
 
   <!-- Desktop Sidebar -->
-  <header class="bg-slate-950 sticky top-0 z-50 w-full md:w-72 md:h-screen md:fixed md:flex md:flex-col md:border-r border-slate-800 px-4 py-3 md:p-6 shadow-2xl flex justify-between items-center md:items-start transition-colors">
+  <header class="glass-nav sticky top-0 z-50 w-full md:w-72 md:h-screen md:fixed md:flex md:flex-col md:border-r border-slate-200 dark:border-slate-800 px-4 py-3 md:p-6 shadow-2xl flex justify-between items-center md:items-start transition-colors">
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-400 to-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 font-serif">D</div>
-      <h1 class="text-xl md:text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-red-500 tracking-tighter">Dindi</h1>
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-400 to-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 font-serif">V</div>
+      <h1 class="text-xl md:text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-red-500 tracking-tighter">Vandan</h1>
     </div>
 
     <!-- Desktop Nav -->
     <nav class="hidden md:flex flex-col gap-2 mt-10 w-full">
-      <a href="/" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">Home</a>
-      <a href="/calendar.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-medium">Calendar</a>
-      <a href="/auth.html" class="mt-4 flex items-center justify-center gap-3 px-4 py-3 bg-brand-500 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/20 hover:bg-brand-600 transition cursor-pointer">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-        Back to Dashboard
+      <a href="/" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5 font-bold" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+        Home
+      </a>
+      <a href="/calendar.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+        Calendar
+      </a>
+      <a href="/dashboard.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+        Dashboard
+      </a>
+      <a href="/auth.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+        Profile
+      </a>
+      <a href="/contact.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        Help & Contact
       </a>
     </nav>
 
-    <div class="flex items-center gap-3 md:mt-auto md:w-full md:justify-between">
-      <button id="themeToggle" class="rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition text-slate-500 dark:text-slate-400" aria-label="Toggle Dark Mode">
-        <svg id="themeToggleDarkIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>
-        <svg id="themeToggleLightIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="5" />
-          <circle cx="12" cy="3" r="1.5" />
-          <circle cx="12" cy="21" r="1.5" />
-          <circle cx="3" cy="12" r="1.5" />
-          <circle cx="21" cy="12" r="1.5" />
-          <circle cx="5.636" cy="5.636" r="1.5" />
-          <circle cx="18.364" cy="18.364" r="1.5" />
-          <circle cx="5.636" cy="18.364" r="1.5" />
-          <circle cx="18.364" cy="5.636" r="1.5" />
-        </svg>
-      </button>
+    <div class="md:mt-auto w-full flex flex-col gap-4">
+      <div class="flex items-center gap-3 w-full justify-between">
+        <button id="themeToggle" class="rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition text-slate-500 dark:text-slate-400" aria-label="Toggle Dark Mode">
+          <svg id="themeToggleDarkIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>
+          <svg id="themeToggleLightIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5" /><circle cx="12" cy="3" r="1.5" /><circle cx="12" cy="21" r="1.5" /><circle cx="3" cy="12" r="1.5" /><circle cx="21" cy="12" r="1.5" /><circle cx="5.636" cy="5.636" r="1.5" /><circle cx="18.364" cy="18.364" r="1.5" /><circle cx="5.636" cy="18.364" r="1.5" /><circle cx="18.364" cy="5.636" r="1.5" />
+          </svg>
+        </button>
+      </div>
+      <div id="auth-section" class="hidden md:block"></div>
     </div>
   </header>
 
   <!-- Content Area -->
-  <div class="flex-1 md:ml-72 flex flex-col min-h-screen px-4 md:px-8 py-8 relative">
+  <div class="flex-1 md:ml-72 flex flex-col min-h-screen pb-32 md:pb-8 px-4 md:px-8 py-8 relative">
     <div class="max-w-4xl w-full mx-auto relative z-10 animate-fade-in transition-all">
         <div id="loadingState" class="py-20 text-center">
-            <div class="inline-block relative w-16 h-16"><div class="absolute inset-0 border-4 border-slate-200 dark:border-slate-800 rounded-full"></div><div class="absolute inset-0 border-4 border-brand-500 rounded-full border-t-transparent animate-spin"></div></div>
+            <div class="inline-block relative w-16 h-16"><div class="absolute inset-0 border-4 border-slate-200 dark:border-slate-200 dark:border-slate-800 rounded-full"></div><div class="absolute inset-0 border-4 border-brand-500 rounded-full border-t-transparent animate-spin"></div></div>
         </div>
       
         <div id="compContent" class="hidden flex flex-col gap-6">
-            <div class="bg-slate-900/40 backdrop-blur-md rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border border-slate-800/50 shadow-2xl">
+            <div id="headerCard" class="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border border-slate-200/50 dark:border-slate-200 dark:border-slate-800/50 shadow-2xl transition-colors">
                <div class="flex-1 text-left">
-                  <h2 class="text-2xl sm:text-3xl font-black text-slate-100 mb-3 tracking-tight" id="compTitle">Event Title</h2>
+                  <div class="flex items-center gap-3 mb-3 flex-wrap">
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-slate-100 tracking-tight" id="compTitle">Event Title</h2>
+                    <span id="compTypeBadge" class="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400 leading-none"></span>
+                  </div>
                   <div class="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-500 dark:text-slate-400">
                     <span id="compDate" class="bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg">Date</span>
                     <span id="compLoc" class="bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg">Location</span>
@@ -137,7 +169,7 @@
       
             <div class="glass-card rounded-3xl p-6 md:p-8 mt-2">
                <h3 class="text-xl font-bold mb-6 text-slate-800 dark:text-slate-100">Registered Teams</h3>
-               <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+               <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-200 dark:border-slate-800">
                  <table class="w-full text-center border-collapse">
                    <thead>
                      <tr class="bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 text-slate-500 text-xs font-bold uppercase tracking-widest">
@@ -156,9 +188,31 @@
     </div>
   </div>
 
-  <!-- Modal Removed from this DOM tree to bypass Stacking Context restrictions, appended to body tail --!>
+  <!-- Mobile Bottom Nav -->
+  <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav mobile-bottom-nav rounded-3xl px-6 py-3 flex justify-between items-center shadow-xl transition-all duration-300 transform">
+    <a href="/" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+      <span class="text-[10px] font-medium">Home</span>
+    </a>
+    <a href="/calendar.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+      <span class="text-[10px] font-medium">Calendar</span>
+    </a>
+    <a href="/dashboard.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+       <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+       <span class="text-[10px] font-medium">Dash</span>
+    </a>
+    <a href="/auth.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition transform scale-105">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+      <span class="text-[10px] font-bold">Profile</span>
+    </a>
+    <a href="/contact.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+      <span class="text-[10px] font-medium">Help</span>
+    </a>
+  </nav>
 
-  <script src="/js/main.js?v=11"></script>
+  <script src="/js/main.js?v=51.61"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -178,6 +232,8 @@
       document.getElementById('compContent').classList.remove('hidden');
 
       document.getElementById('compTitle').textContent = comp.title || '';
+      const typeBadge = document.getElementById('compTypeBadge');
+      if (typeBadge && comp.eventType) { typeBadge.textContent = comp.eventType + ' Competition'; }
       document.getElementById('compDate').textContent = comp.date ? new Date(comp.date).toLocaleDateString() : '';
       document.getElementById('compLoc').textContent = comp.location || '';
       document.getElementById('participantCount').textContent = comp.registeredGroups.length;
@@ -188,7 +244,7 @@
       } else {
          comp.registeredGroups.forEach(rg => {
             const tr = document.createElement('tr');
-            tr.className = 'border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition';
+            tr.className = 'border-b border-slate-100 dark:border-slate-200 dark:border-slate-800  dark:hover:bg-slate-800/50 transition';
             tr.innerHTML = `<td class="py-4 px-5 font-bold text-slate-800 dark:text-slate-200">${rg.groupName}</td>` +
                            `<td class="py-4 px-5 text-slate-600 dark:text-slate-400">${rg.village || '-'}</td>` +
                            `<td class="py-4 px-5 text-slate-600 dark:text-slate-400">${rg.leaderName || '-'}</td>` +
@@ -206,14 +262,66 @@
          });
       }
 
-      const openBtn = document.getElementById('openEditModalBtn');
-
-      openBtn.onclick = () => {
+      document.getElementById('openEditModalBtn').onclick = () => {
          window.location.href = '/edit-competition.html?id=' + compId;
       };
 
     });
   </script>
-
+  
+  
+  
+  <!-- PWA Install Banner (Mobile) -->
+  <div id="installMobileBanner" class="hidden md:hidden fixed bottom-24 left-0 right-0 mx-auto w-[90%] max-w-sm glass-card p-4 rounded-2xl shadow-2xl border border-brand-200/50 dark:border-brand-500/30 animate-fade-in" style="z-index: 9999;">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-500 to-orange-500 text-white flex items-center justify-center font-bold text-xl shrink-0 shadow-lg shadow-brand-500/20">V</div>
+      <div class="flex-1 min-w-0">
+        <h4 class="text-sm font-black text-slate-800 dark:text-slate-100">Install Vandan</h4>
+        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate">Fast, secure & offline access</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="dismissInstallBanner" class="p-2 text-slate-400 hover:text-slate-600 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <button id="installMobileBtn" class="px-4 py-2 bg-brand-500 text-white text-[10px] font-black rounded-lg shadow-lg shadow-brand-500/30">INSTALL</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

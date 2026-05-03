@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme');
+      if (t === 'traditional') document.documentElement.classList.add('traditional');
+      else if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
+    })();
+  </script>
+  <style>
+    html.dark { background-color: #0f172a !important; }
+    html.traditional { background-color: #1A3636 !important; }
+  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Owner Dashboard - Vandan</title>
+  <link rel="manifest" href="/manifest.json?v=9">
+  <link href="/css/style.css?v=13" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap');
+    body { 
+      font-family: 'Outfit', sans-serif;
+      background-image: radial-gradient(at 0% 0%, rgba(251, 146, 60, 0.1) 0px, transparent 50%), 
+                        radial-gradient(at 100% 0%, rgba(234, 88, 12, 0.1) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+    .dark body {
+      background-image: radial-gradient(at 0% 0%, rgba(251, 146, 60, 0.15) 0px, transparent 50%), 
+                        radial-gradient(at 100% 100%, rgba(79, 70, 229, 0.15) 0px, transparent 50%);
+      background-color: #020617;
+    }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .status-badge { @apply px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter; }
+    .status-new { @apply bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400; }
+    .status-confirmed { @apply bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400; }
+    .status-rejected { @apply bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400; }
+    
+    .nav-tab { 
+      padding: 0.75rem 1.5rem !important;
+      border-radius: 1rem !important;
+      font-weight: 700 !important;
+      font-size: 0.875rem !important;
+      transition: all 0.3s ease !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+      border: 1px solid transparent !important;
+      cursor: pointer !important;
+      white-space: nowrap !important;
+    }
+    .nav-tab-active {
+      background-color: #f97316 !important;
+      color: white !important;
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3) !important;
+    }
+    .nav-tab-inactive {
+      background-color: #f1f5f9 !important;
+      color: #64748b !important;
+      border-color: #e2e8f0 !important;
+    }
+    .dark .nav-tab-inactive {
+      background-color: #1e293b !important;
+      color: #94a3b8 !important;
+      border-color: #334155 !important;
+    }
+
+
+    .traditional .nav-tab-inactive {
+      background-color: rgba(200, 169, 126, 0.1) !important;
+      color: #C8A97E !important;
+      border-color: rgba(200, 169, 126, 0.2) !important;
+    }
+  </style>
+  
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen md:flex md:flex-row">
+
+  <!-- Desktop Sidebar / Mobile Top Nav -->
+  <header class="glass-nav sticky top-0 z-50 w-full md:w-72 md:h-screen md:fixed md:flex md:flex-col md:border-r md:border-b-0 px-4 py-3 md:p-6 shadow-sm flex justify-between items-center md:items-start transition-colors">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-400 to-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 font-serif">V</div>
+      <h1 class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-red-500">Vandan</h1>
+    </div>
+
+    <!-- Desktop Navigation Links -->
+    <nav class="hidden md:flex flex-col gap-2 mt-10 w-full">
+      <a href="/" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+        Home
+      </a>
+      <a href="/calendar.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+        Calendar
+      </a>
+      <a href="/dashboard.html" class="flex items-center gap-3 px-4 py-3 bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-semibold rounded-xl transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+        Dashboard
+      </a>
+      <a href="/auth.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+        Profile
+      </a>
+      <a href="/contact.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        Help & Contact
+      </a>
+
+    </nav>
+
+    <div class="flex items-center gap-3 md:mt-auto md:w-full md:justify-between">
+      <button id="themeToggle" class="rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition text-slate-500 dark:text-slate-400" aria-label="Toggle Dark Mode">
+        <svg id="themeToggleDarkIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>
+        <svg id="themeToggleLightIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="5" />
+          <circle cx="12" cy="3" r="1.5" />
+          <circle cx="12" cy="21" r="1.5" />
+          <circle cx="3" cy="12" r="1.5" />
+          <circle cx="21" cy="12" r="1.5" />
+          <circle cx="5.636" cy="5.636" r="1.5" />
+          <circle cx="18.364" cy="18.364" r="1.5" />
+          <circle cx="5.636" cy="18.364" r="1.5" />
+          <circle cx="18.364" cy="5.636" r="1.5" />
+        </svg>
+      </button>
+      <div id="auth-section" class="text-sm font-medium"></div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 md:ml-72 flex flex-col min-h-screen pb-32 md:pb-8 transition-colors">
+    <div class="px-4 py-8 md:px-10 md:py-12 relative z-10">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+      <div>
+        <h1 class="text-3xl md:text-4xl font-black tracking-tight mb-2">Owner <span class="text-brand-500">Dashboard</span></h1>
+        <p class="text-slate-500 dark:text-slate-400 font-medium" id="groupWelcome">Welcome back, Group Leader</p>
+      </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div id="statsSection" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+      <div class="glass-card p-6 rounded-[2rem] text-center border-b-4 border-yellow-500">
+        <div class="text-2xl font-black text-yellow-600 dark:text-yellow-400" id="statTotal">0</div>
+        <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Total Requests</div>
+      </div>
+      <div class="glass-card p-6 rounded-[2rem] text-center border-b-4 border-blue-500">
+        <div class="text-2xl font-black text-blue-600 dark:text-blue-400" id="statNew">0</div>
+        <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">New</div>
+      </div>
+      <div class="glass-card p-6 rounded-[2rem] text-center border-b-4 border-green-500">
+        <div class="text-2xl font-black text-green-600 dark:text-green-400" id="statConfirmed">0</div>
+        <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Confirmed</div>
+      </div>
+      <div class="glass-card p-6 rounded-[2rem] text-center border-b-4 border-red-500">
+        <div class="text-2xl font-black text-red-600 dark:text-red-400" id="statRejected">0</div>
+        <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Rejected</div>
+      </div>
+    </div>
+    
+    <!-- Group Selector Section -->
+    <div id="groupSelectorContainer" class="hidden mb-12 border-b border-slate-100 dark:border-slate-200 dark:border-slate-800 pb-8">
+      <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4 ml-2">Switch Group View</p>
+      <div id="groupList" class="flex overflow-x-auto gap-3 no-scrollbar pb-2">
+         <!-- Group buttons injected here -->
+      </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div id="tabsSection" class="flex overflow-x-auto gap-3 mb-8 no-scrollbar pb-2 mt-4">
+      <button class="nav-tab nav-tab-active" data-status="new">
+        New <span class="bg-blue-500 text-white text-[10px] px-1.5 py-0.5 rounded-full" id="badgeNew">0</span>
+      </button>
+      <button class="nav-tab nav-tab-inactive" data-status="confirmed">Confirmed</button>
+      <button class="nav-tab nav-tab-inactive" data-status="rejected">Rejected</button>
+      <button class="nav-tab nav-tab-inactive" data-status="all">All Bookings</button>
+    </div>
+
+    <!-- Bookings Grid -->
+    <div id="loadingState" class="text-center py-20 text-slate-400 font-medium">Loading your bookings...</div>
+    <div id="noBookings" class="hidden text-center py-24 glass-card rounded-[3rem] border-2 border-dashed border-slate-200 dark:border-slate-200 dark:border-slate-800">
+       <div class="text-slate-500 dark:text-slate-400 font-bold text-lg">No booking requests found in this category.</div>
+       <p class="text-slate-400 dark:text-slate-500 text-sm mt-2">New requests will appear here once submitted by users.</p>
+    </div>
+
+    <!-- No Groups Found Section -->
+    <div id="noGroups" class="hidden text-center py-24 glass-card rounded-[3rem] border-2 border-dashed border-brand-200 dark:border-brand-900/30">
+       <div class="text-slate-800 dark:text-slate-100 font-black text-2xl mb-4">No Vandan Groups Found</div>
+       <p class="text-slate-500 dark:text-slate-400 text-base max-w-sm mx-auto leading-relaxed">It looks like you haven't registered any groups yet. You can create one from your profile page to start receiving bookings.</p>
+       <a href="/auth.html" class="inline-flex items-center gap-2 mt-8 px-8 py-4 bg-brand-500 text-white font-bold rounded-2xl shadow-xl shadow-brand-500/30 hover:bg-brand-600 transition transform hover:-translate-y-1">
+         Create a Group
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+       </a>
+    </div>
+
+    <div id="bookingsGrid" class="dashboard-grid hidden"></div>
+
+    <!-- Login Required Section -->
+    <div id="loginRequired" class="hidden text-center py-24 glass-card rounded-[3rem] border-2 border-dashed border-slate-200 dark:border-slate-200 dark:border-slate-800 animate-fade-in">
+       <div class="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-400">
+         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+       </div>
+       <div class="text-slate-800 dark:text-slate-100 font-black text-2xl mb-4">Dashboard Access Required</div>
+       <p class="text-slate-500 dark:text-slate-400 text-base max-w-sm mx-auto leading-relaxed">Please sign in to your owner account to manage your groups and booking requests.</p>
+       <a href="/auth.html" class="inline-flex items-center gap-3 mt-8 px-10 py-4 bg-brand-500 text-white font-bold rounded-2xl shadow-xl shadow-brand-500/30 hover:bg-brand-600 transition transform hover:-translate-y-1">
+         Sign In to My Account
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+       </a>
+    </div>
+  </div>
+</div>
+
+  
+      
+  
+  <!-- Mobile Floating Bottom Nav -->
+  <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav mobile-bottom-nav rounded-3xl px-6 py-3 flex justify-between items-center shadow-xl transition-all duration-300 transform">
+    <a href="/" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+      <span class="text-[10px] font-medium">Home</span>
+    </a>
+    <a href="/calendar.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+      <span class="text-[10px] font-medium">Calendar</span>
+    </a>
+    <a href="/dashboard.html" class="flex flex-col items-center text-brand-500 transition transform scale-105">
+       <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+       <span class="text-[10px] font-bold">Dash</span>
+    </a>
+    <a href="/auth.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+      <span class="text-[10px] font-medium">Profile</span>
+    </a>
+    <a href="/contact.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+      <span class="text-[10px] font-medium">Help</span>
+    </a>
+  </nav>
+
+  <script src="/js/main.js?v=51.61"></script>
+  <script>
+    let allBookings = [];
+    let allGroups = [];
+    let selectedGroupId = null;
+    let currentFilter = 'new';
+
+    async function initDashboard() {
+      try {
+        const res = await fetch(`/api/bookings/my-group?t=${Date.now()}`);
+        if (!res.ok) {
+          if (res.status === 401) {
+             document.getElementById('loadingState').classList.add('hidden');
+             document.getElementById('loginRequired').classList.remove('hidden');
+             document.getElementById('statsSection').classList.add('hidden');
+             document.getElementById('tabsSection').classList.add('hidden');
+             document.getElementById('groupWelcome').textContent = 'Please log in to continue';
+             return;
+          }
+          throw new Error('Failed to load dashboard');
+        }
+        
+        const data = await res.json();
+        allGroups = data.groups;
+        allBookings = data.bookings;
+
+        if (!allGroups || allGroups.length === 0) {
+           document.getElementById('noGroups').classList.remove('hidden');
+           document.getElementById('statsSection').classList.add('hidden');
+           document.getElementById('tabsSection').classList.add('hidden');
+           document.getElementById('groupWelcome').textContent = 'No groups registered';
+        } else {
+           selectedGroupId = allGroups[0]._id;
+           renderGroups();
+           if (allGroups.length > 1) {
+             document.getElementById('groupSelectorContainer').classList.remove('hidden');
+           }
+           updateView();
+        }
+        document.getElementById('loadingState').classList.add('hidden');
+      } catch (err) {
+        document.getElementById('loadingState').textContent = `Error: ${err.message}`;
+      }
+    }
+
+    function renderGroups() {
+      const container = document.getElementById('groupList');
+      container.innerHTML = allGroups.map(g => `
+        <button onclick="switchGroup('${g._id}')" class="px-5 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap ${selectedGroupId === g._id ? 'bg-brand-500 text-white shadow-lg' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-200 dark:border-slate-800 text-slate-500'}">
+          ${g.groupName}
+        </button>
+      `).join('');
+    }
+
+    function switchGroup(id) {
+      selectedGroupId = id;
+      renderGroups();
+      updateView();
+    }
+
+    function updateView() {
+      if (!allGroups || !allGroups.length) return;
+      const group = allGroups.find(g => g._id === selectedGroupId);
+      if (group) {
+        document.getElementById('groupWelcome').textContent = `Manage bookings for ${group.groupName}`;
+      }
+      updateStats();
+      renderBookings();
+    }
+
+    function updateStats() {
+      const groupBookings = allBookings.filter(b => b.groupId === selectedGroupId);
+      const stats = {
+        total: groupBookings.length,
+        new: groupBookings.filter(b => b.status === 'new').length,
+        confirmed: groupBookings.filter(b => b.status === 'confirmed').length,
+        rejected: groupBookings.filter(b => b.status === 'rejected').length
+      };
+
+      document.getElementById('statTotal').textContent = stats.total;
+      document.getElementById('statNew').textContent = stats.new;
+      document.getElementById('statConfirmed').textContent = stats.confirmed;
+      document.getElementById('statRejected').textContent = stats.rejected;
+      document.getElementById('badgeNew').textContent = stats.new;
+    }
+
+    function renderBookings() {
+      const grid = document.getElementById('bookingsGrid');
+      const noBookings = document.getElementById('noBookings');
+      
+      const groupBookings = allBookings.filter(b => b.groupId === selectedGroupId);
+      const filtered = currentFilter === 'all' 
+        ? groupBookings 
+        : groupBookings.filter(b => b.status === currentFilter);
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        grid.classList.add('hidden');
+        noBookings.classList.remove('hidden');
+        return;
+      }
+
+      grid.classList.remove('hidden');
+      noBookings.classList.add('hidden');
+      
+      grid.innerHTML = filtered.map(b => `
+        <div class="glass-card p-6 rounded-[2.5rem] flex flex-col gap-4 animate-fade-in border border-slate-200 dark:border-slate-200 dark:border-slate-800">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="status-badge status-${b.status}">${b.status}</span>
+              <h3 class="text-xl font-bold mt-2 text-slate-800 dark:text-slate-100">${b.name}</h3>
+              <p class="text-xs text-slate-400 font-medium">${new Date(b.createdAt).toLocaleString()}</p>
+            </div>
+            <div class="bg-brand-50 dark:bg-brand-900/20 p-3 rounded-2xl text-center min-w-[80px]">
+               <div class="text-brand-600 dark:text-brand-400 font-black text-lg">${new Date(b.eventDate).getDate()}</div>
+               <div class="text-[10px] font-bold text-brand-500 uppercase">${new Date(b.eventDate).toLocaleString('default', { month: 'short' })}</div>
+            </div>
+          </div>
+
+          <div class="space-y-3 py-2">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              </div>
+              <span class="text-sm font-bold text-slate-600 dark:text-slate-300 truncate">${b.purpose}</span>
+            </div>
+            <div class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl text-sm text-slate-500 dark:text-slate-400 leading-relaxed italic">
+              "${b.additionalMessage || 'No additional message'}"
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 mt-auto">
+            ${(b.status === 'new') ? `
+              <button onclick="handleStatusUpdate(this, '${b._id}', 'confirmed')" class="py-3 btn-accept rounded-xl text-xs font-black transition shadow-lg">ACCEPT</button>
+              <button onclick="handleStatusUpdate(this, '${b._id}', 'rejected')" class="py-3 btn-reject rounded-xl text-xs font-black transition shadow-lg">REJECT</button>
+              <a href="tel:${b.whatsappNumber}" class="py-3 bg-slate-800 dark:bg-slate-700 text-white rounded-xl text-xs font-black flex items-center justify-center gap-2">CALL</a>
+              <a href="https://wa.me/${b.whatsappNumber}" target="_blank" class="py-3 bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-xs font-black flex items-center justify-center gap-2">WHATSAPP</a>
+            ` : `
+              <a href="tel:${b.whatsappNumber}" class="py-3 bg-slate-800 dark:bg-slate-700 text-white rounded-xl text-xs font-black flex items-center justify-center gap-2">CALL</a>
+              <a href="https://wa.me/${b.whatsappNumber}" target="_blank" class="py-3 bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-xs font-black flex items-center justify-center gap-2">WHATSAPP</a>
+            `}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function handleStatusUpdate(btn, id, status) {
+      const confirmed = await window.vandanModal.show({
+        title: status === 'confirmed' ? 'Accept Booking?' : 'Reject Booking?',
+        text: status === 'confirmed' 
+          ? 'Do you really want to ACCEPT this booking? It will be added to your public calendar immediately.'
+          : 'Are you sure you want to REJECT this request? This action cannot be undone.',
+        type: status === 'confirmed' ? 'success' : 'error',
+        confirmText: status === 'confirmed' ? 'Yes, Accept' : 'Yes, Reject',
+        cancelText: 'Go Back'
+      });
+      
+      if (!confirmed) return;
+      
+      const originalText = btn.textContent;
+      btn.textContent = '...';
+      btn.disabled = true;
+      
+      try {
+        await updateStatus(id, status);
+      } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    async function updateStatus(id, status) {
+      try {
+        const res = await fetch(`/api/bookings/${id}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status })
+        });
+        
+        const data = await res.json();
+        
+        if (!res.ok) {
+           throw new Error(data.error || 'Update failed');
+        }
+
+        await window.vandanModal.show({
+          title: 'Success!',
+          text: `Booking has been ${status === 'confirmed' ? 'accepted and added to your calendar' : 'rejected'}.`,
+          type: 'success',
+          confirmText: 'Done'
+        });
+        
+        // Refresh local data
+        const idx = allBookings.findIndex(b => b._id === id);
+        if (idx !== -1) {
+          allBookings[idx].status = status;
+          updateStats();
+          renderBookings();
+        }
+      } catch (err) {
+        await window.vandanModal.show({
+          title: 'Update Error',
+          text: err.message,
+          type: 'error',
+          confirmText: 'Try Again'
+        });
+        initDashboard();
+      }
+    }
+
+    // Tab switching
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+      tab.onclick = () => {
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.replace('nav-tab-active', 'nav-tab-inactive'));
+        tab.classList.replace('nav-tab-inactive', 'nav-tab-active');
+        currentFilter = tab.dataset.status;
+        renderBookings();
+      };
+    });
+
+    initDashboard();
+  </script>
+
+    
+  
+  
+  <!-- PWA Install Banner (Mobile) -->
+  <div id="installMobileBanner" class="hidden md:hidden fixed bottom-24 left-0 right-0 mx-auto w-[90%] max-w-sm glass-card p-4 rounded-2xl shadow-2xl border border-brand-200/50 dark:border-brand-500/30 animate-fade-in" style="z-index: 9999;">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-500 to-orange-500 text-white flex items-center justify-center font-bold text-xl shrink-0 shadow-lg shadow-brand-500/20">V</div>
+      <div class="flex-1 min-w-0">
+        <h4 class="text-sm font-black text-slate-800 dark:text-slate-100">Install Vandan</h4>
+        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate">Fast, secure & offline access</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="dismissInstallBanner" class="p-2 text-slate-400 hover:text-slate-600 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <button id="installMobileBtn" class="px-4 py-2 bg-brand-500 text-white text-[10px] font-black rounded-lg shadow-lg shadow-brand-500/30">INSTALL</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

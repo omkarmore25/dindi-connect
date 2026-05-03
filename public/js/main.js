@@ -7,9 +7,8 @@ window.addEventListener('beforeinstallprompt', (e) => {
   const isMobile = window.innerWidth < 768;
 
   if (isMobile) {
-    // Mobile: show a beautiful floating banner above the bottom nav
     const banner = document.getElementById('installMobileBanner');
-    if (banner) {
+    if (banner && window.innerWidth < 768) {
       banner.classList.remove('hidden');
 
       document.getElementById('installMobileBtn')?.addEventListener('click', async () => {
@@ -23,26 +22,11 @@ window.addEventListener('beforeinstallprompt', (e) => {
         banner.classList.add('hidden');
       });
     }
-  } else {
-    // Desktop: show the Install button in the sidebar
-    const installBtn = document.getElementById('installPwaBtn');
-    if (installBtn) {
-      installBtn.classList.remove('hidden');
-      installBtn.classList.add('flex');
-      installBtn.addEventListener('click', async () => {
-        installBtn.classList.add('hidden');
-        installBtn.classList.remove('flex');
-        deferredInstallPrompt.prompt();
-        await deferredInstallPrompt.userChoice;
-        deferredInstallPrompt = null;
-      });
-    }
   }
 });
 window.addEventListener('appinstalled', () => {
   deferredInstallPrompt = null;
   document.getElementById('installMobileBanner')?.classList.add('hidden');
-  document.getElementById('installPwaBtn')?.classList.add('hidden');
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -53,12 +37,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (mobileNav) {
     window.addEventListener('scroll', () => {
       let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      if (scrollTop > lastScrollTop && scrollTop > 20) {
+      if (scrollTop > lastScrollTop && scrollTop > 50) {
         // Scrolling down
-        mobileNav.style.transform = 'translate(-50%, 150%)';
+        mobileNav.classList.add('nav-hidden');
       } else {
         // Scrolling up
-        mobileNav.style.transform = 'translate(-50%, 0)';
+        mobileNav.classList.remove('nav-hidden');
       }
       lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
     }, { passive: true });
@@ -148,58 +132,100 @@ document.addEventListener('DOMContentLoaded', async () => {
   initGlobalMapModal();
 
   const updateIcons = () => {
-    if (document.documentElement.classList.contains('dark')) {
-      darkIcons.forEach(i => i.classList.add('hidden'));
-      lightIcons.forEach(i => i.classList.remove('hidden'));
-    } else {
-      darkIcons.forEach(i => i.classList.remove('hidden'));
-      lightIcons.forEach(i => i.classList.add('hidden'));
-    }
+    const isDark = document.documentElement.classList.contains('dark');
+    const isTrad = document.documentElement.classList.contains('traditional');
+    
+    themeToggleGrp.forEach(btn => {
+      let tradIcon = btn.querySelector('.themeToggleTradIcon');
+      if (!tradIcon) {
+        btn.insertAdjacentHTML('beforeend', '<svg class="themeToggleTradIcon hidden w-5 h-5 text-[#C8A97E]" fill="currentColor" viewBox="0 0 24 24"><path d="M14.25 2.25L13.132 5.045C12.339 7.027 10.777 8.589 8.795 9.382L6 10.5L8.795 11.618C10.777 12.411 12.339 13.973 13.132 15.955L14.25 18.75L15.368 15.955C16.161 13.973 17.723 12.411 19.705 11.618L22.5 10.5L19.705 9.382C17.723 8.589 16.161 7.027 15.368 5.045L14.25 2.25Z" /><path d="M6 15L5.441 16.398C5.044 17.389 4.264 18.169 3.273 18.566L1.875 19.125L3.273 19.684C4.264 20.081 5.044 20.861 5.441 21.852L6 23.25L6.559 21.852C6.956 20.861 7.736 20.081 8.727 19.684L10.125 19.125L8.727 18.566C7.736 18.169 6.956 17.389 6.559 16.398L6 15Z" /></svg>');
+        tradIcon = btn.querySelector('.themeToggleTradIcon');
+      }
+      
+      const darkIcon = btn.querySelector('#themeToggleDarkIcon');
+      const lightIcon = btn.querySelector('#themeToggleLightIcon');
+
+      if (darkIcon) darkIcon.classList.add('hidden');
+      if (lightIcon) lightIcon.classList.add('hidden');
+      if (tradIcon) tradIcon.classList.add('hidden');
+
+      if (isTrad) {
+         if (tradIcon) tradIcon.classList.remove('hidden');
+      } else if (isDark) {
+         if (lightIcon) lightIcon.classList.remove('hidden');
+      } else {
+         if (darkIcon) darkIcon.classList.remove('hidden');
+      }
+    });
   };
+
+  // Restore theme on load
+  if (localStorage.theme === 'traditional') {
+    document.documentElement.classList.add('traditional');
+    document.documentElement.classList.remove('dark');
+  } else if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+    document.documentElement.classList.remove('traditional');
+  } else {
+    document.documentElement.classList.remove('dark', 'traditional');
+  }
 
   updateIcons();
 
   themeToggleGrp.forEach(btn => {
     btn.addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
-      if (document.documentElement.classList.contains('dark')) {
-        localStorage.theme = 'dark';
-      } else {
+      const html = document.documentElement;
+      if (html.classList.contains('traditional')) {
+        // Trad -> Light
+        html.classList.remove('traditional');
+        html.classList.remove('dark');
         localStorage.theme = 'light';
+      } else if (html.classList.contains('dark')) {
+        // Dark -> Trad
+        html.classList.remove('dark');
+        html.classList.add('traditional');
+        localStorage.theme = 'traditional';
+      } else {
+        // Light -> Dark
+        html.classList.add('dark');
+        localStorage.theme = 'dark';
       }
       updateIcons();
     });
   });
 
-  // Check auth status
-  let user = null;
-  try {
-    const res = await fetch('/api/auth/current_user');
-    const data = await res.json();
-    if (data.isAuthenticated) {
-      user = data.user;
+  // Common Header Update (runs in background)
+  const updateAuthUI = async () => {
+    try {
+      const res = await fetch('/api/auth/current_user');
+      const data = await res.json();
+      const authSection = document.getElementById('auth-section');
+      if (authSection) {
+        if (data.isAuthenticated) {
+          const u = data.user;
+          authSection.innerHTML = `<span class="user-badge bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 font-bold px-3 py-1.5 rounded-full text-xs border border-brand-200 dark:border-brand-800 shadow-sm">${u.username || u.email.split('@')[0]}</span>`;
+        } else {
+          authSection.innerHTML = `<a href="/auth.html" class="text-white bg-slate-800 dark:bg-brand-500 hover:bg-slate-700 dark:hover:bg-brand-400 px-4 py-2 rounded-xl transition shadow-md font-semibold text-sm">Sign In</a>`;
+        }
+      }
+    } catch (err) {
+      console.error("Error checking auth status", err);
     }
-  } catch (err) {
-    console.error("Error checking auth status", err);
-  }
-
-  // Common Header Update
-  const authSection = document.getElementById('auth-section');
-  if (authSection) {
-    if (user) {
-      authSection.innerHTML = `<span class="bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 font-bold px-3 py-1.5 rounded-full text-xs border border-brand-200 dark:border-brand-800 shadow-sm">${user.username || user.email.split('@')[0]}</span>`;
-    } else {
-      authSection.innerHTML = `<a href="/auth.html" class="text-white bg-slate-800 dark:bg-brand-500 hover:bg-slate-700 dark:hover:bg-brand-400 px-4 py-2 rounded-xl transition shadow-md font-semibold text-sm">Sign In</a>`;
-    }
-  }
+  };
+  updateAuthUI();
 
   const path = window.location.pathname;
+  const isHomePage = path === '/' || path.endsWith('/index.html') || path === '';
+  const isCalendarPage = path.endsWith('/calendar.html');
 
   // --- index.html Logic ---
-  if (path === '/' || path === '/index.html') {
-    const fetchGroups = async (query = '') => {
+  if (isHomePage) {
+    let currentSearch = '';
+    let currentType = 'All';
+
+    const fetchGroups = async () => {
       try {
-        const res = await fetch(`/api/groups?village=${encodeURIComponent(query)}&t=${Date.now()}`);
+        const res = await fetch(`/api/groups?search=${encodeURIComponent(currentSearch)}&type=${encodeURIComponent(currentType)}&t=${Date.now()}`);
         const groups = await res.json();
         renderGroups(groups);
       } catch (err) {
@@ -210,7 +236,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
       searchInput.addEventListener('input', (e) => {
-        fetchGroups(e.target.value);
+        currentSearch = e.target.value;
+        fetchGroups();
+      });
+    }
+
+    const typeFilters = document.querySelectorAll('#groupTypeFilters .filter-btn');
+    if (typeFilters.length > 0) {
+      typeFilters.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+           typeFilters.forEach(b => {
+             b.classList.remove('active', 'bg-brand-500', 'text-white', 'shadow-md');
+             b.classList.add('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300', 'border', 'border-slate-200', 'dark:border-slate-700');
+           });
+           const target = e.currentTarget;
+           target.classList.add('active', 'bg-brand-500', 'text-white', 'shadow-md');
+           target.classList.remove('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300', 'border', 'border-slate-200', 'dark:border-slate-700');
+           currentType = target.dataset.type;
+           fetchGroups();
+        });
       });
     }
 
@@ -244,6 +288,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (cardDiv) cardDiv.style.animationDelay = `${index * 50}ms`;
 
         clone.querySelector('.group-name-slot').textContent = g.groupName;
+        const typeSlot = clone.querySelector('.group-type-slot');
+        if (typeSlot) typeSlot.textContent = g.groupType || 'Dindi';
         clone.querySelector('.group-village-slot').textContent = g.village;
         clone.querySelector('.group-members-slot').innerHTML = `${g.memberCount} <span class="hidden sm:inline">members</span>`;
         clone.querySelector('.group-initial-slot').textContent = g.leaderName.charAt(0).toUpperCase();
@@ -255,14 +301,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const message = encodeURIComponent(`Hello, I found your Dindi group (${g.groupName}) on Dindi. Are you available for a performance?`);
         
         if (g.acceptingBookings) {
-          const waLink = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
-            ? `whatsapp://send?phone=${g.contactNumber}&text=${message}`
-            : `https://wa.me/${g.contactNumber}?text=${message}`;
-            
-          innerFlex.innerHTML = `<a href="${waLink}" target="_blank" 
-          class="flex-1 text-center bg-green-500 hover:bg-green-600 text-white py-3.5 rounded-2xl font-bold transition transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-green-500/20 flex items-center justify-center gap-2">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.012 2C6.486 2 2 6.486 2 12.013c0 1.77.464 3.447 1.341 4.954L2 22l5.194-1.319A9.957 9.957 0 0012.012 22C17.538 22 22 17.538 22 12.013 22 6.486 17.538 2 12.012 2zM17.135 15.65c-.237.669-1.378 1.28-1.895 1.332-.516.052-.942.278-3.042-.596-2.531-1.054-4.148-3.666-4.272-3.832-.124-.165-1.021-1.353-1.021-2.584 0-1.231.639-1.839.866-2.066.227-.227.495-.284.66-.284.165 0 .33 0 .474.008.155.008.361-.061.567.433.216.516.732 1.802.794 1.925.062.124.103.268.021.433-.082.165-.124.268-.247.412-.124.144-.258.319-.371.433-.124.124-.258.258-.113.505.144.247.639 1.061 1.371 1.711.948.845 1.741 1.103 1.989 1.226.247.124.392.103.536-.062.144-.165.618-.721.783-.969.165-.247.33-.206.556-.124.227.082 1.443.68 1.69.804.247.124.412.185.474.288.062.103.062.608-.175 1.278z"/></svg>
-            Invite via WhatsApp
+          innerFlex.innerHTML = `<a href="/book-group.html?id=${g._id}" 
+          class="flex-1 text-center bg-brand-500 hover:bg-brand-600 text-white py-3.5 rounded-2xl font-bold transition transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            Book this Group
           </a>`;
         } else {
           innerFlex.innerHTML = `<div class="flex-1 text-center bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 py-3.5 rounded-2xl font-bold border border-slate-200 dark:border-slate-700">Currently Unavailable</div>`;
@@ -278,7 +320,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // --- Global Donation Logic ---
   window.openDonationModal = (groupName, groupId) => {
     const params = new URLSearchParams({
-      groupName: groupName || 'Dindi Community (General)',
+      groupName: groupName || 'Vandan Community (General)',
       groupId: groupId || ''
     });
     window.location.href = `/payment.html?${params.toString()}`;
@@ -289,155 +331,180 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
   // --- calendar.html Logic ---
-  if (path === '/calendar.html') {
-    const tabEventsBtn = document.getElementById('tabEventsBtn');
-    const tabCompsBtn = document.getElementById('tabCompsBtn');
-    const eventsContainer = document.getElementById('eventsContainer');
-    const compsContainer = document.getElementById('competitionsContainer');
+  if (isCalendarPage) {
+    let currentSearch = '';
+    let currentType = 'All';
+    let currentSection = 'events';
 
-    if (tabEventsBtn && tabCompsBtn) {
-      tabEventsBtn.addEventListener('click', () => {
-        tabEventsBtn.className = 'text-brand-600 dark:text-brand-400 font-bold border-b-2 border-brand-500 pb-2 transition';
-        tabCompsBtn.className = 'text-slate-500 dark:text-slate-400 font-bold border-b-2 border-transparent hover:text-slate-700 dark:hover:text-slate-300 pb-2 transition';
-        eventsContainer.classList.remove('hidden');
-        compsContainer.classList.add('hidden');
-      });
+    const fetchCalendarData = async () => {
+      try {
+        const [eventsRes, compsRes] = await Promise.all([
+          fetch(`/api/events?search=${encodeURIComponent(currentSearch)}&type=${encodeURIComponent(currentType)}&t=${Date.now()}`),
+          fetch(`/api/competitions?search=${encodeURIComponent(currentSearch)}&type=${encodeURIComponent(currentType)}&t=${Date.now()}`)
+        ]);
+        const events = await eventsRes.json();
+        const comps = await compsRes.json();
 
-      tabCompsBtn.addEventListener('click', () => {
-        tabCompsBtn.className = 'text-brand-600 dark:text-brand-400 font-bold border-b-2 border-brand-500 pb-2 transition';
-        tabEventsBtn.className = 'text-slate-500 dark:text-slate-400 font-bold border-b-2 border-transparent hover:text-slate-700 dark:hover:text-slate-300 pb-2 transition';
-        compsContainer.classList.remove('hidden');
-        eventsContainer.classList.add('hidden');
-        fetchCompetitions();
+        const taggedEvents = Array.isArray(events) ? events.map(e => ({ ...e, _itemType: 'event' })) : [];
+        const taggedComps = Array.isArray(comps) ? comps.map(c => ({ ...c, _itemType: 'comp' })) : [];
+
+        let combined = [...taggedEvents, ...taggedComps].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        if (currentSection === 'events') {
+          combined = combined.filter(i => i._itemType === 'event');
+        } else if (currentSection === 'competitions') {
+          combined = combined.filter(i => i._itemType === 'comp');
+        }
+
+        renderCalendar(combined);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    const searchInput = document.getElementById('calendarSearchInput');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        currentSearch = e.target.value;
+        fetchCalendarData();
       });
     }
 
-    const fetchEvents = async () => {
-      try {
-        const res = await fetch('/api/events');
-        const events = await res.json();
-        
-        const template = document.getElementById('event-row-template');
-        Array.from(eventsContainer.children).forEach(child => {
-          if (!child.classList.contains('absolute')) eventsContainer.removeChild(child);
+    const typeFilters = document.querySelectorAll('#calendarTypeFilters .filter-btn');
+    if (typeFilters.length > 0) {
+      typeFilters.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+           typeFilters.forEach(b => {
+             b.classList.remove('active', 'bg-brand-500', 'text-white', 'shadow-md');
+             b.classList.add('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+           });
+           const target = e.currentTarget;
+           target.classList.add('active', 'bg-brand-500', 'text-white', 'shadow-md');
+           target.classList.remove('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+           currentType = target.dataset.type;
+           fetchCalendarData();
         });
-        
-        if (events.length === 0) {
-          eventsContainer.insertAdjacentHTML('beforeend', `
-            <div class="flex flex-col items-center justify-center py-20 animate-fade-in">
-              <div class="w-20 h-20 rounded-full bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center mb-6">
-                <svg class="w-10 h-10 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-              </div>
-              <h4 class="font-bold text-lg text-slate-600 dark:text-slate-300 mb-2">No upcoming performances</h4>
-              <p class="text-slate-400 dark:text-slate-500 text-sm text-center max-w-xs">There are no events scheduled yet. Check back soon or create one from your dashboard!</p>
-            </div>`);
-          return;
-        }
+      });
+    }
 
-        events.forEach((e, index) => {
-          const date = new Date(e.date);
-          const clone = template.firstElementChild.cloneNode(true);
+    const sectionTabs = document.querySelectorAll('.calendar-section-tab');
+    if (sectionTabs.length > 0) {
+      sectionTabs.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          sectionTabs.forEach(b => {
+            b.classList.remove('tab-active');
+            b.classList.add('text-slate-500', 'dark:text-slate-400', 'hover:text-brand-500');
+          });
+          const target = e.currentTarget;
+          target.classList.add('tab-active');
+          target.classList.remove('text-slate-500', 'dark:text-slate-400', 'hover:text-brand-500');
+          currentSection = target.dataset.section;
+          fetchCalendarData();
+        });
+      });
+    }
+
+    const renderCalendar = (items) => {
+      const container = document.getElementById('calendarContainer');
+      const eventTemplate = document.getElementById('event-row-template');
+      const compTemplate = document.getElementById('comp-row-template');
+      
+      if (!container) return;
+
+      Array.from(container.children).forEach(child => {
+        if (!child.classList.contains('absolute')) container.removeChild(child);
+      });
+
+      if (items.length === 0) {
+        container.insertAdjacentHTML('beforeend', `
+          <div class="flex flex-col items-center justify-center py-20 animate-fade-in z-10 relative">
+            <div class="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-6">
+              <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <h4 class="font-bold text-lg text-slate-600 dark:text-slate-300 mb-2">No items found</h4>
+            <p class="text-slate-400 dark:text-slate-500 text-sm text-center max-w-xs">No events or competitions match your search.</p>
+          </div>`);
+        return;
+      }
+
+      items.forEach((item, index) => {
+        const date = new Date(item.date);
+        
+        if (item._itemType === 'event') {
+          const clone = eventTemplate.firstElementChild.cloneNode(true);
           const rowDiv = clone.querySelector('.group');
           if (rowDiv) rowDiv.style.animationDelay = `${index * 50}ms`;
 
           clone.querySelector('.event-month-slot').textContent = date.toLocaleString('default', { month: 'short' });
           clone.querySelector('.event-day-slot').textContent = date.getDate();
-          clone.querySelector('.event-temple-slot').textContent = e.templeName;
-          clone.querySelector('.event-village-slot').textContent = e.village;
-          const groupLink = clone.querySelector('.event-group-slot');
-          groupLink.textContent = e.performingGroupId.groupName;
-          groupLink.href = `/group.html?id=${e.performingGroupId._id}`;
+          clone.querySelector('.event-temple-slot').textContent = item.templeName;
           
-          if (e.locationCoordinates && e.locationCoordinates.lat && e.locationCoordinates.lng) {
+          const typeSlot = clone.querySelector('.event-type-slot');
+          if (typeSlot) typeSlot.textContent = item.performingGroupId?.groupType || 'Event';
+          
+          clone.querySelector('.event-village-slot').textContent = item.village;
+          const groupLink = clone.querySelector('.event-group-slot');
+          groupLink.textContent = item.performingGroupId.groupName;
+          groupLink.href = `/group.html?id=${item.performingGroupId._id}`;
+          
+          if (item.locationCoordinates && item.locationCoordinates.lat && item.locationCoordinates.lng) {
              const mapLink = clone.querySelector('.event-map-slot');
              if (mapLink) {
-                 mapLink.href = `https://www.openstreetmap.org/?mlat=${e.locationCoordinates.lat}&mlon=${e.locationCoordinates.lng}#map=15/${e.locationCoordinates.lat}/${e.locationCoordinates.lng}`;
+                 mapLink.href = `https://www.openstreetmap.org/?mlat=${item.locationCoordinates.lat}&mlon=${item.locationCoordinates.lng}#map=15/${item.locationCoordinates.lat}/${item.locationCoordinates.lng}`;
                  mapLink.classList.remove('hidden');
              }
           }
-
-          eventsContainer.appendChild(clone);
-        });
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    const fetchCompetitions = async () => {
-      try {
-        const res = await fetch('/api/competitions');
-        const comps = await res.json();
-        
-        const template = document.getElementById('comp-row-template');
-        Array.from(compsContainer.children).forEach(child => {
-          if (!child.classList.contains('absolute')) compsContainer.removeChild(child);
-        });
-        
-        if (comps.length === 0) {
-          compsContainer.insertAdjacentHTML('beforeend', `
-            <div class="flex flex-col items-center justify-center py-20 animate-fade-in">
-              <div class="w-20 h-20 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center mb-6">
-                <svg class="w-10 h-10 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
-                </svg>
-              </div>
-              <h4 class="font-bold text-lg text-slate-600 dark:text-slate-300 mb-2">No upcoming competitions</h4>
-              <p class="text-slate-400 dark:text-slate-500 text-sm text-center max-w-xs">Competitions will appear here once organizers publish them. Stay tuned!</p>
-            </div>`);
-          return;
-        }
-
-        comps.forEach((c, index) => {
-          const date = new Date(c.date);
-          const clone = template.firstElementChild.cloneNode(true);
+          container.appendChild(clone);
+        } else {
+          const clone = compTemplate.firstElementChild.cloneNode(true);
           const rowDiv = clone.querySelector('.group');
           if (rowDiv) rowDiv.style.animationDelay = `${index * 50}ms`;
 
           clone.querySelector('.comp-month-slot').textContent = date.toLocaleString('default', { month: 'short' });
           clone.querySelector('.comp-day-slot').textContent = date.getDate();
-          clone.querySelector('.comp-title-slot').textContent = c.title;
-          clone.querySelector('.comp-location-slot').textContent = c.location;
-          clone.querySelector('.comp-desc-slot').textContent = c.description;
-          clone.querySelector('.comp-count-slot').textContent = `${c.registeredGroups.length} groups`;
+          clone.querySelector('.comp-title-slot').textContent = item.title;
+          
+          const typeSlot = clone.querySelector('.comp-type-slot');
+          if (typeSlot) typeSlot.textContent = (item.eventType || 'All') + ' COMPETITION';
 
-          if (c.locationCoordinates && c.locationCoordinates.lat && c.locationCoordinates.lng) {
+          clone.querySelector('.comp-location-slot').textContent = item.location;
+          clone.querySelector('.comp-desc-slot').innerText = item.description;
+          clone.querySelector('.comp-count-slot').textContent = `${item.registeredGroups.length} groups`;
+
+          if (item.locationCoordinates && item.locationCoordinates.lat && item.locationCoordinates.lng) {
              const mapLink = clone.querySelector('.comp-map-slot');
              if (mapLink) {
-                 mapLink.href = `https://www.openstreetmap.org/?mlat=${c.locationCoordinates.lat}&mlon=${c.locationCoordinates.lng}#map=15/${c.locationCoordinates.lat}/${c.locationCoordinates.lng}`;
+                 mapLink.href = `https://www.openstreetmap.org/?mlat=${item.locationCoordinates.lat}&mlon=${item.locationCoordinates.lng}#map=15/${item.locationCoordinates.lat}/${item.locationCoordinates.lng}`;
                  mapLink.classList.remove('hidden');
              }
           }
 
-          if (c.photos && c.photos.length > 0) {
+          if (item.photos && item.photos.length > 0) {
             const posterCont = clone.querySelector('.comp-poster-container');
             const posterImg = clone.querySelector('.comp-poster-slot');
             if (posterCont && posterImg) {
-              posterImg.src = c.photos[0];
+              posterImg.src = item.photos[0];
               posterCont.classList.remove('hidden');
             }
           }
 
           if (clone.classList.contains('comp-card-btn')) {
-            clone.onclick = () => window.location.href = `/competition.html?id=${c._id}`;
+             clone.onclick = () => { window.location.href = `/competition.html?id=${item._id}`; };
           } else {
             const cardBtn = clone.querySelector('.comp-card-btn');
             if (cardBtn) {
-              cardBtn.onclick = () => window.location.href = `/competition.html?id=${c._id}`;
+               cardBtn.onclick = () => { window.location.href = `/competition.html?id=${item._id}`; };
             }
           }
 
-          compsContainer.appendChild(clone);
-        });
-      } catch (err) {
-        console.error(err);
-      }
+          container.appendChild(clone);
+        }
+      });
     };
 
-
-
-    fetchEvents();
+    fetchCalendarData();
   }
 
   // --- auth.html Logic ---
@@ -446,6 +513,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     const profileView = document.getElementById('profileView');
     const statusBox = document.getElementById('statusMessage');
     const urlParams = new URLSearchParams(window.location.search);
+    
+    let user = null;
+    try {
+      const authCheckRes = await fetch('/api/auth/current_user');
+      const authCheckData = await authCheckRes.json();
+      if (authCheckData.isAuthenticated) {
+        user = authCheckData.user;
+      }
+    } catch (e) {
+      console.error('Failed to check auth status', e);
+    }
     
     let statusTimeout;
     const showStatus = (msg, isError) => {
@@ -461,28 +539,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       }, 5000);
     };
 
-    const showConfirm = (message) => {
-      return new Promise((resolve) => {
-        const modal = document.getElementById('confirmModal');
-        const msgEl = document.getElementById('confirmMessage');
-        const okBtn = document.getElementById('confirmOkBtn');
-        const cancelBtn = document.getElementById('confirmCancelBtn');
-
-        msgEl.textContent = message;
-        modal.classList.remove('hidden');
-
-        const cleanup = () => {
-          modal.classList.add('hidden');
-          okBtn.removeEventListener('click', onOk);
-          cancelBtn.removeEventListener('click', onCancel);
-        };
-
-        const onOk = () => { cleanup(); resolve(true); };
-        const onCancel = () => { cleanup(); resolve(false); };
-
-        okBtn.addEventListener('click', onOk);
-        cancelBtn.addEventListener('click', onCancel);
-      });
+    const showConfirm = async (message) => {
+       return await window.vandanModal.show({
+         title: 'Confirm Action',
+         text: message,
+         confirmText: 'Yes, Proceed',
+         cancelText: 'Cancel'
+       });
     };
 
     if (urlParams.get('verified') === 'true') {
@@ -499,6 +562,42 @@ document.addEventListener('DOMContentLoaded', async () => {
       } else {
         profileView.classList.remove('hidden');
         document.getElementById('userEmail').textContent = user.username || user.email.split('@')[0];
+        
+        // --- Account Deletion Logic ---
+        const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+        if (deleteAccountBtn) {
+          deleteAccountBtn.onclick = async () => {
+            const confirmed = await window.vandanModal.show({
+              title: 'Delete Account?',
+              text: 'This action is PERMANENT. You will lose your profile, all registered groups, events, and booking history. This cannot be undone.',
+              type: 'error',
+              confirmText: 'Yes, Delete Everything',
+              cancelText: 'Cancel'
+            });
+
+            if (confirmed) {
+              deleteAccountBtn.disabled = true;
+              deleteAccountBtn.textContent = 'Deleting...';
+              try {
+                const res = await fetch('/api/auth/delete-account', { method: 'DELETE' });
+                const data = await res.json();
+                if (res.ok) {
+                  showStatus('Account deleted successfully. Farewell!', false);
+                  setTimeout(() => window.location.href = '/', 2000);
+                } else {
+                  showStatus('Failed: ' + (data.error || 'Please try again'), true);
+                  deleteAccountBtn.disabled = false;
+                  deleteAccountBtn.textContent = 'Delete Account';
+                }
+              } catch (err) {
+                console.error(err);
+                showStatus('Network error during account deletion.', true);
+                deleteAccountBtn.disabled = false;
+                deleteAccountBtn.textContent = 'Delete Account';
+              }
+            }
+          };
+        }
         
         // Fetch group ownership
         const loadDashboard = async () => {
@@ -571,9 +670,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const card = document.createElement('div');
                     card.className = 'glass-input p-4 rounded-xl flex justify-between items-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border border-slate-200 dark:border-slate-700';
                     card.innerHTML = `
-                      <div>
-                        <h4 class="font-bold text-slate-800 dark:text-slate-100">${group.groupName}</h4>
-                        <p class="text-xs text-slate-500">${group.village}</p>
+                      <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-0.5">
+                          <h4 class="font-bold text-slate-800 dark:text-slate-100">${group.groupName}</h4>
+                          <span class="text-[9px] uppercase font-black px-2 py-0.5 rounded-md bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400 leading-none">${group.groupType || 'Dindi'}</span>
+                        </div>
+                        <p class="text-xs text-slate-500 font-medium">${group.village}</p>
                       </div>
                       <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     `;
@@ -584,6 +686,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                        
                        document.getElementById('dashGroupName').textContent = group.groupName;
                        document.getElementById('dashEditGroupName').value = group.groupName;
+                       document.getElementById('dashEmail').value = group.email || '';
+                       document.getElementById('dashGroupType').value = group.groupType || 'Dindi';
                        document.getElementById('dashLeaderName').value = group.leaderName;
                        document.getElementById('dashMemberCount').value = group.memberCount;
                        document.getElementById('dashContact').value = group.contactNumber;
@@ -645,6 +749,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                          btn.textContent = 'Saving...'; btn.disabled = true;
                          const payload = {
                                 groupName: document.getElementById('dashEditGroupName').value,
+                                email: document.getElementById('dashEmail').value,
+                                groupType: document.getElementById('dashGroupType').value,
                                 leaderName: document.getElementById('dashLeaderName').value,
                                 memberCount: document.getElementById('dashMemberCount').value,
                                 contactNumber: document.getElementById('dashContact').value,
@@ -660,8 +766,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                               headers: { 'Content-Type': 'application/json' },
                               body: JSON.stringify(payload)
                             });
-                            if(updateRes.ok) showStatus('Profile updated successfully!', false);
-                            else showStatus('Failed to update profile.', true);
+                             if(updateRes.ok) {
+                                showStatus('Profile updated successfully!', false);
+                                setTimeout(showList, 1000); // Redirect back to list after 1s
+                             } else showStatus('Failed to update profile.', true);
                           } catch(err) { console.error(err); }
                           finally { btn.textContent = 'Save Changes'; btn.disabled = false; }
                        };
@@ -875,7 +983,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     
                     card.innerHTML = `
                       <div class="flex-1 min-w-0">
-                         <h4 class="font-bold text-slate-800 dark:text-slate-100 text-base truncate group-hover:text-brand-500 transition">${comp.title}</h4>
+                         <div class="flex items-center gap-2 mb-0.5 flex-wrap"><h4 class="font-bold text-slate-800 dark:text-slate-100 text-base truncate group-hover:text-brand-500 transition">${comp.title}</h4>${comp.eventType ? `<span class="text-[9px] uppercase font-black px-2 py-0.5 rounded-md bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400 leading-none shrink-0">${comp.eventType} Competition</span>` : ""}</div>
                          <p class="text-[10px] text-slate-500 font-medium truncate uppercase tracking-wider">${new Date(comp.date).toLocaleDateString()} &bull; ${comp.location}</p>
                          <div class="mt-1 text-[10px] font-bold text-orange-600 dark:text-orange-400">
                            ${comp.registeredGroups.length} Teams Registered
@@ -923,7 +1031,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 description: document.getElementById('cDesc').value,
                 location: document.getElementById('cLocation').value,
                 date: document.getElementById('cDate').value,
-                registrationDeadline: document.getElementById('cDeadline').value
+                registrationDeadline: document.getElementById('cDeadline').value,
+                eventType: document.getElementById('cType').value
             };
             const cLat = document.getElementById('compEventLat').value;
             const cLng = document.getElementById('compEventLng').value;
@@ -1182,6 +1291,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const payload = {
           groupName: document.getElementById('gName').value,
           village: document.getElementById('gVillage').value,
+          email: document.getElementById('gEmail').value,
+          groupType: document.getElementById('gType').value,
           leaderName: document.getElementById('gLeader').value,
           contactNumber: document.getElementById('gContact').value,
           memberCount: document.getElementById('gCount').value,
@@ -1248,7 +1359,7 @@ document.addEventListener('DOMContentLoaded', async () => {
            }
           
           if (group.description) {
-            document.getElementById('pDesc').textContent = group.description;
+            document.getElementById('pDesc').innerText = group.description;
           }
           
           if (group.achievements && group.achievements.length > 0) {
@@ -1291,16 +1402,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             statusBadge.className = 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 px-3 py-1 text-xs font-bold rounded-xl whitespace-nowrap';
             statusBadge.textContent = 'Open for Invitations';
             
-            const message = encodeURIComponent(`Hello, I found your Dindi group (${group.groupName}) on Dindi. Are you available for a performance?`);
-            const waLink = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
-              ? `whatsapp://send?phone=${group.contactNumber}&text=${message}`
-              : `https://wa.me/${group.contactNumber}?text=${message}`;
-
-            actionBtn.innerHTML = `<a href="${waLink}" target="_blank" 
-              class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3.5 rounded-2xl font-bold transition transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-green-500/20">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.012 2C6.486 2 2 6.486 2 12.013c0 1.77.464 3.447 1.341 4.954L2 22l5.194-1.319A9.957 9.957 0 0012.012 22C17.538 22 22 17.538 22 12.013 22 6.486 17.538 2 12.012 2zM17.135 15.65c-.237.669-1.378 1.28-1.895 1.332-.516.052-.942.278-3.042-.596-2.531-1.054-4.148-3.666-4.272-3.832-.124-.165-1.021-1.353-1.021-2.584 0-1.231.639-1.839.866-2.066.227-.227.495-.284.66-.284.165 0 .33 0 .474.008.155.008.361-.061.567.433.216.516.732 1.802.794 1.925.062.124.103.268.021.433-.082.165-.124.268-.247.412-.124.144-.258.319-.371.433-.124.124-.258.258-.113.505.144.247.639 1.061 1.371 1.711.948.845 1.741 1.103 1.989 1.226.247.124.392.103.536-.062.144-.165.618-.721.783-.969.165-.247.33-.206.556-.124.227.082 1.443.68 1.69.804.247.124.412.185.474.288.062.103.062.608-.175 1.278z"/></svg>
-                Invite via WhatsApp
-              </a>`;
+            actionBtn.innerHTML = `<button id="openBookingBtn" class="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-6 py-3.5 rounded-2xl font-bold transition transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-brand-500/20">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+              Book this Group
+            </button>`;
           } else {
             statusBadge.className = 'bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-3 py-1 text-xs font-bold rounded-xl whitespace-nowrap border border-slate-300 dark:border-slate-700';
             statusBadge.textContent = 'Unavailable';
@@ -1313,6 +1418,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
              </button>
           `;
+
+          const openBtn = document.getElementById('openBookingBtn');
+          if (openBtn) {
+            openBtn.addEventListener('click', () => {
+              window.location.href = `/book-group.html?id=${group._id}`;
+            });
+          }
           
         } catch (err) {
           console.error(err);
@@ -1320,6 +1432,114 @@ document.addEventListener('DOMContentLoaded', async () => {
       };
       
       fetchGroupProfile();
+    }
+  }
+
+  // --- book-group.html Logic ---
+  if (path === '/book-group.html') {
+    const urlParams = new URLSearchParams(window.location.search);
+    const groupId = urlParams.get('id');
+
+    if (!groupId) {
+      window.location.href = '/';
+    } else {
+      let targetGroup = null;
+
+      const fetchGroupForBooking = async () => {
+        try {
+          const res = await fetch(`/api/groups/${groupId}?t=${Date.now()}`);
+          if (!res.ok) throw new Error('Group not found');
+          
+          targetGroup = await res.json();
+          document.getElementById('loadingGroup').classList.add('hidden');
+          document.getElementById('bookingContainer').classList.remove('hidden');
+          document.getElementById('targetGroupName').textContent = targetGroup.groupName;
+        } catch (err) {
+          document.getElementById('loadingGroup').textContent = 'Error: ' + err.message;
+        }
+      };
+
+      fetchGroupForBooking();
+
+      const bookingForm = document.getElementById('fullBookingForm');
+      if (bookingForm) {
+        bookingForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
+          const confirmed = await window.vandanModal.show({
+            title: 'Confirm Booking',
+            text: 'Are you sure you want to submit this booking request? The group leader will be notified.',
+            confirmText: 'Yes, Submit',
+            cancelText: 'Cancel'
+          });
+          
+          if (!confirmed) return;
+          
+          const btn = document.getElementById('bSubmitBtn');
+          btn.disabled = true;
+          btn.innerHTML = '<span class="animate-pulse">Processing...</span>';
+
+          const payload = {
+            groupId: targetGroup._id,
+            name: document.getElementById('bName').value,
+            phone: document.getElementById('bPhone').value,
+            date: document.getElementById('bDate').value,
+            purpose: document.getElementById('bPurpose').value,
+            message: document.getElementById('bMessage').value
+          };
+
+          try {
+            const res = await fetch('/api/bookings', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            
+            const data = await res.json();
+
+            if (!res.ok) {
+              if (data.error && data.error.includes('already booked')) {
+                await window.vandanModal.show({
+                  title: 'Date Unavailable',
+                  text: 'This group is already confirmed/booked on this specific date. Please choose another date or group.',
+                  type: 'error',
+                  confirmText: 'Go Back'
+                });
+                btn.disabled = false;
+                btn.innerHTML = 'Submit Booking Request';
+                return;
+              }
+              throw new Error(data.error || 'Failed to submit booking');
+            }
+            
+            const waMessage = encodeURIComponent(`Hello ${targetGroup.leaderName},\n\nI would like to book ${targetGroup.groupName} for an event.\n\nName: ${payload.name}\nPhone: ${payload.phone}\nDate: ${payload.date}\nPurpose: ${payload.purpose}\nMessage: ${payload.message}\n\nPlease let me know your availability.`);
+            const waLink = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+              ? `whatsapp://send?phone=${targetGroup.contactNumber}&text=${waMessage}`
+              : `https://wa.me/${targetGroup.contactNumber}?text=${waMessage}`;
+            
+            await window.vandanModal.show({
+              title: 'Success!',
+              text: 'Booking request saved. Redirecting to WhatsApp to notify the group leader...',
+              type: 'success',
+              confirmText: 'Open WhatsApp'
+            });
+            
+            window.open(waLink, '_blank');
+            window.location.href = `/group.html?id=${targetGroup._id}`;
+
+          } catch(err) {
+            console.error(err);
+            await window.vandanModal.show({
+              title: 'Booking Failed',
+              text: 'Failed to process booking. Please try again or contact support.',
+              type: 'error',
+              confirmText: 'Try Again'
+            });
+            btn.disabled = false;
+            btn.textContent = 'Submit Booking Request';
+          }
+        });
+      }
     }
   }
 
@@ -1344,4 +1564,116 @@ document.addEventListener('DOMContentLoaded', async () => {
        };
     }
   });
+
+// --- Central Service Worker Registration & Update Handling ---
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').then((registration) => {
+      console.log('[PWA] Service Worker Registered');
+
+      // Check for updates periodically
+      setInterval(() => {
+        registration.update();
+      }, 1000 * 60 * 60); // Check every hour
+
+      registration.onupdatefound = () => {
+        const installingWorker = registration.installing;
+        if (!installingWorker) return;
+        installingWorker.onstatechange = () => {
+          if (installingWorker.state === 'installed') {
+            if (navigator.serviceWorker.controller) {
+              // New content is available; please refresh.
+              console.log('[PWA] New version available. Reloading...');
+              window.location.reload();
+            }
+          }
+        };
+      };
+    }).catch(err => console.error('[PWA] Registration failed:', err));
+  });
+
+  // Handle redundant workers and focus updates
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!refreshing) {
+      window.location.reload();
+      refreshing = true;
+    }
+  });
+}
 });
+
+// --- Central Premium Modal System ---
+window.vandanModal = {
+  activeResolve: null,
+
+  init() {
+    if (document.getElementById('vandanModalBackdrop')) return;
+    
+    const html = `
+      <div id="vandanModalBackdrop" class="modal-backdrop">
+        <div class="modal-content glass-card">
+          <div id="vandanModalIcon" class="mb-4 flex justify-center"></div>
+          <h3 id="vandanModalTitle" class="text-2xl font-black text-slate-800 dark:text-slate-100 mb-2"></h3>
+          <p id="vandanModalText" class="text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-8"></p>
+          <div id="vandanModalActions" class="flex flex-col gap-3">
+            <button id="vandanModalConfirm" class="modal-btn w-full"></button>
+            <button id="vandanModalCancel" class="modal-btn btn-secondary w-full" style="display:none;"></button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', html);
+    
+    document.getElementById('vandanModalConfirm').onclick = () => this.close(true);
+    document.getElementById('vandanModalCancel').onclick = () => this.close(false);
+  },
+
+  async show({ title, text, type = 'info', confirmText = 'OK', cancelText = '' }) {
+    this.init();
+    const backdrop = document.getElementById('vandanModalBackdrop');
+    const titleEl = document.getElementById('vandanModalTitle');
+    const textEl = document.getElementById('vandanModalText');
+    const confirmEl = document.getElementById('vandanModalConfirm');
+    const cancelEl = document.getElementById('vandanModalCancel');
+    const iconEl = document.getElementById('vandanModalIcon');
+
+    titleEl.textContent = title;
+    textEl.textContent = text;
+    confirmEl.textContent = confirmText;
+    
+    if (cancelText) {
+      cancelEl.textContent = cancelText;
+      cancelEl.style.display = 'block';
+    } else {
+      cancelEl.style.display = 'none';
+    }
+
+    let iconHtml = '';
+    if (type === 'success') {
+      iconHtml = '<div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 text-green-500 flex items-center justify-center"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>';
+      confirmEl.className = 'modal-btn btn-accept w-full';
+    } else if (type === 'error') {
+      iconHtml = '<div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 text-red-500 flex items-center justify-center"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg></div>';
+      confirmEl.className = 'modal-btn btn-reject w-full';
+    } else {
+      iconHtml = '<div class="w-16 h-16 rounded-full bg-brand-100 dark:bg-brand-900/30 text-brand-500 flex items-center justify-center"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>';
+      confirmEl.className = 'modal-btn btn-accept w-full';
+    }
+    iconEl.innerHTML = iconHtml;
+
+    backdrop.classList.add('active');
+    
+    return new Promise((resolve) => {
+      this.activeResolve = resolve;
+    });
+  },
+
+  close(result) {
+    document.getElementById('vandanModalBackdrop').classList.remove('active');
+    if (this.activeResolve) {
+      this.activeResolve(result);
+      this.activeResolve = null;
+    }
+  }
+};

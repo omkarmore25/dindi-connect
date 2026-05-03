@@ -1,10 +1,17 @@
-// Dindi Connect - Service Worker
-const CACHE_NAME = 'dindi-connect-v6';
+// Vandan - Service Worker
+const CACHE_NAME = 'vandan-v51.61'; 
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/calendar.html',
   '/auth.html',
+  '/dashboard.html',
+  '/group.html',
+  '/competition.html',
+  '/manage-competition.html',
+  '/edit-competition.html',
+  '/book-group.html',
+  '/reset-password.html',
   '/contact.html',
   '/refund-policy.html',
   '/css/style.css',
@@ -38,43 +45,26 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch: Network first for HTML, Cache first for static assets
+// Fetch: NETWORK FIRST for everything to ensure latest changes are seen
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET requests and cross-origin requests (Cloudinary, Razorpay, etc.)
+  // Skip non-GET requests and cross-origin requests
   if (request.method !== 'GET' || url.origin !== self.location.origin) return;
 
-  // For API requests: network only
-  if (url.pathname.startsWith('/api/')) {
-    event.respondWith(
-      fetch(request).catch(() => new Response(JSON.stringify({ error: 'You are offline.' }), {
-        headers: { 'Content-Type': 'application/json' }
-      }))
-    );
-    return;
-  }
-
-  // For HTML pages: ALWAYS network first (never serve stale HTML from cache)
-  if (request.headers.get('accept')?.includes('text/html') || url.pathname.endsWith('.html') || url.pathname === '/') {
-    event.respondWith(
-      fetch(request).then((response) => {
-        // Update the cache with the fresh HTML
+  // NETWORK FIRST STRATEGY
+  event.respondWith(
+    fetch(request).then((response) => {
+      // If we got a valid response, cache it and return
+      if (response && response.status === 200) {
         const clone = response.clone();
         caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
-        return response;
-      }).catch(() => caches.match(request)) // Fall back to cache only if offline
-    );
-    return;
-  }
-
-  // For static assets (CSS, JS, images): cache first for speed
-  event.respondWith(
-    caches.match(request).then((cached) => cached || fetch(request).then((response) => {
-      const clone = response.clone();
-      caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+      }
       return response;
-    }))
+    }).catch(() => {
+      // If network fails, try the cache
+      return caches.match(request);
+    })
   );
 });
