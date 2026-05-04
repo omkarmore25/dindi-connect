@@ -65,6 +65,9 @@ const donationRoutes = require('./routes/donations');
 
 const app = express();
 
+// Trust proxy is required for sessions to work on Render/Heroku
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -77,7 +80,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-    secure: process.env.NODE_ENV === 'production'
+    secure: process.env.NODE_ENV === 'production',
+    proxy: true
   }
 }));
 
