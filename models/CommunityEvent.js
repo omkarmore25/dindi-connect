@@ -31,10 +31,6 @@ const CommunityEventSchema = new mongoose.Schema({
     type: Date,
     default: null, // null means single-day event
   },
-  time: {
-    type: String,
-    default: '',
-  },
   deadline: {
     type: Date,
     required: true,

@@ -554,7 +554,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           clone.querySelector('.ce-title-slot').textContent = item.eventName;
           clone.querySelector('.ce-type-slot').textContent = item.eventType || 'Event';
           clone.querySelector('.ce-location-slot').textContent = item.venue;
-          clone.querySelector('.ce-time-slot').textContent = item.time || 'N/A';
+
           clone.querySelector('.ce-desc-slot').innerText = item.description;
           clone.querySelector('.ce-organizer-slot').textContent = item.organizer;
           clone.querySelector('.ce-contact-slot').textContent = item.contact;
@@ -1306,7 +1306,6 @@ document.addEventListener('DOMContentLoaded', async () => {
               venue: document.getElementById('ceLocation').value,
               date: document.getElementById('ceDate').value,
               endDate: document.getElementById('ceEndDate') ? (document.getElementById('ceEndDate').value || null) : null,
-              time: '',
               deadline: document.getElementById('ceDeadline').value,
               contacts,
               foodProvided: document.getElementById('ceFoodProvided').checked,

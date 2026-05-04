@@ -116,6 +116,20 @@
             <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Registration Deadline</label>
             <input type="date" id="eDeadline" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-slate-800 dark:text-slate-100 font-medium" required>
           </div>
+          <div class="grid grid-cols-2 gap-4">
+            <label class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer transition hover:bg-slate-100 dark:hover:bg-slate-700">
+              <input type="checkbox" id="eFoodProvided" class="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+              <span class="text-sm font-bold text-slate-700 dark:text-slate-300">Food Provided</span>
+            </label>
+            <label class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer transition hover:bg-slate-100 dark:hover:bg-slate-700">
+              <input type="checkbox" id="eEntryFee" class="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+              <span class="text-sm font-bold text-slate-700 dark:text-slate-300">Entry Fee</span>
+            </label>
+          </div>
+          <div id="eEntryFeeAmountContainer" class="hidden animate-fade-in">
+            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Entry Fee Amount (₹)</label>
+            <input type="number" id="eEntryFeeAmount" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-slate-800 dark:text-slate-100 font-medium" placeholder="0">
+          </div>
 
           <!-- Photo Gallery -->
           <div class="border-t border-slate-100 dark:border-slate-800 pt-6">
@@ -156,7 +170,7 @@
     </a>
   </nav>
 
-  <script src="/js/main.js?v=51.95"></script>
+  <script src="/js/main.js?v=52.11"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -185,6 +199,21 @@
       document.getElementById('eEndDate').value = ev.endDate ? ev.endDate.split('T')[0] : '';
       document.getElementById('eDeadline').value = ev.deadline ? ev.deadline.split('T')[0] : '';
       document.getElementById('eDesc').value = ev.description || '';
+      document.getElementById('eFoodProvided').checked = ev.foodProvided || false;
+      document.getElementById('eEntryFee').checked = ev.entryFee || false;
+      if (ev.entryFee) {
+        document.getElementById('eEntryFeeAmountContainer').classList.remove('hidden');
+        document.getElementById('eEntryFeeAmount').value = ev.entryFeeAmount || 0;
+      }
+
+      document.getElementById('eEntryFee').onchange = (e) => {
+        if (e.target.checked) {
+          document.getElementById('eEntryFeeAmountContainer').classList.remove('hidden');
+        } else {
+          document.getElementById('eEntryFeeAmountContainer').classList.add('hidden');
+        }
+      };
+
       // Contacts
       const contactsContainer = document.getElementById('editCEContactsContainer');
       const addContactBtn = document.getElementById('editCEAddContactBtn');
@@ -256,6 +285,9 @@
             endDate: endDateVal || null,
             deadline: document.getElementById('eDeadline').value,
             description: document.getElementById('eDesc').value,
+            foodProvided: document.getElementById('eFoodProvided').checked,
+            entryFee: document.getElementById('eEntryFee').checked,
+            entryFeeAmount: document.getElementById('eEntryFee').checked ? (document.getElementById('eEntryFeeAmount').value || 0) : 0,
             contacts,
             deletePhotos: toDelete
           };
