@@ -109,12 +109,10 @@
               <p id="evDesc" class="whitespace-pre-wrap leading-relaxed"></p>
             </div>
             <hr class="border-slate-100 dark:border-slate-800">
-            <div class="grid grid-cols-2 gap-4 text-sm">
+            <div class="grid grid-cols-2 gap-4 text-sm" id="manageContactsGrid">
               <div><span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Deadline</span><span id="evDeadline" class="font-semibold"></span></div>
               <div><span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Food Provided</span><span id="evFood" class="font-semibold"></span></div>
               <div><span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Entry Fee</span><span id="evFee" class="font-semibold"></span></div>
-              <div><span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Contact Person</span><span id="evContact" class="font-semibold"></span></div>
-              <div><span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Contact Number</span><span id="evContactNum" class="font-semibold"></span></div>
             </div>
           </div>
         </div>
@@ -181,8 +179,16 @@
       document.getElementById('evDeadline').textContent = ev.deadline ? new Date(ev.deadline).toLocaleDateString() : '-';
       document.getElementById('evFood').textContent = ev.foodProvided ? '✅ Yes' : '❌ No';
       document.getElementById('evFee').textContent = ev.entryFee ? `₹${ev.entryFeeAmount}` : 'Free';
-      document.getElementById('evContact').textContent = ev.contact || '-';
-      document.getElementById('evContactNum').textContent = ev.contactNumber || '-';
+      
+      if (ev.contacts && ev.contacts.length > 0) {
+        const grid = document.getElementById('manageContactsGrid');
+        ev.contacts.forEach(c => {
+          grid.insertAdjacentHTML('beforeend', `
+            <div><span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Contact Person</span><span class="font-semibold">${c.name}</span></div>
+            <div><span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Contact Number</span><span class="font-semibold">${c.phone}</span></div>
+          `);
+        });
+      }
 
       // Photos
       if (ev.photos && ev.photos.length > 0) {

@@ -1263,11 +1263,40 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
           };
 
+          const addContactBtn = document.getElementById('ceAddContactBtn');
+          const contactsContainer = document.getElementById('ceContactsContainer');
+
+          if (addContactBtn && contactsContainer) {
+            addContactBtn.onclick = () => {
+              const row = document.createElement('div');
+              row.className = 'flex gap-4 contact-row animate-fade-in relative group';
+              row.innerHTML = `
+                <div class="flex-1">
+                  <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-1">Contact Person</label>
+                  <input type="text" class="ce-contact-name w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" placeholder="Name" required>
+                </div>
+                <div class="flex-1">
+                  <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-1">Contact Number</label>
+                  <input type="tel" class="ce-contact-phone w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" placeholder="Phone" required>
+                </div>
+                <button type="button" class="remove-contact-btn absolute -right-2 -top-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-lg scale-0 group-hover:scale-100">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+              `;
+              row.querySelector('.remove-contact-btn').onclick = () => row.remove();
+              contactsContainer.appendChild(row);
+            };
+          }
+
           ceForm.onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('ceSubmitBtn');
             btn.disabled = true;
             btn.textContent = 'Publishing...';
+
+            const contactNames = Array.from(document.querySelectorAll('.ce-contact-name')).map(i => i.value);
+            const contactPhones = Array.from(document.querySelectorAll('.ce-contact-phone')).map(i => i.value);
+            const contacts = contactNames.map((name, i) => ({ name, phone: contactPhones[i] }));
 
             const payload = {
               eventName: document.getElementById('ceTitle').value,
@@ -1279,8 +1308,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               endDate: document.getElementById('ceEndDate') ? (document.getElementById('ceEndDate').value || null) : null,
               time: '',
               deadline: document.getElementById('ceDeadline').value,
-              contact: document.getElementById('ceContact').value,
-              contactNumber: document.getElementById('ceContactNumber').value,
+              contacts,
               foodProvided: document.getElementById('ceFoodProvided').checked,
               entryFee: document.getElementById('ceEntryFee').checked,
               entryFeeAmount: document.getElementById('ceEntryFee').checked ? document.getElementById('ceEntryFeeAmount').value : 0

@@ -39,14 +39,10 @@ const CommunityEventSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  contact: {
-    type: String,
-    required: true,
-  },
-  contactNumber: {
-    type: String,
-    required: true,
-  },
+  contacts: [{
+    name: { type: String, required: true },
+    phone: { type: String, required: true }
+  }],
   foodProvided: {
     type: Boolean,
     default: false,
