@@ -14,7 +14,7 @@ const ensureAuthenticated = (req, res, next) => {
 // POST /api/bookings - Create a new booking request
 router.post('/', async (req, res) => {
   try {
-    const { groupId, name, phone, date, purpose, message } = req.body;
+    const { groupId, name, phone, date, purpose, message, eventType, performanceType, budget } = req.body;
     
     if (!groupId || !name || !phone || !date || !purpose) {
       return res.status(400).json({ error: 'Missing required booking fields.' });
@@ -48,7 +48,10 @@ router.post('/', async (req, res) => {
       additionalMessage: message,
       groupId,
       groupName: group.groupName,
-      status: 'new'
+      status: 'new',
+      eventType,
+      performanceType,
+      budget
     });
 
     await booking.save();

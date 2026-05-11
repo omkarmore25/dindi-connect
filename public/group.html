@@ -171,6 +171,35 @@
           <div id="pAction" class="flex flex-wrap items-center gap-4"></div>
         </div>
 
+        <div id="pNatakDetails" class="hidden mb-6 glass-card p-6 rounded-3xl bg-orange-50/50 dark:bg-orange-900/10 border-orange-200 dark:border-orange-800/30">
+          <h3 class="text-xl font-bold mb-4 text-orange-600 dark:text-orange-400 flex items-center gap-2">
+            <span class="text-2xl">🎭</span> Natak Mandal Details
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-700 dark:text-slate-300">
+            <div><span class="font-bold">Sub Type:</span> <span id="pSubType"></span></div>
+            <div><span class="font-bold">Performance:</span> <span id="pPerformanceType"></span></div>
+            <div><span class="font-bold">Experience:</span> <span id="pExpYears"></span> years</div>
+            <div><span class="font-bold">Languages:</span> <span id="pLangs"></span></div>
+            <div class="col-span-full"><span class="font-bold">Districts:</span> <span id="pDistricts"></span></div>
+          </div>
+          
+          <div class="mt-4 flex flex-col md:flex-row gap-4">
+            <div class="flex-1 bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700">
+              <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Trick Scene Price</div>
+              <div class="font-bold text-lg text-slate-800 dark:text-slate-100" id="pTrickPrice"></div>
+            </div>
+            <div class="flex-1 bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700">
+              <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Simple Price</div>
+              <div class="font-bold text-lg text-slate-800 dark:text-slate-100" id="pSimplePrice"></div>
+            </div>
+          </div>
+          
+          <div id="pNatakNamesCont" class="hidden mt-4">
+            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Natak Names Performed</div>
+            <div id="pNatakNames" class="flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+
         <div class="flex flex-col gap-6">
           <div class="glass-card p-6 rounded-3xl">
             <h3 class="text-xl font-bold mb-3 text-slate-800 dark:text-slate-100">About Us</h3>
@@ -236,7 +265,7 @@
     </a>
   </nav>
 
-  <script src="/js/main.js?v=51.95"></script>
+  <script src="/js/main.js?v=52.17"></script>
   
   
   

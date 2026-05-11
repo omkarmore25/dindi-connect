@@ -45,6 +45,10 @@ router.get('/', async (req, res) => {
       filter.groupType = req.query.type;
     }
 
+    if (req.query.subType && req.query.subType !== 'All') {
+      filter.subType = req.query.subType;
+    }
+
     const groups = await Group.find(filter).sort({ createdAt: -1 });
     res.json(groups);
   } catch (error) {
@@ -77,7 +81,7 @@ router.get('/:id', validateObjectIdParam('id'), async (req, res) => {
 router.post('/', requireAuth, validateGroup, async (req, res) => {
   try {
     console.log('[DEBUG] POST /api/groups - Request Body:', JSON.stringify(req.body, null, 2));
-    const { groupName, village, email, groupType, leaderName, contactNumber, memberCount, registrationId, acceptingBookings, description, achievements, photos } = req.body;
+    const { groupName, village, email, groupType, leaderName, contactNumber, memberCount, registrationId, acceptingBookings, description, achievements, photos, subType, performanceType, trickSceneMinPrice, trickSceneMaxPrice, simpleMinPrice, simpleMaxPrice, languages, districts, natakNames, experienceYears, totalArtists } = req.body;
     
     if (!email) {
       console.error('[ERROR] Email is missing in req.body!');
@@ -96,7 +100,18 @@ router.post('/', requireAuth, validateGroup, async (req, res) => {
       description: description || '',
       achievements: achievements || [],
       photos: photos || [],
-      ownerId: req.user._id
+      ownerId: req.user._id,
+      subType,
+      performanceType,
+      trickSceneMinPrice,
+      trickSceneMaxPrice,
+      simpleMinPrice,
+      simpleMaxPrice,
+      languages: languages || [],
+      districts: districts || [],
+      natakNames: natakNames || [],
+      experienceYears,
+      totalArtists
     });
 
     await newGroup.save();
@@ -119,7 +134,7 @@ router.put('/:id', requireAuth, validateObjectIdParam('id'), async (req, res) =>
     }
 
     console.log('[DEBUG] PUT /api/groups/:id body:', req.body);
-    const { groupName, email, groupType, leaderName, memberCount, contactNumber, registrationId, description, achievements, acceptingBookings, photos } = req.body;
+    const { groupName, email, groupType, leaderName, memberCount, contactNumber, registrationId, description, achievements, acceptingBookings, photos, subType, performanceType, trickSceneMinPrice, trickSceneMaxPrice, simpleMinPrice, simpleMaxPrice, languages, districts, natakNames, experienceYears, totalArtists } = req.body;
     
     if (groupName !== undefined) group.groupName = groupName;
     if (email !== undefined) group.email = email;
@@ -130,6 +145,17 @@ router.put('/:id', requireAuth, validateObjectIdParam('id'), async (req, res) =>
     if (registrationId !== undefined) group.registrationId = registrationId || null;
     if (description !== undefined) group.description = description;
     if (acceptingBookings !== undefined) group.acceptingBookings = acceptingBookings;
+    if (subType !== undefined) group.subType = subType;
+    if (performanceType !== undefined) group.performanceType = performanceType;
+    if (trickSceneMinPrice !== undefined) group.trickSceneMinPrice = trickSceneMinPrice;
+    if (trickSceneMaxPrice !== undefined) group.trickSceneMaxPrice = trickSceneMaxPrice;
+    if (simpleMinPrice !== undefined) group.simpleMinPrice = simpleMinPrice;
+    if (simpleMaxPrice !== undefined) group.simpleMaxPrice = simpleMaxPrice;
+    if (languages !== undefined) group.languages = languages;
+    if (districts !== undefined) group.districts = districts;
+    if (natakNames !== undefined) group.natakNames = natakNames;
+    if (experienceYears !== undefined) group.experienceYears = experienceYears;
+    if (totalArtists !== undefined) group.totalArtists = totalArtists;
     
     if (achievements !== undefined) {
       if (Array.isArray(achievements)) {

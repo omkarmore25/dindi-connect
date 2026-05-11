@@ -1,3 +1,5 @@
+window.currentProfileHub = "groups";
+console.log("Vandan JS v52.19 Loaded");
 // --- PWA Install Button Logic ---
 let deferredInstallPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -246,10 +248,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (isHomePage) {
     let currentSearch = '';
     let currentType = 'All';
+    let currentSubType = 'All';
 
     const fetchGroups = async () => {
       try {
-        const res = await fetch(`/api/groups?search=${encodeURIComponent(currentSearch)}&type=${encodeURIComponent(currentType)}&t=${Date.now()}`);
+        const res = await fetch(`/api/groups?search=${encodeURIComponent(currentSearch)}&type=${encodeURIComponent(currentType)}&subType=${encodeURIComponent(currentSubType)}&t=${Date.now()}`);
         const groups = await res.json();
         renderGroups(groups);
       } catch (err) {
@@ -265,22 +268,186 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     }
 
+    const mainFilterCont = document.getElementById('groupTypeFilters');
+    const natakFilterCont = document.getElementById('natakSubFilters');
     const typeFilters = document.querySelectorAll('#groupTypeFilters .filter-btn');
+    const natakSubFilters = document.querySelectorAll('.natak-sub-filter-btn');
+    const backBtn = document.getElementById('backToMainFilters');
+
     if (typeFilters.length > 0) {
       typeFilters.forEach(btn => {
         btn.addEventListener('click', (e) => {
-          typeFilters.forEach(b => {
-            b.classList.remove('active', 'bg-brand-500', 'text-white', 'shadow-md');
+          const target = e.currentTarget;
+          const type = target.dataset.type;
+
+          if (type === 'Natak') {
+            const handleNatakTransition = () => {
+              if (mainFilterCont) mainFilterCont.classList.add('hidden');
+              if (natakFilterCont) {
+                natakFilterCont.classList.remove('hidden');
+                natakFilterCont.classList.add('flex');
+              }
+              currentType = 'Natak';
+              currentSubType = 'All';
+              fetchGroups();
+            };
+
+            if (window.playNatakIntroAnimation) {
+              window.playNatakIntroAnimation(handleNatakTransition);
+            } else {
+              handleNatakTransition();
+            }
+          } else {
+            typeFilters.forEach(b => {
+              b.classList.remove('active', 'bg-brand-500', 'text-white', 'shadow-md');
+              b.classList.add('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300', 'border', 'border-slate-200', 'dark:border-slate-700');
+            });
+            target.classList.add('active', 'bg-brand-500', 'text-white', 'shadow-md');
+            target.classList.remove('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300', 'border', 'border-slate-200', 'dark:border-slate-700');
+            currentType = type;
+            currentSubType = 'All';
+            fetchGroups();
+          }
+        });
+      });
+    }
+
+    if (natakSubFilters.length > 0) {
+      natakSubFilters.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          natakSubFilters.forEach(b => {
+            b.classList.remove('active', 'bg-orange-500', 'text-white', 'shadow-md');
             b.classList.add('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300', 'border', 'border-slate-200', 'dark:border-slate-700');
           });
           const target = e.currentTarget;
-          target.classList.add('active', 'bg-brand-500', 'text-white', 'shadow-md');
+          target.classList.add('active', 'bg-orange-500', 'text-white', 'shadow-md');
           target.classList.remove('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300', 'border', 'border-slate-200', 'dark:border-slate-700');
-          currentType = target.dataset.type;
+          currentSubType = target.dataset.subtype;
           fetchGroups();
         });
       });
     }
+
+    if (backBtn) {
+      backBtn.addEventListener('click', () => {
+        if (natakFilterCont) {
+          natakFilterCont.classList.add('hidden');
+          natakFilterCont.classList.remove('flex');
+        }
+        if (mainFilterCont) mainFilterCont.classList.remove('hidden');
+        
+        // Reset to "All" main filter
+        typeFilters.forEach(b => {
+          b.classList.remove('active', 'bg-brand-500', 'text-white', 'shadow-md');
+          b.classList.add('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300', 'border', 'border-slate-200', 'dark:border-slate-700');
+          if (b.dataset.type === 'All') {
+            b.classList.add('active', 'bg-brand-500', 'text-white', 'shadow-md');
+            b.classList.remove('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300', 'border', 'border-slate-200', 'dark:border-slate-700');
+          }
+        });
+        currentType = 'All';
+        currentSubType = 'All';
+        fetchGroups();
+      });
+    }
+
+    // ── Natak Premium Card Builder ──────────────────────────────────────
+    const renderNatakCard = (g, index) => {
+      const delay = index * 60;
+
+      // Price range display
+      let priceHtml = '';
+      const tMin = g.trickSceneMinPrice, tMax = g.trickSceneMaxPrice;
+      const sMin = g.simpleMinPrice, sMax = g.simpleMaxPrice;
+      const fmt = (n) => n ? '₹' + Number(n).toLocaleString('en-IN') : null;
+
+      if (g.performanceType === 'Both Available' && (tMin || sMin)) {
+        if (tMin) priceHtml += `<span class="natak-price-chip trick">🎪 Trick: ${fmt(tMin)}${tMax ? '–' + fmt(tMax) : ''}</span>`;
+        if (sMin) priceHtml += `<span class="natak-price-chip simple">🎭 Simple: ${fmt(sMin)}${sMax ? '–' + fmt(sMax) : ''}</span>`;
+      } else if ((g.performanceType === 'Trick Scene') && tMin) {
+        priceHtml = `<span class="natak-price-chip trick">🎪 ${fmt(tMin)}${tMax ? ' – ' + fmt(tMax) : ''}</span>`;
+      } else if (sMin) {
+        priceHtml = `<span class="natak-price-chip simple">🎭 ${fmt(sMin)}${sMax ? ' – ' + fmt(sMax) : ''}</span>`;
+      }
+
+      // Languages
+      const langs = Array.isArray(g.languages) && g.languages.length
+        ? g.languages.join(' · ')
+        : '';
+
+      // Performance type badge
+      const perfBadge = g.performanceType
+        ? `<span class="natak-info-badge">${g.performanceType === 'Both Available' ? 'Trick & Simple' : g.performanceType}</span>`
+        : '';
+
+      // Sub type badge
+      const subBadge = g.subType
+        ? `<span class="natak-info-badge" style="background:rgba(251,146,60,0.15); color:#f97316; border-color:rgba(251,146,60,0.3);">${g.subType}</span>`
+        : '';
+
+      const reportBtn = `<button onclick="openReportModal('${g._id}', '${g.groupName.replace(/'/g, "\\'")}', '${g.village.replace(/'/g, "\\'")}' )" class="natak-report-btn" title="Report">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+      </button>`;
+
+      const bookBtn = g.acceptingBookings
+        ? `<a href="/book-group.html?id=${g._id}" class="natak-book-btn">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            Book this Group
+          </a>`
+        : `<div class="natak-unavailable-btn">Currently Unavailable</div>`;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'col-span-full sm:col-span-1';
+      wrapper.style.animationDelay = delay + 'ms';
+      wrapper.innerHTML = `
+        <div class="natak-premium-card animate-fade-in" style="animation-delay:${delay}ms">
+          <!-- Top accent bar -->
+          <div style="position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#f97316,#dc2626,#f97316); border-radius:1.5rem 1.5rem 0 0;"></div>
+
+          <!-- Header Row -->
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:12px;">
+            <div>
+              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:4px;">
+                <span style="background:linear-gradient(135deg,#dc2626,#9a3412); color:white; font-size:0.6rem; font-weight:900; padding:3px 8px; border-radius:999px; letter-spacing:0.12em; text-transform:uppercase;">🎭 NATAK</span>
+                ${subBadge}
+                ${perfBadge}
+              </div>
+              <h4 style="font-size:1.2rem; font-weight:800; color:var(--natak-text,white); line-height:1.2; margin:0;">${g.groupName}</h4>
+            </div>
+            <span style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); color:rgba(255,255,255,0.7); font-size:0.7rem; font-weight:700; padding:4px 10px; border-radius:10px; white-space:nowrap; flex-shrink:0;">${g.memberCount} artists</span>
+          </div>
+
+          <!-- Location -->
+          <div style="display:flex; align-items:center; gap:6px; color:rgba(255,255,255,0.55); font-size:0.82rem; margin-bottom:10px;">
+            <svg style="width:14px;height:14px;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span>${g.village}</span>
+          </div>
+
+          <!-- Divider -->
+          <div style="height:1px; background:rgba(255,255,255,0.08); margin-bottom:12px;"></div>
+
+          <!-- Details Grid -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; font-size:0.78rem;">
+            ${priceHtml ? `<div style="grid-column:1/-1; display:flex; flex-wrap:wrap; gap:6px;">${priceHtml}</div>` : ''}
+            ${langs ? `<div style="grid-column:1/-1; color:rgba(255,255,255,0.5);"><span style="color:rgba(255,255,255,0.35); font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em;">Languages</span><br><span style="color:rgba(255,255,255,0.8);">${langs}</span></div>` : ''}
+          </div>
+
+          <!-- Leader row → profile link -->
+          <a href="/group.html?id=${g._id}" style="display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.09); padding:9px 12px; border-radius:14px; text-decoration:none; margin-bottom:14px; transition:background 0.2s;" onmouseover="this.style.background='rgba(249,115,22,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">
+            <span style="width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#f97316,#dc2626); color:white; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.85rem; flex-shrink:0;">${g.leaderName.charAt(0).toUpperCase()}</span>
+            <span style="color:rgba(255,255,255,0.8); font-weight:600; font-size:0.85rem; flex:1;">${g.leaderName}</span>
+            <svg style="width:16px;height:16px; color:rgba(255,255,255,0.3);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </a>
+
+          <!-- Action Buttons -->
+          <div style="display:flex; gap:10px; align-items:center;">
+            ${bookBtn}
+            ${reportBtn}
+          </div>
+        </div>
+      `;
+      return wrapper;
+    };
 
     const renderGroups = (groups) => {
       const gCount = document.getElementById('groupCount');
@@ -327,6 +494,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
           </button>`;
 
+        if (g.groupType === 'Natak') {
+          const natakCard = renderNatakCard(g, index);
+          container.appendChild(natakCard);
+          return;
+        }
         if (g.acceptingBookings) {
           innerFlex.innerHTML = `<a href="/book-group.html?id=${g._id}" 
           class="flex-1 text-center bg-brand-500 hover:bg-brand-600 text-white py-3.5 rounded-2xl font-bold transition transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2">
@@ -414,6 +586,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           target.classList.add('active', 'bg-brand-500', 'text-white', 'shadow-md');
           target.classList.remove('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
           currentType = target.dataset.type;
+          if (currentType === 'Natak' && window.playNatakIntroAnimation) {
+            window.playNatakIntroAnimation();
+          }
           fetchCalendarData();
         });
       });
@@ -431,7 +606,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           target.classList.add('tab-active');
           target.classList.remove('text-slate-500', 'dark:text-slate-400', 'hover:text-brand-500');
           currentSection = target.dataset.section;
-          
+
           const filters = document.getElementById('calendarTypeFilters');
           if (filters) {
             if (currentSection === 'community-events') {
@@ -615,7 +790,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       clearTimeout(statusTimeout);
       statusBox.textContent = msg;
       statusBox.className = `mb-6 p-4 rounded-2xl text-sm font-semibold shadow-md transition-all text-center block ${isError ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800'
-          : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800'
+        : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800'
         }`;
       statusTimeout = setTimeout(() => {
         statusBox.classList.remove('block');
@@ -645,6 +820,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         statusBox.className = 'mb-6 p-4 rounded-2xl text-sm font-semibold shadow-md transition-all text-center block bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-800';
       } else {
         profileView.classList.remove('hidden');
+        setTimeout(() => { if (window.switchProfileHub) window.switchProfileHub('groups'); }, 50);
         document.getElementById('userEmail').textContent = user.username || user.email.split('@')[0];
 
         // Check if session is admin to show the panel link
@@ -787,6 +963,47 @@ document.addEventListener('DOMContentLoaded', async () => {
                     document.getElementById('dashDesc').value = group.description || '';
                     document.getElementById('dashAchieve').value = (group.achievements || []).join(', ');
                     document.getElementById('dashAccepting').checked = group.acceptingBookings;
+                    
+                    // Reset Natak fields
+                    const natakFields = document.getElementById('dashNatakFields');
+                    if (natakFields) {
+                      natakFields.classList.add('hidden');
+                      natakFields.classList.remove('flex');
+                    }
+                    document.getElementById('dashSubType').value = '';
+                    document.getElementById('dashPerformanceType').value = '';
+                    document.getElementById('dashTrickSceneMinPrice').value = '';
+                    document.getElementById('dashTrickSceneMaxPrice').value = '';
+                    document.getElementById('dashSimpleMinPrice').value = '';
+                    document.getElementById('dashSimpleMaxPrice').value = '';
+                    document.getElementById('dashDistricts').value = '';
+                    document.getElementById('dashNatakNames').value = '';
+                    document.getElementById('dashExperienceYears').value = '';
+                    document.querySelectorAll('.dashLang').forEach(cb => cb.checked = false);
+
+                    if (group.groupType === 'Natak') {
+                      if (natakFields) {
+                        natakFields.classList.remove('hidden');
+                        natakFields.classList.add('flex');
+                      }
+                      document.getElementById('dashSubType').value = group.subType || '';
+                      document.getElementById('dashPerformanceType').value = group.performanceType || '';
+                      document.getElementById('dashTrickSceneMinPrice').value = group.trickSceneMinPrice || '';
+                      document.getElementById('dashTrickSceneMaxPrice').value = group.trickSceneMaxPrice || '';
+                      document.getElementById('dashSimpleMinPrice').value = group.simpleMinPrice || '';
+                      document.getElementById('dashSimpleMaxPrice').value = group.simpleMaxPrice || '';
+                      document.getElementById('dashDistricts').value = (group.districts || []).join(', ');
+                      document.getElementById('dashNatakNames').value = (group.natakNames || []).join(', ');
+                      document.getElementById('dashExperienceYears').value = group.experienceYears || '';
+                      
+                      const langs = group.languages || [];
+                      document.querySelectorAll('.dashLang').forEach(cb => {
+                        cb.checked = langs.includes(cb.value);
+                      });
+                      
+                      document.getElementById('dashSubType').dispatchEvent(new Event('change'));
+                      document.getElementById('dashPerformanceType').dispatchEvent(new Event('change'));
+                    }
 
                     const dashGallery = document.getElementById('dashPhotoGallery');
                     const renderDashGallery = () => {
@@ -851,6 +1068,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                         achievements: document.getElementById('dashAchieve').value,
                         acceptingBookings: document.getElementById('dashAccepting').checked
                       };
+
+                      if (payload.groupType === 'Natak') {
+                        payload.subType = document.getElementById('dashSubType').value;
+                        payload.performanceType = document.getElementById('dashPerformanceType').value;
+                        payload.trickSceneMinPrice = document.getElementById('dashTrickSceneMinPrice').value;
+                        payload.trickSceneMaxPrice = document.getElementById('dashTrickSceneMaxPrice').value;
+                        payload.simpleMinPrice = document.getElementById('dashSimpleMinPrice').value;
+                        payload.simpleMaxPrice = document.getElementById('dashSimpleMaxPrice').value;
+                        payload.languages = Array.from(document.querySelectorAll('.dashLang:checked')).map(el => el.value);
+                        payload.districts = document.getElementById('dashDistricts').value.split(',').map(s => s.trim()).filter(Boolean);
+                        payload.natakNames = document.getElementById('dashNatakNames').value.split(',').map(s => s.trim()).filter(Boolean);
+                        payload.experienceYears = document.getElementById('dashExperienceYears').value;
+                      }
                       console.log('[DEBUG] Sending PUT payload:', payload);
                       try {
                         const updateRes = await fetch(`/api/groups/${group._id}`, {
@@ -1574,6 +1804,19 @@ document.addEventListener('DOMContentLoaded', async () => {
           acceptingBookings: document.getElementById('gAccepting').checked,
         };
 
+        if (payload.groupType === 'Natak') {
+          payload.subType = document.getElementById('gSubType').value;
+          payload.performanceType = document.getElementById('gPerformanceType').value;
+          payload.trickSceneMinPrice = document.getElementById('gTrickSceneMinPrice').value;
+          payload.trickSceneMaxPrice = document.getElementById('gTrickSceneMaxPrice').value;
+          payload.simpleMinPrice = document.getElementById('gSimpleMinPrice').value;
+          payload.simpleMaxPrice = document.getElementById('gSimpleMaxPrice').value;
+          payload.languages = Array.from(document.querySelectorAll('.gLang:checked')).map(el => el.value);
+          payload.districts = document.getElementById('gDistricts').value.split(',').map(s => s.trim()).filter(Boolean);
+          payload.natakNames = document.getElementById('gNatakNames').value.split(',').map(s => s.trim()).filter(Boolean);
+          payload.experienceYears = document.getElementById('gExperienceYears').value;
+        }
+
         try {
           const res = await fetch('/api/groups', {
             method: 'POST',
@@ -2252,4 +2495,255 @@ window.vandanModal = {
       this.activeResolve = null;
     }
   }
+};
+
+// ── Profile Hub Tab Switcher ─────────────────────────────────────────
+
+window.switchProfileHub = (hub) => {
+  window.currentProfileHub = hub;
+  console.log("Switching Hub to:", hub);
+
+  // 1. Update active tab styling
+  document.querySelectorAll('.hub-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.hub === hub);
+  });
+
+  // 2. Hide ALL master wrappers
+  const wrappers = ['hub-groups-wrapper', 'hub-competitions-wrapper', 'hub-community-wrapper'];
+  wrappers.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
+  });
+
+  // 3. Show the target master wrapper
+  const targetId = {
+    groups: 'hub-groups-wrapper',
+    competitions: 'hub-competitions-wrapper',
+    community: 'hub-community-wrapper'
+  }[hub];
+
+  if (targetId) {
+    const el = document.getElementById(targetId);
+    if (el) el.classList.remove('hidden');
+    console.log("Visible wrapper:", targetId);
+  }
+};
+
+  
+
+// Add Natak fields toggle logic
+
+document.addEventListener('DOMContentLoaded', () => {
+  // --- SubType logic for Registration ---
+  const gSubType = document.getElementById('gSubType');
+  const gPerformanceType = document.getElementById('gPerformanceType');
+  const gTrickPriceCont = document.getElementById('gTrickPriceCont');
+  const gSimplePriceCont = document.getElementById('gSimplePriceCont');
+  const gTrickSceneMinPrice = document.getElementById('gTrickSceneMinPrice');
+  const gTrickSceneMaxPrice = document.getElementById('gTrickSceneMaxPrice');
+  const gSimpleMinPrice = document.getElementById('gSimpleMinPrice');
+  const gSimpleMaxPrice = document.getElementById('gSimpleMaxPrice');
+
+  const updateRegSubtypeLogic = () => {
+    if (!gSubType) return;
+    if (gSubType.value === 'Dashavatar') {
+      gPerformanceType.classList.remove('hidden');
+      gTrickPriceCont.classList.remove('hidden');
+      gSimplePriceCont.classList.remove('hidden');
+    } else if (gSubType.value !== '') {
+      gPerformanceType.classList.add('hidden');
+      gPerformanceType.value = 'Simple';
+      gTrickPriceCont.classList.add('hidden');
+      gTrickSceneMinPrice.value = '';
+      gTrickSceneMaxPrice.value = '';
+      gSimplePriceCont.classList.remove('hidden');
+    } else {
+      gPerformanceType.classList.add('hidden');
+      gTrickPriceCont.classList.add('hidden');
+      gSimplePriceCont.classList.add('hidden');
+    }
+  };
+
+  if (gSubType) {
+    gSubType.addEventListener('change', updateRegSubtypeLogic);
+  }
+
+  // Performance Type logic (Dashavatar can choose Trick, Simple, or Both)
+  if (gPerformanceType) {
+    gPerformanceType.addEventListener('change', () => {
+      if (gSubType.value === 'Dashavatar') {
+        const val = gPerformanceType.value;
+        if (val === 'Trick Scene') {
+          gTrickPriceCont.classList.remove('hidden');
+          gSimplePriceCont.classList.add('hidden');
+          gSimpleMinPrice.value = '';
+          gSimpleMaxPrice.value = '';
+        } else if (val === 'Simple') {
+          gSimplePriceCont.classList.remove('hidden');
+          gTrickPriceCont.classList.add('hidden');
+          gTrickSceneMinPrice.value = '';
+          gTrickSceneMaxPrice.value = '';
+        } else if (val === 'Both Available') {
+          gTrickPriceCont.classList.remove('hidden');
+          gSimplePriceCont.classList.remove('hidden');
+        }
+      }
+    });
+  }
+
+  // --- SubType logic for Dashboard ---
+  const dashSubType = document.getElementById('dashSubType');
+  const dashPerformanceTypeCont = document.getElementById('dashPerformanceTypeCont');
+  const dashPerformanceType = document.getElementById('dashPerformanceType');
+  const dashTrickPriceCont = document.getElementById('dashTrickPriceCont');
+  const dashSimplePriceCont = document.getElementById('dashSimplePriceCont');
+
+  const updateDashSubtypeLogic = () => {
+    if (!dashSubType) return;
+    if (dashSubType.value === 'Dashavatar') {
+      if (dashPerformanceTypeCont) dashPerformanceTypeCont.classList.remove('hidden');
+      // Let the performance type dictate prices
+      const pVal = dashPerformanceType ? dashPerformanceType.value : '';
+      if (pVal === 'Trick Scene') {
+        if (dashTrickPriceCont) dashTrickPriceCont.classList.remove('hidden');
+        if (dashSimplePriceCont) dashSimplePriceCont.classList.add('hidden');
+      } else if (pVal === 'Simple') {
+        if (dashSimplePriceCont) dashSimplePriceCont.classList.remove('hidden');
+        if (dashTrickPriceCont) dashTrickPriceCont.classList.add('hidden');
+      } else { // Both Available or empty
+        if (dashTrickPriceCont) dashTrickPriceCont.classList.remove('hidden');
+        if (dashSimplePriceCont) dashSimplePriceCont.classList.remove('hidden');
+      }
+    } else if (dashSubType.value !== '') {
+      if (dashPerformanceTypeCont) dashPerformanceTypeCont.classList.add('hidden');
+      if (dashPerformanceType) dashPerformanceType.value = 'Simple';
+      if (dashTrickPriceCont) dashTrickPriceCont.classList.add('hidden');
+      // clear trick values if elements exist
+      const dashTrickMin = document.getElementById('dashTrickSceneMinPrice');
+      const dashTrickMax = document.getElementById('dashTrickSceneMaxPrice');
+      if (dashTrickMin) dashTrickMin.value = '';
+      if (dashTrickMax) dashTrickMax.value = '';
+
+      if (dashSimplePriceCont) dashSimplePriceCont.classList.remove('hidden');
+    } else {
+      if (dashPerformanceTypeCont) dashPerformanceTypeCont.classList.add('hidden');
+      if (dashTrickPriceCont) dashTrickPriceCont.classList.add('hidden');
+      if (dashSimplePriceCont) dashSimplePriceCont.classList.add('hidden');
+    }
+  };
+
+  if (dashSubType) {
+    dashSubType.addEventListener('change', updateDashSubtypeLogic);
+  }
+
+  if (dashPerformanceType) {
+    dashPerformanceType.addEventListener('change', updateDashSubtypeLogic);
+  }
+
+  const gType = document.getElementById('gType');
+  const natakFields = document.getElementById('natakFields');
+  if (gType && natakFields) {
+    gType.addEventListener('change', () => {
+      if (gType.value === 'Natak') {
+        natakFields.classList.remove('hidden');
+        natakFields.classList.add('flex');
+      } else {
+        natakFields.classList.add('hidden');
+        natakFields.classList.remove('flex');
+      }
+    });
+  }
+
+  const dashGroupType = document.getElementById('dashGroupType');
+  const dashNatakFields = document.getElementById('dashNatakFields');
+  if (dashGroupType && dashNatakFields) {
+    dashGroupType.addEventListener('change', () => {
+      if (dashGroupType.value === 'Natak') {
+        dashNatakFields.classList.remove('hidden');
+        dashNatakFields.classList.add('flex');
+      } else {
+        dashNatakFields.classList.add('hidden');
+        dashNatakFields.classList.remove('flex');
+      }
+    });
+  }
+});
+
+// --- Natak Intro Animation ---
+window.playNatakIntroAnimation = () => {
+  const overlay = document.getElementById('natakIntroOverlay');
+  const flames = document.getElementById('natakFlames');
+  const spotlight = document.getElementById('natakSpotlight');
+  const curtainLeft = document.getElementById('natakCurtainLeft');
+  const curtainRight = document.getElementById('natakCurtainRight');
+  const text = document.getElementById('natakText');
+  const skipBtn = document.getElementById('skipNatakIntro');
+
+  if (!overlay) return;
+
+  let animTimeouts = [];
+  const clearAnim = () => {
+    animTimeouts.forEach(t => clearTimeout(t));
+    overlay.style.display = 'none';
+    // Reset classes
+    flames.classList.remove('translate-y-0', 'opacity-100');
+    flames.classList.add('translate-y-full', 'opacity-0');
+    spotlight.classList.remove('opacity-100', 'rotate-0');
+    spotlight.classList.add('opacity-0', 'rotate-12');
+    curtainLeft.classList.remove('-translate-x-full');
+    curtainRight.classList.remove('translate-x-full');
+    text.classList.remove('opacity-100', 'scale-100');
+    text.classList.add('opacity-0', 'scale-50');
+    skipBtn.classList.remove('opacity-100');
+
+    // Add slide-in animation to all group cards
+    const cards = document.querySelectorAll('#groupsContainer > div');
+    cards.forEach((card, index) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(50px)';
+      card.style.transition = 'all 0.5s ease-out';
+      setTimeout(() => {
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, 50 * index); // Staggered entrance
+    });
+  };
+
+  skipBtn.onclick = clearAnim;
+
+  // Step 1: Show overlay (dark screen)
+  overlay.style.display = 'flex';
+
+  animTimeouts.push(setTimeout(() => {
+    skipBtn.classList.add('opacity-100');
+  }, 100));
+
+  // Step 2: Flames rise (0.5s)
+  animTimeouts.push(setTimeout(() => {
+    flames.classList.remove('translate-y-full', 'opacity-0');
+    flames.classList.add('translate-y-0', 'opacity-100');
+  }, 500));
+
+  // Step 3: Spotlight appears (1.0s)
+  animTimeouts.push(setTimeout(() => {
+    spotlight.classList.remove('opacity-0', 'rotate-12');
+    spotlight.classList.add('opacity-100', 'rotate-0');
+  }, 1000));
+
+  // Step 4: Curtains open (1.5s)
+  animTimeouts.push(setTimeout(() => {
+    curtainLeft.classList.add('-translate-x-full');
+    curtainRight.classList.add('translate-x-full');
+  }, 1500));
+
+  // Step 5: NATAK text appears (2.0s)
+  animTimeouts.push(setTimeout(() => {
+    text.classList.remove('opacity-0', 'scale-50');
+    text.classList.add('opacity-100', 'scale-100');
+  }, 2000));
+
+  // Step 6: Hide overlay & Slide in cards (3.0s)
+  animTimeouts.push(setTimeout(() => {
+    clearAnim();
+  }, 3000));
 };

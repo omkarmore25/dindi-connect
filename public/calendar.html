@@ -67,14 +67,6 @@
                         radial-gradient(at 100% 100%, rgba(79,70,229,0.15) 0px, transparent 50%);
     }
 
-    
-    
-    .dark 
-
-    
-    
-    .dark 
-
     .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -87,6 +79,10 @@
     .dark .calendar-section-tab.tab-active {
       background-color: #f97316 !important; /* brand-500 */
       color: #ffffff !important;
+    }
+
+    .filter-btn.active {
+      color: white !important;
     }
   </style>
 
@@ -170,6 +166,7 @@
         <button class="filter-btn px-4 py-2 rounded-full text-sm font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700  transition whitespace-nowrap" data-type="Dindi">Dindi</button>
         <button class="filter-btn px-4 py-2 rounded-full text-sm font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700  transition whitespace-nowrap" data-type="Bhajan">Bhajan</button>
         <button class="filter-btn px-4 py-2 rounded-full text-sm font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700  transition whitespace-nowrap" data-type="Kirtan">Kirtan</button>
+        <button class="filter-btn px-4 py-2 rounded-full text-sm font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700  transition whitespace-nowrap border-orange-500 text-orange-600 dark:text-orange-400" data-type="Natak">🎭 Natak</button>
       </div>
     </div>
 
@@ -259,6 +256,7 @@
     </div>
   </div>
 
+  <!-- TEMPLATE: Community Event Row -->
   <div id="community-event-row-template" class="hidden">
     <div class="flex gap-4 sm:gap-8 items-start relative z-10 animate-fade-in group cursor-pointer ce-card-btn">
       <div class="flex flex-col items-center glass-card rounded-2xl min-w-[72px] py-3 mt-1 shadow-lg shadow-blue-500/10 group-hover:scale-105 transition duration-300">
@@ -324,7 +322,7 @@
   </nav>
 
 
-  <script src="/js/main.js?v=52.10"></script>
+  <script src="/js/main.js?v=52.19"></script>
   
   
   
@@ -346,41 +344,3 @@
   </div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

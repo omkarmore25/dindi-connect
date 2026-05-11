@@ -13,6 +13,9 @@ const bookingSchema = new mongoose.Schema({
     enum: ['new', 'confirmed', 'pending', 'rejected'], 
     default: 'new' 
   },
+  eventType: String,
+  performanceType: String,
+  budget: Number,
   createdAt: { type: Date, default: Date.now }
 });
 

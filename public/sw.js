@@ -1,37 +1,29 @@
 // Vandan - Service Worker
-const CACHE_NAME = 'vandan-v52.11'; 
-const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/calendar.html',
-  '/auth.html',
-  '/dashboard.html',
-  '/group.html',
-  '/competition.html',
-  '/manage-competition.html',
-  '/edit-competition.html',
-  '/community-event.html',
-  '/manage-community-event.html',
-  '/edit-community-event.html',
-  '/book-group.html',
-  '/report.html',
-  '/reset-password.html',
-  '/contact.html',
-  '/refund-policy.html',
+// Strategy: HTML + JS = ALWAYS network (never stale), Images/CSS = cache-first for offline
+const CACHE_NAME = 'vandan-v52.19';
+
+const CACHE_ONLY_ASSETS = [
   '/css/style.css',
-  '/js/main.js',
   '/images/icon-192.png',
   '/images/icon-512.png',
   '/images/og-image.png',
   '/manifest.json'
 ];
 
-// Install: Pre-cache all static assets
+// Never cache these — always fetch fresh
+const NO_CACHE_PATTERNS = ['.html', '.js', '/api/'];
+
+const shouldSkipCache = (url) => {
+  const pathname = new URL(url).pathname;
+  return NO_CACHE_PATTERNS.some(p => pathname.includes(p)) || pathname === '/';
+};
+
+// Install: Pre-cache only images + CSS
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log('[SW] Pre-caching static assets...');
-      return cache.addAll(STATIC_ASSETS);
+      return cache.addAll(CACHE_ONLY_ASSETS);
     })
   );
   self.skipWaiting();
@@ -49,7 +41,9 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch: NETWORK FIRST for everything to ensure latest changes are seen
+// Fetch strategy:
+// - HTML & JS: ALWAYS network, no cache stored
+// - Images/CSS: Cache-first (fast), fallback to network
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
@@ -57,18 +51,26 @@ self.addEventListener('fetch', (event) => {
   // Skip non-GET requests and cross-origin requests
   if (request.method !== 'GET' || url.origin !== self.location.origin) return;
 
-  // NETWORK FIRST STRATEGY
+  // HTML, JS, API → always fetch from network, never serve from cache
+  if (shouldSkipCache(request.url)) {
+    event.respondWith(
+      fetch(request, { cache: 'no-store' }).catch(() => {
+        // Offline fallback for HTML pages only
+        if (url.pathname.endsWith('.html') || url.pathname === '/') {
+          return caches.match('/index.html');
+        }
+      })
+    );
+    return;
+  }
+
+  // Static Assets: Cache-first
   event.respondWith(
-    fetch(request).then((response) => {
-      // If we got a valid response, cache it and return
-      if (response && response.status === 200) {
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
-      }
-      return response;
-    }).catch(() => {
-      // If network fails, try the cache
-      return caches.match(request);
+    caches.match(request).then((response) => {
+      return response || fetch(request).then((networkResponse) => {
+        // Don't cache API or HTML/JS in this block either
+        return networkResponse;
+      });
     })
   );
 });

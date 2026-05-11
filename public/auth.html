@@ -1,30 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-LJLHH6R5TM"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-LJLHH6R5TM');
   </script>
   <script>
-    (function() {
+    (function () {
       var t = localStorage.getItem('theme');
       if (t === 'traditional') document.documentElement.classList.add('traditional');
       else if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
     })();
   </script>
   <style>
-    html.dark { background-color: #0f172a !important; }
-    html.traditional { background-color: #1A3636 !important; }
+    html.dark {
+      background-color: #0f172a !important;
+    }
+
+    html.traditional {
+      background-color: #1A3636 !important;
+    }
   </style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vandan - Profile & Dashboard</title>
+  <title>Vandan Hub v52.17</title>
   <meta name="description" content="Manage your Vandan group, create events, and edit your profile.">
-  
+
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://dindi-connect.onrender.com/auth.html">
   <meta property="og:title" content="Vandan - Profile & Dashboard">
@@ -49,39 +55,31 @@
   <meta name="theme-color" content="#f97316">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="/images/icon-192.png">
-  
+
   <link href="/css/style.css?v=13" rel="stylesheet">
-  
+
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.11.1/dist/geosearch.css" />
-  
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
-    
+
     body {
-      background-image: radial-gradient(at 0% 0%, rgba(251,146,60,0.1) 0px, transparent 50%),
-                        radial-gradient(at 100% 0%, rgba(234,88,12,0.1) 0px, transparent 50%);
+      background-image: radial-gradient(at 0% 0%, rgba(251, 146, 60, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(234, 88, 12, 0.1) 0px, transparent 50%);
       background-attachment: fixed;
       transition: background-color 0.3s ease, color 0.3s ease;
     }
-    
+
     .dark body {
-      background-image: radial-gradient(at 0% 0%, rgba(251,146,60,0.15) 0px, transparent 50%),
-                        radial-gradient(at 100% 100%, rgba(79,70,229,0.15) 0px, transparent 50%);
+      background-image: radial-gradient(at 0% 0%, rgba(251, 146, 60, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(79, 70, 229, 0.15) 0px, transparent 50%);
     }
 
 
-    
-    .dark 
 
-    
-    .dark 
-
-    
-    .dark 
-
-    .glass-input {
+    .dark .dark .dark .glass-input {
       background: rgba(255, 255, 255, 0.6);
       border: 1px solid rgba(0, 0, 0, 0.05);
     }
@@ -92,12 +90,28 @@
       color: white;
     }
 
-    .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .custom-modal-overlay {
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       z-index: 99999;
       background-color: rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(4px);
@@ -106,22 +120,36 @@
       align-items: center;
       justify-content: center;
     }
+
     .custom-modal-overlay.hidden {
       display: none !important;
     }
+
     .map-modal-overlay {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 999999;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 999999;
       background-color: rgba(15, 23, 42, 0.9);
-      display: flex; flex-direction: column;
+      display: flex;
+      flex-direction: column;
     }
-    .map-modal-overlay.hidden { display: none !important; }
+
+    .map-modal-overlay.hidden {
+      display: none !important;
+    }
+
     .custom-delete-btn {
       background-color: #ef4444 !important;
       color: #ffffff !important;
     }
+
     .custom-delete-btn:hover {
       background-color: #dc2626 !important;
     }
+
     .photo-delete-btn {
       position: absolute;
       top: 0.5rem;
@@ -130,7 +158,8 @@
       color: white;
       padding: 0.5rem;
       border-radius: 0.8rem;
-      opacity: 1; /* Always visible for mobile accessibility */
+      opacity: 1;
+      /* Always visible for mobile accessibility */
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
       display: flex;
@@ -138,13 +167,16 @@
       justify-content: center;
       z-index: 20;
     }
+
     .photo-delete-btn:hover {
       z-index: 20;
     }
+
     .photo-delete-btn:hover {
       transform: scale(1.1);
       background: #ef4444;
     }
+
     .photo-delete-btn:active {
       transform: scale(0.9);
     }
@@ -156,29 +188,175 @@
       border: 1px solid #f1f5f9 !important;
       transition: all 0.3s ease !important;
     }
+
     .dark .premium-dash-btn {
       background-color: #1e293b !important;
       color: #f8fafc !important;
       border: 1px solid rgba(255, 255, 255, 0.1) !important;
     }
+
     .premium-dash-btn:hover {
-      background-color: #f97316 !important; /* brand-500 */
+      background-color: #f97316 !important;
+      /* brand-500 */
       color: #ffffff !important;
       border-color: #f97316 !important;
       transform: translateY(-2px);
       box-shadow: 0 10px 15px -3px rgba(249, 115, 22, 0.3);
     }
+
     .premium-dash-btn .icon-box {
-      background-color: #fff7ed !important; /* brand-50 */
-      color: #ea580c !important; /* brand-600 */
+      background-color: #fff7ed !important;
+      /* brand-50 */
+      color: #ea580c !important;
+      /* brand-600 */
     }
+
     .dark .premium-dash-btn .icon-box {
       background-color: rgba(249, 115, 22, 0.1) !important;
-      color: #fb923c !important; /* brand-400 */
+      color: #fb923c !important;
+      /* brand-400 */
     }
+
     .premium-dash-btn:hover .icon-box {
       background-color: rgba(255, 255, 255, 0.2) !important;
       color: #ffffff !important;
+    }
+
+
+    /* ── Profile Page Redesign ─────────────────── */
+    .profile-hero-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+      border: 1px solid rgba(249, 115, 22, 0.15);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+    }
+
+    .dark .profile-hero-card {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.9) 100%);
+      border: 1px solid rgba(249, 115, 22, 0.2);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+    }
+
+    .profile-action-btn {
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-align: center;
+      transition: all 0.2s;
+      cursor: pointer;
+      display: block;
+      border: none;
+    }
+
+    .sign-out-btn {
+      background: rgba(100, 116, 139, 0.1);
+      color: #475569;
+      border: 1px solid rgba(100, 116, 139, 0.15);
+      text-decoration: none;
+    }
+
+    .dark .sign-out-btn {
+      background: rgba(100, 116, 139, 0.15);
+      color: #94a3b8;
+      border-color: rgba(100, 116, 139, 0.2);
+    }
+
+    .sign-out-btn:hover {
+      background: rgba(100, 116, 139, 0.2);
+    }
+
+    .delete-btn {
+      background: rgba(239, 68, 68, 0.08);
+      color: #dc2626;
+      border: 1px solid rgba(239, 68, 68, 0.15);
+    }
+
+    .dark .delete-btn {
+      background: rgba(239, 68, 68, 0.1);
+      color: #f87171;
+      border-color: rgba(239, 68, 68, 0.2);
+    }
+
+    .delete-btn:hover {
+      background: rgba(239, 68, 68, 0.18);
+    }
+
+    /* ── 3-Tab Hub ── */
+    .profile-hub-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .hub-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 18px 8px 16px;
+      border-radius: 1.25rem;
+      background: rgba(255, 255, 255, 0.85);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .dark .hub-tab {
+      background: rgba(30, 41, 59, 0.8);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .hub-tab:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark .hub-tab:hover {
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .hub-tab.active {
+      border-color: #f97316;
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0 6px 24px rgba(249, 115, 22, 0.2), 0 0 0 1px rgba(249, 115, 22, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .dark .hub-tab.active {
+      background: rgba(30, 41, 59, 0.95);
+      box-shadow: 0 6px 24px rgba(249, 115, 22, 0.25);
+    }
+
+    .hub-tab-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s;
+    }
+
+    .hub-tab.active .hub-tab-icon {
+      transform: scale(1.1);
+    }
+
+    .hub-tab-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #64748b;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .dark .hub-tab-label {
+      color: #94a3b8;
+    }
+
+    .hub-tab.active .hub-tab-label {
+      color: #f97316;
     }
 
     .premium-input {
@@ -186,11 +364,13 @@
       color: #1e293b !important;
       border: 1px solid #e2e8f0 !important;
     }
+
     .dark .premium-input {
       background-color: rgba(15, 23, 42, 0.8) !important;
       color: #f8fafc !important;
       border: 1px solid rgba(255, 255, 255, 0.1) !important;
     }
+
     .premium-input:focus {
       border-color: #f97316 !important;
       box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2) !important;
@@ -201,21 +381,24 @@
       color: #ffffff !important;
       box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.39) !important;
     }
+
     #dashDeleteBtn:hover {
       background-color: #dc2626 !important;
       transform: translateY(-1px);
       box-shadow: 0 6px 20px rgba(220, 38, 38, 0.23) !important;
     }
-    
+
     .back-btn-premium {
       color: #ea580c !important;
     }
+
     .dark .back-btn-premium {
       color: #fb923c !important;
     }
 
 
-    .premium-dash-btn svg, .premium-dash-btn div {
+    .premium-dash-btn svg,
+    .premium-dash-btn div {
       pointer-events: none !important;
     }
 
@@ -226,11 +409,13 @@
       padding: 0.75rem 1rem !important;
       border-radius: 1.25rem !important;
     }
+
     .dark .premium-event-card {
       background-color: rgba(30, 41, 59, 0.4) !important;
       color: #f8fafc !important;
       border: 1px solid rgba(255, 255, 255, 0.05) !important;
     }
+
     .premium-event-card .date-box {
       background-color: #fff7ed !important;
       color: #ea580c !important;
@@ -238,6 +423,7 @@
       width: 42px !important;
       height: 42px !important;
     }
+
     .dark .premium-event-card .date-box {
       background-color: rgba(249, 115, 22, 0.1) !important;
       color: #fb923c !important;
@@ -250,69 +436,159 @@
       color: #C8A97E !important;
       border: 1px solid #C8A97E !important;
     }
+
     .traditional .premium-dash-btn .icon-box {
       background-color: rgba(200, 169, 126, 0.1) !important;
       color: #C8A97E !important;
       border: 1px solid rgba(200, 169, 126, 0.2) !important;
     }
+
     .traditional .premium-dash-btn div:last-child {
       background-color: rgba(200, 169, 126, 0.05) !important;
       color: #C8A97E !important;
     }
+
     .traditional .premium-event-card {
       background-color: #234040 !important;
       color: #C8A97E !important;
       border: 1px solid rgba(200, 169, 126, 0.2) !important;
     }
+
     .traditional .premium-event-card .date-box {
       background-color: rgba(200, 169, 126, 0.1) !important;
       color: #C8A97E !important;
       border: 1px solid rgba(200, 169, 126, 0.1) !important;
     }
+
     .traditional .back-btn-premium {
+      color: #f97316 !important;
+    }
+
+    /* Traditional Theme - Profile Redesign Alignment */
+    .traditional h2.text-4xl.font-extrabold {
+      color: #C8A97E !important;
+    }
+    .traditional p.text-slate-500.dark\:text-slate-400 {
+      color: rgba(200, 169, 126, 0.7) !important;
+    }
+
+    .traditional .profile-hero-card {
+      background: linear-gradient(135deg, rgba(35, 64, 64, 0.95) 0%, rgba(26, 54, 54, 0.9) 100%) !important;
+      border: 1px solid rgba(200, 169, 126, 0.3) !important;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .traditional #userEmail {
+      color: #C8A97E !important;
+    }
+
+    .traditional .sign-out-btn {
+      background: rgba(200, 169, 126, 0.1) !important;
+      color: #C8A97E !important;
+      border: 1px solid rgba(200, 169, 126, 0.2) !important;
+    }
+
+    .traditional .delete-btn {
+      background: rgba(239, 68, 68, 0.1) !important;
+      color: #ef4444 !important;
+      border: 1px solid rgba(239, 68, 68, 0.2) !important;
+    }
+
+    .traditional .hub-tab {
+      background: rgba(35, 64, 64, 0.8) !important;
+      border-color: rgba(200, 169, 126, 0.1) !important;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    .traditional .hub-tab-label {
+      color: rgba(200, 169, 126, 0.6) !important;
+    }
+
+    .traditional .hub-tab.active {
+      background: rgba(35, 64, 64, 1) !important;
+      border-color: #f97316 !important;
+      box-shadow: 0 6px 24px rgba(249, 115, 22, 0.25) !important;
+    }
+
+    .traditional .hub-tab.active .hub-tab-label {
       color: #f97316 !important;
     }
   </style>
 
-  
+
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen md:flex md:flex-row">
+
+<body
+  class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased min-h-screen md:flex md:flex-row">
 
   <!-- Desktop Sidebar / Mobile Top Nav -->
-  <header class="glass-nav sticky top-0 z-50 w-full md:w-72 md:h-screen md:fixed md:flex md:flex-col md:border-r md:border-b-0 px-4 py-3 md:p-6 shadow-sm flex justify-between items-center md:items-start transition-colors">
+  <header
+    class="glass-nav sticky top-0 z-50 w-full md:w-72 md:h-screen md:fixed md:flex md:flex-col md:border-r md:border-b-0 px-4 py-3 md:p-6 shadow-sm flex justify-between items-center md:items-start transition-colors">
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-400 to-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 font-serif">V</div>
-      <h1 class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-red-500">Vandan</h1>
+      <div
+        class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-400 to-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 font-serif">
+        V</div>
+      <h1
+        class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-red-500">
+        Vandan</h1>
     </div>
 
     <!-- Desktop Navigation Links -->
     <nav class="hidden md:flex flex-col gap-2 mt-10 w-full">
-      <a href="/" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+      <a href="/"
+        class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 20 20">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+          </path>
+        </svg>
         Home
       </a>
-      <a href="/calendar.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+      <a href="/calendar.html"
+        class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
         Calendar
       </a>
-      <a href="/dashboard.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+      <a href="/dashboard.html"
+        class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+          </path>
+        </svg>
         Dashboard
       </a>
-      <a href="/auth.html" class="flex items-center gap-3 px-4 py-3 bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-semibold rounded-xl transition">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+      <a href="/auth.html"
+        class="flex items-center gap-3 px-4 py-3 bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-semibold rounded-xl transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+        </svg>
         Profile
       </a>
-      <a href="/contact.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+      <a href="/contact.html"
+        class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400  dark:hover:bg-slate-800 rounded-xl transition font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z">
+          </path>
+        </svg>
         Help & Contact
       </a>
 
     </nav>
 
     <div class="flex items-center gap-3 md:mt-auto md:w-full md:justify-between">
-      <button id="themeToggle" class="rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition text-slate-500 dark:text-slate-400" aria-label="Toggle Dark Mode">
-        <svg id="themeToggleDarkIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>
+      <button id="themeToggle"
+        class="rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition text-slate-500 dark:text-slate-400"
+        aria-label="Toggle Dark Mode">
+        <svg id="themeToggleDarkIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path
+            d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+        </svg>
         <svg id="themeToggleLightIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="5" />
           <circle cx="12" cy="3" r="1.5" />
@@ -330,11 +606,12 @@
 
   <!-- Main Content Area -->
   <div class="flex-1 md:ml-72 flex flex-col justify-center min-h-screen pb-32 md:pb-8 px-4 py-8 relative">
-    
+
     <div class="max-w-md w-full mx-auto relative z-10">
-      
+
       <!-- Status Messages -->
-      <div id="statusMessage" class="hidden mb-6 p-4 rounded-2xl text-sm font-semibold shadow-md transition-all text-center"></div>
+      <div id="statusMessage"
+        class="hidden mb-6 p-4 rounded-2xl text-sm font-semibold shadow-md transition-all text-center"></div>
 
       <div class="text-center mb-8">
         <h2 class="text-4xl font-extrabold mb-2 tracking-tight">Welcome</h2>
@@ -342,10 +619,25 @@
       </div>
 
       <!-- Auth View -->
-      <div id="authView" class="hidden glass-card rounded-3xl p-6 md:p-8 animate-fade-in shadow-2xl shadow-brand-500/10">
+      <div id="authView"
+        class="hidden glass-card rounded-3xl p-6 md:p-8 animate-fade-in shadow-2xl shadow-brand-500/10">
         <!-- Google Auth -->
-        <a href="/api/auth/google" class="flex items-center justify-center gap-3 py-3.5 glass-input rounded-2xl shadow-sm hover:scale-[1.02] transition-transform active:scale-95 font-semibold">
-          <svg class="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        <a href="/api/auth/google"
+          class="flex items-center justify-center gap-3 py-3.5 glass-input rounded-2xl shadow-sm hover:scale-[1.02] transition-transform active:scale-95 font-semibold">
+          <svg class="w-5 h-5" viewBox="0 0 24 24">
+            <path
+              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+              fill="#4285F4" />
+            <path
+              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+              fill="#34A853" />
+            <path
+              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+              fill="#FBBC05" />
+            <path
+              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+              fill="#EA4335" />
+          </svg>
           <span class="text-slate-700 dark:text-slate-100">Continue with Google</span>
         </a>
 
@@ -357,512 +649,968 @@
 
         <!-- Email Form -->
         <form id="authForm" class="flex flex-col gap-4">
-          <input type="text" id="username" placeholder="Username" class="hidden p-4 glass-input rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 transition shadow-sm placeholder-slate-400 dark:placeholder-slate-500">
-          <input type="email" id="email" placeholder="Email Address" required class="p-4 glass-input rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 transition shadow-sm placeholder-slate-400 dark:placeholder-slate-500">
-          <input type="password" id="password" placeholder="Password" required class="p-4 glass-input rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 transition shadow-sm placeholder-slate-400 dark:placeholder-slate-500">
-          
-          <button type="submit" id="authSubmitBtn" class="mt-2 py-4 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/30 transition transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50">Log In</button>
-          
+          <input type="text" id="username" placeholder="Username"
+            class="hidden p-4 glass-input rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 transition shadow-sm placeholder-slate-400 dark:placeholder-slate-500">
+          <input type="email" id="email" placeholder="Email Address" required
+            class="p-4 glass-input rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 transition shadow-sm placeholder-slate-400 dark:placeholder-slate-500">
+          <input type="password" id="password" placeholder="Password" required
+            class="p-4 glass-input rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 transition shadow-sm placeholder-slate-400 dark:placeholder-slate-500">
+
+          <button type="submit" id="authSubmitBtn"
+            class="mt-2 py-4 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/30 transition transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50">Log
+            In</button>
+
           <div class="flex flex-col sm:flex-row justify-between items-center mt-1 gap-2">
-            <button type="button" id="showForgotPasswordBtn" class="text-sm font-bold text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 hover:underline transition">Forgot Password?</button>
-            <button type="button" id="resendLinkBtn" class="hidden text-sm font-bold text-brand-600 hover:text-brand-700 dark:text-brand-400 hover:underline transition">Resend verification email</button>
+            <button type="button" id="showForgotPasswordBtn"
+              class="text-sm font-bold text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 hover:underline transition">Forgot
+              Password?</button>
+            <button type="button" id="resendLinkBtn"
+              class="hidden text-sm font-bold text-brand-600 hover:text-brand-700 dark:text-brand-400 hover:underline transition">Resend
+              verification email</button>
           </div>
         </form>
-        
+
         <p class="text-center text-sm text-slate-500 dark:text-slate-400 mt-6 font-medium">
-          Don't have an account? <button id="toggleAuthBtn" class="text-brand-500 dark:text-brand-400 font-bold hover:underline focus:outline-none transition-all">Sign Up</button>
+          Don't have an account? <button id="toggleAuthBtn"
+            class="text-brand-500 dark:text-brand-400 font-bold hover:underline focus:outline-none transition-all">Sign
+            Up</button>
         </p>
       </div>
 
       <!-- Forgot Password View -->
-      <div id="forgotPasswordView" class="hidden glass-card rounded-3xl p-6 md:p-8 animate-fade-in shadow-2xl shadow-brand-500/10">
+      <div id="forgotPasswordView"
+        class="hidden glass-card rounded-3xl p-6 md:p-8 animate-fade-in shadow-2xl shadow-brand-500/10">
         <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">Reset Password</h2>
-        <p class="text-slate-500 dark:text-slate-400 mb-6 text-sm">Enter your email address and we'll send you a link to reset your password.</p>
-        
+        <p class="text-slate-500 dark:text-slate-400 mb-6 text-sm">Enter your email address and we'll send you a link to
+          reset your password.</p>
+
         <form id="forgotPasswordForm" class="flex flex-col gap-4">
-          <input type="email" id="forgotEmail" placeholder="Email Address" required class="p-4 glass-input rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 transition shadow-sm placeholder-slate-400 dark:placeholder-slate-500">
-          <button type="submit" id="forgotSubmitBtn" class="mt-2 py-4 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/30 transition transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50">Send Reset Link</button>
-          <button type="button" id="forgotBackBtn" class="py-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-2xl transition">Back to Login</button>
+          <input type="email" id="forgotEmail" placeholder="Email Address" required
+            class="p-4 glass-input rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 transition shadow-sm placeholder-slate-400 dark:placeholder-slate-500">
+          <button type="submit" id="forgotSubmitBtn"
+            class="mt-2 py-4 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/30 transition transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50">Send
+            Reset Link</button>
+          <button type="button" id="forgotBackBtn"
+            class="py-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-2xl transition">Back
+            to Login</button>
         </form>
       </div>
 
       <!-- Pending Verification View -->
-      <div id="verifyEmailView" class="hidden glass-card rounded-3xl p-6 md:p-8 animate-fade-in shadow-2xl shadow-brand-500/10 text-center">
-        <div class="w-20 h-20 mx-auto bg-brand-100 dark:bg-brand-900/30 text-brand-500 dark:text-brand-400 rounded-full flex items-center justify-center mb-6 shadow-inner">
-          <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+      <div id="verifyEmailView"
+        class="hidden glass-card rounded-3xl p-6 md:p-8 animate-fade-in shadow-2xl shadow-brand-500/10 text-center">
+        <div
+          class="w-20 h-20 mx-auto bg-brand-100 dark:bg-brand-900/30 text-brand-500 dark:text-brand-400 rounded-full flex items-center justify-center mb-6 shadow-inner">
+          <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+            </path>
+          </svg>
         </div>
         <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">Check your inbox</h2>
-        <p class="text-slate-500 dark:text-slate-400 mb-8 text-sm">We've sent a verification link to <br><b id="verifyEmailDisplay" class="text-slate-700 dark:text-slate-300"></b><br>Please click the link to activate your account.</p>
-        
-        <button type="button" id="verifyResendBtn" class="w-full py-4 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/30 transition transform hover:-translate-y-0.5 mb-4">Resend Link</button>
-        <button type="button" id="verifyBackBtn" class="w-full py-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-2xl transition">Back to Login</button>
+        <p class="text-slate-500 dark:text-slate-400 mb-8 text-sm">We've sent a verification link to <br><b
+            id="verifyEmailDisplay" class="text-slate-700 dark:text-slate-300"></b><br>Please click the link to activate
+          your account.</p>
+
+        <button type="button" id="verifyResendBtn"
+          class="w-full py-4 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/30 transition transform hover:-translate-y-0.5 mb-4">Resend
+          Link</button>
+        <button type="button" id="verifyBackBtn"
+          class="w-full py-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-2xl transition">Back
+          to Login</button>
       </div>
 
       <!-- Profile View -->
       <div id="profileView" class="hidden flex flex-col gap-6 animate-fade-in w-full pb-20 md:pb-0">
-        <div class="glass-card p-6 md:p-8 rounded-3xl text-center relative overflow-hidden">
-          <div class="absolute -top-10 -right-10 w-32 h-32 bg-brand-500/20 rounded-full blur-2xl"></div>
-          
-          <div class="w-20 h-20 mx-auto rounded-[2rem] bg-gradient-to-tr from-brand-400 to-red-500 text-white shadow-xl shadow-brand-500/30 mb-5 flex items-center justify-center relative z-10">
-            <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+        <!-- ── New Profile Hero Card ── -->
+        <div class="profile-hero-card relative overflow-hidden rounded-[2rem] p-6">
+          <!-- Background glows -->
+          <div
+            style="position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:radial-gradient(circle,rgba(249,115,22,0.18),transparent 70%);pointer-events:none;">
           </div>
-          
-          <h2 id="userEmail" class="text-xl font-bold text-slate-800 dark:text-slate-100 relative z-10">user@example.com</h2>
-          <div class="inline-flex items-center gap-1.5 mt-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1 rounded-full text-xs font-bold border border-green-200 dark:border-green-800 relative z-10">
-            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-            Verified Account
+          <div
+            style="position:absolute;bottom:-30px;left:-30px;width:100px;height:100px;background:radial-gradient(circle,rgba(79,70,229,0.12),transparent 70%);pointer-events:none;">
           </div>
-          
-          <div class="grid grid-cols-2 gap-4 mt-8 relative z-10">
-            <a href="/api/auth/logout" class="py-3.5 bg-slate-100 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 font-bold rounded-2xl hover:bg-slate-200 dark:hover:bg-slate-700 transition text-center">Sign Out</a>
-            <button id="deleteAccountBtn" class="py-3.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 font-bold rounded-2xl hover:bg-red-100 dark:hover:bg-red-900/40 transition border border-red-200/30 dark:border-red-800/30">Delete Account</button>
-          </div>
-          <a id="adminMasterLink" href="/admin.html" class="hidden mt-4 w-full py-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition text-center shadow-lg shadow-indigo-500/20 relative z-10 block">Go to Master Admin Panel</a>
-        </div>
 
-        <!-- Selection State - My Groups List -->
-        <div id="myGroupsListSection" class="hidden glass-card p-6 md:p-8 rounded-3xl mt-4">
-          <div class="flex justify-between items-center mb-6">
-            <div>
-              <h3 class="font-bold text-2xl text-slate-800 dark:text-slate-100">My Groups</h3>
-              <p class="text-sm text-slate-500 dark:text-slate-400">Manage your Vandan profiles</p>
+          <div class="flex items-center gap-5 relative z-10">
+            <!-- Avatar -->
+            <div
+              style="width:64px;height:64px;border-radius:1.25rem;background:linear-gradient(135deg,#f97316,#dc2626);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 8px 24px rgba(249,115,22,0.35);">
+              <svg style="width:32px;height:32px;color:white;" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd">
+                </path>
+              </svg>
             </div>
-            <button id="showRegisterBtn" class="bg-brand-100 hover:bg-brand-200 text-brand-700 dark:bg-brand-900/30 dark:hover:bg-brand-900/50 dark:text-brand-400 font-bold px-4 py-2 rounded-xl text-sm transition shadow-sm">+ Add New</button>
+            <!-- Name + badge -->
+            <div class="flex-1 min-w-0">
+              <h2 id="userEmail" class="text-xl font-black text-slate-900 dark:text-white truncate">user@example.com
+              </h2>
+              <div
+                class="inline-flex items-center gap-1 mt-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 px-2.5 py-0.5 rounded-full text-[10px] font-bold border border-emerald-200 dark:border-emerald-800">
+                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"></path>
+                </svg>
+                Verified
+              </div>
+            </div>
+            <!-- Sign out / delete -->
+            <div class="flex flex-col gap-2 flex-shrink-0">
+              <a href="/api/auth/logout" class="profile-action-btn sign-out-btn">Sign Out</a>
+              <button id="deleteAccountBtn" class="profile-action-btn delete-btn">Delete</button>
+            </div>
           </div>
-          
-          <div id="myGroupsContainer" class="flex flex-col gap-3">
-             <div class="text-center py-6 text-slate-500 text-sm">Loading groups...</div>
-          </div>
+
+          <a id="adminMasterLink" href="/admin.html"
+            class="hidden mt-5 w-full py-3 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition text-center shadow-lg shadow-indigo-500/20 block text-sm relative z-10">⚙
+            Master Admin Panel</a>
         </div>
 
-        <!-- Registration Section -->
-        <div id="groupRegistrationSection" class="hidden glass-card p-6 md:p-8 rounded-3xl mt-4 relative">
-          <button type="button" id="cancelRegisterBtn" class="hidden mb-5 inline-flex items-center gap-1.5 text-sm text-brand-600 dark:text-brand-400 font-bold hover:underline transition">
-             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-             Back to My Groups
+        <!-- ── 3-Tab Hub ── -->
+        <div class="profile-hub-tabs">
+          <button class="hub-tab active" data-hub="groups" onclick="window.switchProfileHub('groups')">
+            <div class="hub-tab-icon"
+              style="background:linear-gradient(135deg,rgba(249,115,22,0.15),rgba(234,88,12,0.1)); color:#f97316;">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <span class="hub-tab-label">My Groups</span>
           </button>
-          
-          <div class="flex items-center gap-3 mb-6">
-            <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+          <button class="hub-tab" data-hub="competitions" onclick="window.switchProfileHub('competitions')">
+            <div class="hub-tab-icon"
+              style="background:linear-gradient(135deg,rgba(234,179,8,0.15),rgba(161,98,7,0.1)); color:#eab308;">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+              </svg>
             </div>
-            <div>
-              <h3 class="font-bold text-xl text-slate-800 dark:text-slate-100">Register Group</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400">List a new group in the directory</p>
+            <span class="hub-tab-label">Competitions</span>
+          </button>
+          <button class="hub-tab" data-hub="community" onclick="window.switchProfileHub('community')">
+            <div class="hub-tab-icon"
+              style="background:linear-gradient(135deg,rgba(59,130,246,0.15),rgba(37,99,235,0.1)); color:#3b82f6;">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <span class="hub-tab-label">Community</span>
+          </button>
+        </div>
+        <div id="hub-groups-wrapper" class="hidden">
+          <!-- Selection State - My Groups List -->
+          <div id="myGroupsListSection" class="hidden glass-card p-6 md:p-8 rounded-3xl mt-4">
+            <div class="flex justify-between items-center mb-6">
+              <div>
+                <h3 class="font-bold text-2xl text-slate-800 dark:text-slate-100">My Groups</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Manage your Vandan profiles</p>
+              </div>
+              <button id="showRegisterBtn"
+                class="bg-brand-100 hover:bg-brand-200 text-brand-700 dark:bg-brand-900/30 dark:hover:bg-brand-900/50 dark:text-brand-400 font-bold px-4 py-2 rounded-xl text-sm transition shadow-sm">+
+                Add New</button>
+            </div>
+
+            <div id="myGroupsContainer" class="flex flex-col gap-3">
+              <div class="text-center py-6 text-slate-500 text-sm">Loading groups...</div>
             </div>
           </div>
-          
-          <form id="groupForm" class="flex flex-col gap-4 text-sm">
-            <input type="text" id="gName" placeholder="Group Name" class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition" required>
-            <input type="text" id="gVillage" placeholder="Village" class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition" required>
-            <input type="email" id="gEmail" placeholder="Group Email" class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition" required>
-            <select id="gType" class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition" required>
-              <option value="Dindi">Dindi</option>
-              <option value="Bhajan">Bhajan</option>
-              <option value="Kirtan">Kirtan</option>
-            </select>
-            <input type="text" id="gLeader" placeholder="Pramukh" class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition" required>
-            <input type="text" id="gContact" placeholder="Contact WhatsApp (e.g. 919876543210)" class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition" required>
-            <input type="number" id="gCount" placeholder="Members Count" class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition" required>
-            <input type="text" id="gRegId" placeholder="Registration ID / Number (Optional)" class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
-            
-            <label class="flex items-center gap-3 mt-1 cursor-pointer">
-              <input type="checkbox" id="gAccepting" checked class="w-5 h-5 text-brand-500 rounded focus:ring-brand-500 accent-brand-500 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600">
-              <span class="text-slate-600 dark:text-slate-300 font-medium">Open for Invitations</span>
-            </label>
-            
-            <button type="submit" class="mt-4 py-4 bg-slate-800 dark:bg-slate-700 text-white font-bold rounded-2xl shadow-lg hover:bg-slate-900 dark:hover:bg-slate-600 transition hover:-translate-y-0.5" id="gSubmitBtn">Add to Directory</button>
-          </form>
-        </div>
 
-        <!-- Owner Dashboard Section -->
-        <div id="ownerDashboardSection" class="hidden glass-card rounded-[2.5rem] overflow-hidden animate-fade-in w-full shadow-2xl border-t-4 border-brand-500">
-          <!-- Master Header -->
-          <div class="p-8 md:p-10 border-b border-slate-200 dark:border-brand-500/20 relative overflow-hidden bg-gradient-to-br from-brand-50/80 to-white dark:from-brand-900/20 dark:to-slate-900/40">
-            <div class="absolute -top-20 -right-20 w-64 h-64 bg-brand-500/10 rounded-full blur-[80px] animate-pulse"></div>
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-400 via-red-500 to-brand-600"></div>
-            
-            <button type="button" id="backToListBtn" class="back-btn-premium mb-6 inline-flex items-center gap-2 text-sm font-bold hover:gap-3 transition-all group">
-               <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-               Back to My Groups
+          <!-- Registration Section -->
+          <div id="groupRegistrationSection" class="hidden glass-card p-6 md:p-8 rounded-3xl mt-4 relative">
+            <button type="button" id="cancelRegisterBtn"
+              class="hidden mb-5 inline-flex items-center gap-1.5 text-sm text-brand-600 dark:text-brand-400 font-bold hover:underline transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+                </path>
+              </svg>
+              Back to My Groups
             </button>
-            <h3 class="font-bold text-3xl md:text-4xl text-slate-900 dark:text-white tracking-tight leading-tight" id="dashGroupName">Your Group</h3>
-            <div class="flex items-center gap-2 mt-2">
-              <span class="w-2 h-2 rounded-full bg-brand-500 animate-ping"></span>
-              <p class="text-[10px] text-brand-600 dark:text-brand-400 font-black uppercase tracking-[0.2em]">Management Dashboard</p>
-            </div>
-          </div>
 
-          <!-- Master Content Area -->
-          <div class="p-6 md:p-8 bg-white/30 dark:bg-slate-900/50">
-            
-            <!-- SUB-SELECTION MENU -->
-            <div id="dashMenuState" class="grid grid-cols-1 gap-5 animate-fade-in">
-              <button type="button" id="showEditProfileBtn" class="premium-dash-btn flex items-center gap-5 p-7 rounded-[2rem] group transition-all duration-500 text-left relative overflow-hidden shadow-lg">
-                <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                <div class="icon-box w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-all duration-500 shadow-inner border border-brand-100/50 dark:border-brand-800/50 pointer-events-none">
-                  <svg class="w-8 h-8 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                </div>
-                <div class="flex-1 relative z-10 pointer-events-none">
-                  <h4 class="font-bold text-xl tracking-tight pointer-events-none">Edit Profile</h4>
-                  <p class="opacity-70 text-sm mt-0.5 pointer-events-none">Update details, bio, and gallery</p>
-                </div>
-                <div class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 dark:bg-slate-700/50 group-hover:bg-white/20 text-slate-400 group-hover:text-white transition-all pointer-events-none">
-                  <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                </div>
-              </button>
-
-              <button type="button" id="showManageEventsBtn" class="premium-dash-btn flex items-center gap-5 p-7 rounded-[2rem] group transition-all duration-500 text-left relative overflow-hidden shadow-lg">
-                <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                <div class="icon-box w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-all duration-500 shadow-inner border border-brand-100/50 dark:border-brand-800/50 pointer-events-none">
-                  <svg class="w-8 h-8 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                </div>
-                <div class="flex-1 relative z-10 pointer-events-none">
-                  <h4 class="font-bold text-xl tracking-tight pointer-events-none">Performances</h4>
-                  <p class="opacity-70 text-sm mt-0.5 pointer-events-none">Add or remove upcoming events</p>
-                </div>
-                <div class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 dark:bg-slate-700/50 group-hover:bg-white/20 text-slate-400 group-hover:text-white transition-all pointer-events-none">
-                  <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                </div>
-              </button>
-
-              <a href="/dashboard.html" class="premium-dash-btn flex items-center gap-5 p-7 rounded-[2rem] group transition-all duration-500 text-left relative overflow-hidden shadow-lg no-underline text-white">
-                <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                <div class="icon-box w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-all duration-500 shadow-inner border border-brand-100/50 dark:border-brand-800/50 pointer-events-none bg-orange-500">
-                  <svg class="w-8 h-8 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                </div>
-                <div class="flex-1 relative z-10 pointer-events-none">
-                  <h4 class="font-bold text-xl tracking-tight pointer-events-none">Booking Requests</h4>
-                  <p class="opacity-70 text-sm mt-0.5 pointer-events-none">Manage incoming group invitations</p>
-                </div>
-                <div class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 dark:bg-slate-700/50 group-hover:bg-white/20 text-slate-400 group-hover:text-white transition-all pointer-events-none">
-                  <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                </div>
-              </a>
-            </div>
-
-            <!-- EDIT PROFILE SECTION -->
-            <div id="dashEditProfileState" class="hidden animate-fade-in">
-              <button type="button" class="backToDashMenu mb-6 inline-flex items-center gap-2 text-sm text-brand-600 dark:text-brand-400 font-bold hover:gap-3 transition-all group">
-                <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                Back to Dashboard
-              </button>
-              
-              <form id="dashUpdateForm" class="flex flex-col gap-5 text-sm animate-fade-in">
-                <div class="space-y-1.5">
-                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Group Name</label>
-                  <input type="text" id="dashEditGroupName" placeholder="Group Name" class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
-                </div>
-                <div class="space-y-1.5">
-                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Group Email</label>
-                  <input type="email" id="dashEmail" placeholder="Group Email" class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
-                </div>
-                <div class="space-y-1.5">
-                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Group Type</label>
-                  <select id="dashGroupType" class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
-                    <option value="Dindi">Dindi</option>
-                    <option value="Bhajan">Bhajan</option>
-                    <option value="Kirtan">Kirtan</option>
-                  </select>
-                </div>
-                <div class="space-y-1.5">
-                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Pramukh</label>
-                  <input type="text" id="dashLeaderName" placeholder="Pramukh" class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
-                </div>
-                <div class="space-y-1.5">
-                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Members Count</label>
-                  <input type="number" id="dashMemberCount" placeholder="Members Count" class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
-                </div>
-                <div class="space-y-1.5">
-                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">WhatsApp Contact</label>
-                  <input type="text" id="dashContact" placeholder="Contact WhatsApp" class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
-                </div>
-                <div class="space-y-1.5">
-                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Registration ID (Optional)</label>
-                  <input type="text" id="dashRegId" placeholder="Registration ID / Number" class="premium-input w-full p-4 rounded-2xl focus:outline-none transition">
-                </div>
-                <div class="space-y-1.5">
-                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">About Our Group</label>
-                  <textarea id="dashDesc" rows="4" placeholder="E.g. 'We originated in Pandharpur in 2012...'" class="premium-input w-full p-4 rounded-2xl focus:outline-none transition resize-none"></textarea>
-                </div>
-                <div class="space-y-1.5">
-                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Achievements (Comma separated)</label>
-                  <input type="text" id="dashAchieve" placeholder="Best Dindi Award 2023, Pandharpur Yatra..." class="premium-input w-full p-4 rounded-2xl focus:outline-none transition">
-                </div>
-                
-                <label class="flex items-center gap-3 mt-2 cursor-pointer">
-                  <input type="checkbox" id="dashAccepting" class="w-5 h-5 text-brand-500 rounded focus:ring-brand-500 accent-brand-500 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600">
-                  <span class="text-slate-600 dark:text-slate-300 font-medium">Open for Invitations</span>
-                </label>
-                
-                <button type="submit" class="py-3.5 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/20 transition transform hover:-translate-y-0.5" id="dashUpdateBtn">Save Changes</button>
-              </form>
-
-              <hr class="my-8 border-slate-200 dark:border-brand-500/20">
-
-              <form id="dashPhotoForm" class="flex flex-col gap-4 text-sm">
-                <div>
-                  <h4 class="font-bold text-slate-800 dark:text-slate-100 text-lg">Add to Gallery</h4>
-                  <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload photos to show off your performances</p>
-                </div>
-                
-                <div class="relative">
-                  <input type="file" id="dashPhotoFile" accept="image/*" class="w-full p-3 glass-input rounded-xl cursor-pointer file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-900/30 dark:file:text-brand-400 transition" required>
-                </div>
-                
-                <button type="submit" class="py-3.5 bg-slate-800 dark:bg-slate-700 text-white font-bold rounded-2xl shadow-md hover:bg-slate-900 dark:hover:bg-slate-600 transition hover:-translate-y-0.5" id="dashPhotoBtn">Upload Photo</button>
-              </form>
-
-              <div id="dashPhotoGallery" class="mt-6 grid grid-cols-2 gap-4">
-                 <!-- Photos injected here -->
+            <div class="flex items-center gap-3 mb-6">
+              <div
+                class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                  </path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-xl text-slate-800 dark:text-slate-100">Register Group</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400">List a new group in the directory</p>
               </div>
             </div>
 
-            <!-- MANAGE EVENTS SECTION -->
-            <div id="dashEventsState" class="hidden animate-fade-in">
-              <button type="button" class="backToDashMenu mb-6 inline-flex items-center gap-2 text-sm text-brand-600 dark:text-brand-400 font-bold hover:gap-3 transition-all group">
-                <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                Back to Dashboard
-              </button>
-
-              <div class="mb-8 text-left">
-                <h4 class="font-bold text-slate-900 dark:text-white text-2xl tracking-tight leading-tight">Upcoming Performances</h4>
-                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Keep your performance schedule up to date</p>
-              </div>
-
-              <form id="dashEventForm" class="flex flex-col gap-5 mb-10 bg-brand-50/20 dark:bg-brand-900/10 p-6 rounded-[2rem] border border-brand-100 dark:border-brand-500/20 shadow-inner animate-fade-in">
-                <div class="space-y-1.5">
-                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Event / Temple Name</label>
-                  <input type="text" id="dashEventTemple" placeholder="Enter name..." class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
-                </div>
-                <div class="space-y-1.5">
-                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Village / Location</label>
-                  <input type="text" id="dashEventVillage" placeholder="Village name..." class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
-                </div>
-                <div class="space-y-1.5">
-                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Event Date</label>
-                  <input type="date" id="dashEventDate" class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
-                </div>
-                <div class="space-y-1.5">
-                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Map Location (Optional)</label>
-                  <button type="button" id="openDashMapBtn" class="premium-dash-btn w-full p-4 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-sm group">
-                    <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    <span id="dashMapBtnText">Pick Location on Map</span>
-                  </button>
-                  <input type="hidden" id="dashEventLat">
-                  <input type="hidden" id="dashEventLng">
-                  <button type="button" id="dashEventClearMap" class="w-full mt-2 p-3 bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400 border border-red-200/30 rounded-xl font-bold hover:bg-red-100 transition hidden">Clear Location</button>
-                </div>
-                <button type="submit" class="py-4 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/20 transition transform hover:-translate-y-0.5 active:scale-[0.98]" id="dashEventBtn">Add Event to Schedule</button>
-              </form>
-
-              <div id="dashEventsList" class="flex flex-col gap-3">
-                 <!-- Events injected here -->
-              </div>
-            </div>
-          </div>
-
-          <!-- Master Footer -->
-          <div class="p-8 border-t border-slate-200 dark:border-brand-500/10 text-center bg-slate-50/50 dark:bg-slate-900/50">
-             <button type="button" id="dashDeleteBtn" class="w-full py-4 bg-red-500 hover:bg-red-600 text-white font-bold rounded-2xl shadow-lg shadow-red-500/20 transition-all transform hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2 group">
-               <svg class="w-5 h-5 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-               Permanently Delete Group
-             </button>
-          </div>
-        </div>
-
-
-
-
-
-
-
-        <!-- Organizer - My Competitions List -->
-        <div id="myCompetitionsListSection" class="hidden glass-card p-6 md:p-8 rounded-3xl mt-4">
-          <div class="flex justify-between items-center mb-6">
-            <div>
-              <h3 class="font-bold text-2xl text-slate-800 dark:text-slate-100">My Competitions</h3>
-              <p class="text-sm text-slate-500 dark:text-slate-400">Organize events and manage registrations</p>
-            </div>
-            <button id="showCompRegisterBtn" class="bg-brand-100 hover:bg-brand-200 text-brand-700 dark:bg-brand-900/30 dark:hover:bg-brand-900/50 dark:text-brand-400 font-bold px-4 py-2 rounded-xl text-sm transition shadow-sm">+ Create Event</button>
-          </div>
-          
-          <div id="myCompetitionsContainer" class="flex flex-col gap-3">
-             <div class="text-center py-6 text-slate-500 text-sm">Loading competitions...</div>
-          </div>
-        </div>
-
-        <!-- Create Competition Section -->
-        <div id="compRegistrationSection" class="hidden glass-card p-6 md:p-8 rounded-3xl mt-4 relative">
-          <button type="button" id="cancelCompRegisterBtn" class="mb-5 inline-flex items-center gap-1.5 text-sm text-brand-600 dark:text-brand-400 font-bold hover:underline transition">
-             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-             Back
-          </button>
-          
-          <div class="flex items-center gap-3 mb-6">
-            <div class="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400 flex items-center justify-center">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            </div>
-            <div>
-              <h3 class="font-bold text-xl text-slate-800 dark:text-slate-100">Create Competition</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400">Host an event for your group</p>
-            </div>
-          </div>
-          
-          <form id="compForm" class="flex flex-col gap-4 text-sm">
-            <input type="text" id="cTitle" placeholder="Event Title (e.g. Mahashivratri Dindi Spardha)" class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition" required>
-            <div class="space-y-1">
-              <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Event Type</label>
-              <select id="cType" class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition" required>
+            <form id="groupForm" class="flex flex-col gap-4 text-sm">
+              <input type="text" id="gName" placeholder="Group Name"
+                class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
+                required>
+              <input type="text" id="gVillage" placeholder="Village"
+                class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
+                required>
+              <input type="email" id="gEmail" placeholder="Group Email"
+                class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
+                required>
+              <select id="gType"
+                class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
+                required>
                 <option value="Dindi">Dindi</option>
                 <option value="Bhajan">Bhajan</option>
                 <option value="Kirtan">Kirtan</option>
+                <option value="Natak">Natak</option>
               </select>
-            </div>
-            <textarea id="cDesc" rows="3" placeholder="Description & Rules" class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition resize-none" required></textarea>
-            <input type="text" id="cLocation" placeholder="Location / Village" class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition" required>
-            <div class="flex gap-4">
-              <div class="flex-1">
-                <label class="block text-xs text-slate-500 mb-1 ml-1">Event Date</label>
-                <input type="date" id="cDate" class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition" required>
-              </div>
-              <div class="flex-1">
-                <label class="block text-xs text-slate-500 mb-1 ml-1">Registration Deadline</label>
-                <input type="date" id="cDeadline" class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition" required>
-              </div>
-            </div>
-            
-            <div class="mt-2 relative z-0">
-              <label class="block text-xs text-slate-500 mb-2 ml-1">Map Location (Optional) - Search or click on the map</label>
-              <button type="button" id="openCompMapBtn" class="w-full p-3.5 glass-input rounded-xl border border-brand-200 dark:border-brand-800 text-brand-600 dark:text-brand-400 font-bold  dark:hover:bg-brand-900/30 transition flex items-center justify-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                <span id="compMapBtnText">Pick Location on Map</span>
-              </button>
-              <input type="hidden" id="compEventLat">
-              <input type="hidden" id="compEventLng">
-              <button type="button" id="compEventClearMap" class="w-full mt-2 p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/30 rounded-xl font-bold hover:bg-red-100 dark:hover:bg-red-900/40 transition hidden">Clear Location</button>
-            </div>
-            
-            <div class="mt-2">
-              <label class="block text-xs text-slate-500 mb-1 ml-1">Competition Poster / Photo(s)</label>
-              <input type="file" id="cPoster" accept="image/*" multiple class="w-full p-3 glass-input rounded-xl cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-900/30 dark:file:text-brand-400 transition">
-            </div>
-            
-            <button type="submit" class="mt-4 py-4 bg-brand-500 text-white font-bold rounded-2xl shadow-lg hover:bg-brand-600 transition hover:-translate-y-0.5" id="cSubmitBtn">Publish Event</button>
-          </form>
-        </div>
 
-        <!-- Organizer - My Community Events List -->
-        <div id="myCommunityEventsListSection" class="hidden glass-card p-6 md:p-8 rounded-3xl mt-4">
-          <div class="flex justify-between items-center mb-6">
-            <div>
-              <h3 class="font-bold text-2xl text-slate-800 dark:text-slate-100">My Community Events</h3>
-              <p class="text-sm text-slate-500 dark:text-slate-400">Organize and share local events</p>
-            </div>
-            <button id="showCommunityEventRegisterBtn" class="bg-blue-100 hover:bg-blue-200 text-blue-700 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-400 font-bold px-4 py-2 rounded-xl text-sm transition shadow-sm">+ Add Event</button>
-          </div>
-          
-          <div id="myCommunityEventsContainer" class="flex flex-col gap-3">
-             <div class="text-center py-6 text-slate-500 text-sm">Loading community events...</div>
-          </div>
-        </div>
+              <div id="natakFields"
+                class="hidden flex-col gap-4 p-4 bg-brand-50/50 dark:bg-brand-900/10 rounded-xl border border-brand-100 dark:border-brand-800/50 mt-2">
+                <h4 class="font-bold text-brand-600 dark:text-brand-400 mb-2">Natak Mandal Details</h4>
 
-        <!-- Create Community Event Section -->
-        <div id="communityEventRegistrationSection" class="hidden glass-card p-6 md:p-8 rounded-3xl mt-4 relative">
-          <button type="button" id="cancelCommunityEventRegisterBtn" class="mb-5 inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 font-bold hover:underline transition">
-             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-             Back
-          </button>
-          
-          <div class="flex items-center gap-3 mb-6">
-            <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            </div>
-            <div>
-              <h3 class="font-bold text-xl text-slate-800 dark:text-slate-100">Add Community Event</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400">Host an event for the community</p>
-            </div>
-          </div>
-          
-          <form id="communityEventForm" class="flex flex-col gap-4 text-sm">
-            <input type="text" id="ceTitle" placeholder="Event Name" class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" required>
-            <input type="text" id="ceOrganizer" placeholder="Organizer Name" class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" required>
-            
-            <div class="space-y-1">
-              <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Event Type</label>
-              <select id="ceType" class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" required>
-                <option value="Dindi">Dindi</option>
-                <option value="Bhajan">Bhajan</option>
-                <option value="Kirtan">Kirtan</option>
-                <option value="Music">Music</option>
-                <option value="Workshop">Workshop</option>
-                <option value="Cultural">Cultural</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            
-            <textarea id="ceDesc" rows="3" placeholder="Description" class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition resize-none" required></textarea>
-            <input type="text" id="ceLocation" placeholder="Venue / Village" class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" required>
-            
-            <div class="flex gap-4">
-              <div class="flex-1">
-                <label class="block text-xs text-slate-500 mb-1 ml-1">Start Date</label>
-                <input type="date" id="ceDate" class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" required>
-              </div>
-              <div class="flex-1">
-                <label class="block text-xs text-slate-500 mb-1 ml-1">End Date <span class="text-slate-400">(if multi-day)</span></label>
-                <input type="date" id="ceEndDate" class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
-              </div>
-            </div>
+                <select id="gSubType"
+                  class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                  <option value="">Select Sub Type *</option>
+                  <option value="Dashavatar">Dashavatar</option>
+                  <option value="Normal">Normal</option>
+                </select>
 
-            <div class="space-y-1">
-              <label class="block text-xs text-slate-500 mb-1 ml-1">Registration Deadline (Required)</label>
-              <input type="date" id="ceDeadline" class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" required>
-            </div>
-            
-            <!-- Dynamic Contacts Section -->
-            <div id="ceContactsContainer" class="space-y-3">
-              <div class="flex gap-4 contact-row">
-                <div class="flex-1">
-                  <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-1">Contact Person</label>
-                  <input type="text" class="ce-contact-name w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" placeholder="Name" required>
+                <select id="gPerformanceType"
+                  class="hidden p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                  <option value="">Select Performance Type *</option>
+                  <option value="Trick Scene">Trick Scene</option>
+                  <option value="Simple">Simple</option>
+                  <option value="Both Available">Both Available</option>
+                </select>
+
+                <div id="gTrickPriceCont" class="grid grid-cols-2 gap-3 hidden">
+                  <input type="number" id="gTrickSceneMinPrice" placeholder="Trick Min ₹"
+                    class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                  <input type="number" id="gTrickSceneMaxPrice" placeholder="Trick Max ₹"
+                    class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
                 </div>
-                <div class="flex-1">
-                  <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-1">Contact Number</label>
-                  <input type="tel" class="ce-contact-phone w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" placeholder="Phone" required>
-                </div>
-              </div>
-            </div>
-            <button type="button" id="ceAddContactBtn" class="text-[11px] font-black text-blue-500 hover:text-blue-600 flex items-center gap-1.5 mt-1 transition group uppercase tracking-wider">
-              <div class="w-5 h-5 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center group-hover:bg-blue-100 transition">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
-              </div>
-              Add Another Contact
-            </button>
 
-            <div class="flex flex-col sm:flex-row gap-4 mt-2">
-              <label class="flex items-center gap-3 cursor-pointer p-3.5 glass-input rounded-xl flex-1">
-                <input type="checkbox" id="ceFoodProvided" class="w-5 h-5 text-blue-500 rounded focus:ring-blue-500 accent-blue-500 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600">
-                <span class="text-slate-600 dark:text-slate-300 font-medium">Food Provided</span>
+                <div id="gSimplePriceCont" class="grid grid-cols-2 gap-3 hidden">
+                  <input type="number" id="gSimpleMinPrice" placeholder="Simple Min ₹"
+                    class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                  <input type="number" id="gSimpleMaxPrice" placeholder="Simple Max ₹"
+                    class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                </div>
+
+                <div class="space-y-2">
+                  <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Languages</label>
+                  <div class="flex flex-wrap gap-3">
+                    <label class="flex items-center gap-2 text-slate-600 dark:text-slate-300"><input type="checkbox"
+                        value="Marathi" class="gLang rounded text-brand-500"> Marathi</label>
+                    <label class="flex items-center gap-2 text-slate-600 dark:text-slate-300"><input type="checkbox"
+                        value="Konkani" class="gLang rounded text-brand-500"> Konkani</label>
+                    <label class="flex items-center gap-2 text-slate-600 dark:text-slate-300"><input type="checkbox"
+                        value="Hindi" class="gLang rounded text-brand-500"> Hindi</label>
+                    <label class="flex items-center gap-2 text-slate-600 dark:text-slate-300"><input type="checkbox"
+                        value="Other" class="gLang rounded text-brand-500"> Other</label>
+                  </div>
+                </div>
+
+                <input type="text" id="gDistricts" placeholder="Districts you travel to (comma separated)"
+                  class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                <input type="text" id="gNatakNames" placeholder="Natak Names Performed (comma separated) (Optional)"
+                  class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                <input type="number" id="gExperienceYears" placeholder="Experience in Years"
+                  class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+              </div>
+              <input type="text" id="gLeader" placeholder="Pramukh"
+                class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
+                required>
+              <input type="text" id="gContact" placeholder="Contact WhatsApp (e.g. 919876543210)"
+                class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
+                required>
+              <input type="number" id="gCount" placeholder="Members Count"
+                class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
+                required>
+              <input type="text" id="gRegId" placeholder="Registration ID / Number (Optional)"
+                class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+
+              <label class="flex items-center gap-3 mt-1 cursor-pointer">
+                <input type="checkbox" id="gAccepting" checked
+                  class="w-5 h-5 text-brand-500 rounded focus:ring-brand-500 accent-brand-500 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600">
+                <span class="text-slate-600 dark:text-slate-300 font-medium">Open for Invitations</span>
               </label>
-              
-              <div class="flex-1 flex flex-col gap-2">
-                <label class="flex items-center gap-3 cursor-pointer p-3.5 glass-input rounded-xl">
-                  <input type="checkbox" id="ceEntryFee" class="w-5 h-5 text-blue-500 rounded focus:ring-blue-500 accent-blue-500 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600">
-                  <span class="text-slate-600 dark:text-slate-300 font-medium">Entry Fee</span>
-                </label>
-                <input type="number" id="ceEntryFeeAmount" placeholder="Fee Amount (₹)" class="hidden w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+
+              <button type="submit"
+                class="mt-4 py-4 bg-slate-800 dark:bg-slate-700 text-white font-bold rounded-2xl shadow-lg hover:bg-slate-900 dark:hover:bg-slate-600 transition hover:-translate-y-0.5"
+                id="gSubmitBtn">Add to Directory</button>
+            </form>
+          </div>
+
+          <!-- Owner Dashboard Section -->
+          <div id="ownerDashboardSection"
+            class="hidden glass-card rounded-[2.5rem] overflow-hidden animate-fade-in w-full shadow-2xl border-t-4 border-brand-500">
+            <!-- Master Header -->
+            <div
+              class="p-8 md:p-10 border-b border-slate-200 dark:border-brand-500/20 relative overflow-hidden bg-gradient-to-br from-brand-50/80 to-white dark:from-brand-900/20 dark:to-slate-900/40">
+              <div class="absolute -top-20 -right-20 w-64 h-64 bg-brand-500/10 rounded-full blur-[80px] animate-pulse">
+              </div>
+              <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-400 via-red-500 to-brand-600">
+              </div>
+
+              <button type="button" id="backToListBtn"
+                class="back-btn-premium mb-6 inline-flex items-center gap-2 text-sm font-bold hover:gap-3 transition-all group">
+                <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none"
+                  stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Back to My Groups
+              </button>
+              <h3 class="font-bold text-3xl md:text-4xl text-slate-900 dark:text-white tracking-tight leading-tight"
+                id="dashGroupName">Your Group</h3>
+              <div class="flex items-center gap-2 mt-2">
+                <span class="w-2 h-2 rounded-full bg-brand-500 animate-ping"></span>
+                <p class="text-[10px] text-brand-600 dark:text-brand-400 font-black uppercase tracking-[0.2em]">
+                  Management Dashboard</p>
               </div>
             </div>
 
-            <div class="space-y-1">
-              <label class="block text-xs text-slate-500 mb-1 ml-1">Event Poster / Photos (Optional)</label>
-              <input type="file" id="cePoster" accept="image/*" multiple class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition cursor-pointer text-sm font-medium text-slate-500">
+            <!-- Master Content Area -->
+            <div class="p-6 md:p-8 bg-white/30 dark:bg-slate-900/50">
+
+              <!-- SUB-SELECTION MENU -->
+              <div id="dashMenuState" class="grid grid-cols-1 gap-5 animate-fade-in">
+                <button type="button" id="showEditProfileBtn"
+                  class="premium-dash-btn flex items-center gap-5 p-7 rounded-[2rem] group transition-all duration-500 text-left relative overflow-hidden shadow-lg">
+                  <div
+                    class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  </div>
+                  <div
+                    class="icon-box w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-all duration-500 shadow-inner border border-brand-100/50 dark:border-brand-800/50 pointer-events-none">
+                    <svg class="w-8 h-8 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                      </path>
+                    </svg>
+                  </div>
+                  <div class="flex-1 relative z-10 pointer-events-none">
+                    <h4 class="font-bold text-xl tracking-tight pointer-events-none">Edit Profile</h4>
+                    <p class="opacity-70 text-sm mt-0.5 pointer-events-none">Update details, bio, and gallery</p>
+                  </div>
+                  <div
+                    class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 dark:bg-slate-700/50 group-hover:bg-white/20 text-slate-400 group-hover:text-white transition-all pointer-events-none">
+                    <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </div>
+                </button>
+
+                <button type="button" id="showManageEventsBtn"
+                  class="premium-dash-btn flex items-center gap-5 p-7 rounded-[2rem] group transition-all duration-500 text-left relative overflow-hidden shadow-lg">
+                  <div
+                    class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  </div>
+                  <div
+                    class="icon-box w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-all duration-500 shadow-inner border border-brand-100/50 dark:border-brand-800/50 pointer-events-none">
+                    <svg class="w-8 h-8 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                      </path>
+                    </svg>
+                  </div>
+                  <div class="flex-1 relative z-10 pointer-events-none">
+                    <h4 class="font-bold text-xl tracking-tight pointer-events-none">Performances</h4>
+                    <p class="opacity-70 text-sm mt-0.5 pointer-events-none">Add or remove upcoming events</p>
+                  </div>
+                  <div
+                    class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 dark:bg-slate-700/50 group-hover:bg-white/20 text-slate-400 group-hover:text-white transition-all pointer-events-none">
+                    <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </div>
+                </button>
+
+                <a href="/dashboard.html"
+                  class="premium-dash-btn flex items-center gap-5 p-7 rounded-[2rem] group transition-all duration-500 text-left relative overflow-hidden shadow-lg no-underline text-white">
+                  <div
+                    class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  </div>
+                  <div
+                    class="icon-box w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-all duration-500 shadow-inner border border-brand-100/50 dark:border-brand-800/50 pointer-events-none bg-orange-500">
+                    <svg class="w-8 h-8 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                      </path>
+                    </svg>
+                  </div>
+                  <div class="flex-1 relative z-10 pointer-events-none">
+                    <h4 class="font-bold text-xl tracking-tight pointer-events-none">Booking Requests</h4>
+                    <p class="opacity-70 text-sm mt-0.5 pointer-events-none">Manage incoming group invitations</p>
+                  </div>
+                  <div
+                    class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 dark:bg-slate-700/50 group-hover:bg-white/20 text-slate-400 group-hover:text-white transition-all pointer-events-none">
+                    <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </div>
+                </a>
+              </div>
+
+              <!-- EDIT PROFILE SECTION -->
+              <div id="dashEditProfileState" class="hidden animate-fade-in">
+                <button type="button"
+                  class="backToDashMenu mb-6 inline-flex items-center gap-2 text-sm text-brand-600 dark:text-brand-400 font-bold hover:gap-3 transition-all group">
+                  <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                      d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                  </svg>
+                  Back to Dashboard
+                </button>
+
+                <form id="dashUpdateForm" class="flex flex-col gap-5 text-sm animate-fade-in">
+                  <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Group Name</label>
+                    <input type="text" id="dashEditGroupName" placeholder="Group Name"
+                      class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
+                  </div>
+                  <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Group
+                      Email</label>
+                    <input type="email" id="dashEmail" placeholder="Group Email"
+                      class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
+                  </div>
+                  <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Group Type</label>
+                    <select id="dashGroupType"
+                      class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
+                      <option value="Dindi">Dindi</option>
+                      <option value="Bhajan">Bhajan</option>
+                      <option value="Kirtan">Kirtan</option>
+                      <option value="Natak">Natak</option>
+                    </select>
+                  </div>
+
+                  <div id="dashNatakFields"
+                    class="hidden flex-col gap-5 p-5 mt-2 bg-brand-50/50 dark:bg-brand-900/10 rounded-[2rem] border border-brand-100 dark:border-brand-800/50">
+                    <h4 class="font-bold text-brand-600 dark:text-brand-400">Natak Mandal Details</h4>
+
+                    <div class="space-y-1.5">
+                      <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Sub Type</label>
+                      <select id="dashSubType"
+                        class="premium-input w-full p-4 rounded-2xl focus:outline-none transition">
+                        <option value="">Select Sub Type</option>
+                        <option value="Dashavatar">Dashavatar</option>
+                        <option value="Normal">Normal</option>
+                      </select>
+                    </div>
+
+                    <div id="dashPerformanceTypeCont" class="space-y-1.5 hidden">
+                      <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Performance
+                        Type</label>
+                      <select id="dashPerformanceType"
+                        class="premium-input w-full p-4 rounded-2xl focus:outline-none transition">
+                        <option value="">Select Performance Type</option>
+                        <option value="Trick Scene">Trick Scene</option>
+                        <option value="Simple">Simple</option>
+                        <option value="Both Available">Both Available</option>
+                      </select>
+                    </div>
+
+                    <div id="dashTrickPriceCont" class="grid grid-cols-2 gap-3 hidden">
+                      <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Trick Scene
+                          Min ₹</label>
+                        <input type="number" id="dashTrickSceneMinPrice"
+                          class="premium-input w-full p-4 rounded-2xl focus:outline-none transition">
+                      </div>
+                      <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Trick Scene
+                          Max ₹</label>
+                        <input type="number" id="dashTrickSceneMaxPrice"
+                          class="premium-input w-full p-4 rounded-2xl focus:outline-none transition">
+                      </div>
+                    </div>
+
+                    <div id="dashSimplePriceCont" class="grid grid-cols-2 gap-3 hidden">
+                      <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Simple Min
+                          ₹</label>
+                        <input type="number" id="dashSimpleMinPrice"
+                          class="premium-input w-full p-4 rounded-2xl focus:outline-none transition">
+                      </div>
+                      <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Simple Max
+                          ₹</label>
+                        <input type="number" id="dashSimpleMaxPrice"
+                          class="premium-input w-full p-4 rounded-2xl focus:outline-none transition">
+                      </div>
+                    </div>
+
+                    <div class="space-y-2">
+                      <label
+                        class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Languages</label>
+                      <div class="flex flex-wrap gap-3 p-4 premium-input rounded-2xl">
+                        <label class="flex items-center gap-2 text-slate-600 dark:text-slate-300"><input type="checkbox"
+                            value="Marathi" class="dashLang rounded text-brand-500"> Marathi</label>
+                        <label class="flex items-center gap-2 text-slate-600 dark:text-slate-300"><input type="checkbox"
+                            value="Konkani" class="dashLang rounded text-brand-500"> Konkani</label>
+                        <label class="flex items-center gap-2 text-slate-600 dark:text-slate-300"><input type="checkbox"
+                            value="Hindi" class="dashLang rounded text-brand-500"> Hindi</label>
+                        <label class="flex items-center gap-2 text-slate-600 dark:text-slate-300"><input type="checkbox"
+                            value="Other" class="dashLang rounded text-brand-500"> Other</label>
+                      </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                      <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Districts (comma
+                        separated)</label>
+                      <input type="text" id="dashDistricts"
+                        class="premium-input w-full p-4 rounded-2xl focus:outline-none transition">
+                    </div>
+
+                    <div class="space-y-1.5">
+                      <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Natak Names
+                        (comma separated) (Optional)</label>
+                      <input type="text" id="dashNatakNames"
+                        class="premium-input w-full p-4 rounded-2xl focus:outline-none transition">
+                    </div>
+
+                    <div class="space-y-1.5">
+                      <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Experience
+                        Years</label>
+                      <input type="number" id="dashExperienceYears"
+                        class="premium-input w-full p-4 rounded-2xl focus:outline-none transition">
+                    </div>
+                  </div>
+                  <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Pramukh</label>
+                    <input type="text" id="dashLeaderName" placeholder="Pramukh"
+                      class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
+                  </div>
+                  <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Members
+                      Count</label>
+                    <input type="number" id="dashMemberCount" placeholder="Members Count"
+                      class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
+                  </div>
+                  <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">WhatsApp
+                      Contact</label>
+                    <input type="text" id="dashContact" placeholder="Contact WhatsApp"
+                      class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
+                  </div>
+                  <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Registration ID
+                      (Optional)</label>
+                    <input type="text" id="dashRegId" placeholder="Registration ID / Number"
+                      class="premium-input w-full p-4 rounded-2xl focus:outline-none transition">
+                  </div>
+                  <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">About Our
+                      Group</label>
+                    <textarea id="dashDesc" rows="4" placeholder="E.g. 'We originated in Pandharpur in 2012...'"
+                      class="premium-input w-full p-4 rounded-2xl focus:outline-none transition resize-none"></textarea>
+                  </div>
+                  <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Achievements
+                      (Comma separated)</label>
+                    <input type="text" id="dashAchieve" placeholder="Best Dindi Award 2023, Pandharpur Yatra..."
+                      class="premium-input w-full p-4 rounded-2xl focus:outline-none transition">
+                  </div>
+
+                  <label class="flex items-center gap-3 mt-2 cursor-pointer">
+                    <input type="checkbox" id="dashAccepting"
+                      class="w-5 h-5 text-brand-500 rounded focus:ring-brand-500 accent-brand-500 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600">
+                    <span class="text-slate-600 dark:text-slate-300 font-medium">Open for Invitations</span>
+                  </label>
+
+                  <button type="submit"
+                    class="py-3.5 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/20 transition transform hover:-translate-y-0.5"
+                    id="dashUpdateBtn">Save Changes</button>
+                </form>
+
+                <hr class="my-8 border-slate-200 dark:border-brand-500/20">
+
+                <form id="dashPhotoForm" class="flex flex-col gap-4 text-sm">
+                  <div>
+                    <h4 class="font-bold text-slate-800 dark:text-slate-100 text-lg">Add to Gallery</h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload photos to show off your
+                      performances</p>
+                  </div>
+
+                  <div class="relative">
+                    <input type="file" id="dashPhotoFile" accept="image/*"
+                      class="w-full p-3 glass-input rounded-xl cursor-pointer file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-900/30 dark:file:text-brand-400 transition"
+                      required>
+                  </div>
+
+                  <button type="submit"
+                    class="py-3.5 bg-slate-800 dark:bg-slate-700 text-white font-bold rounded-2xl shadow-md hover:bg-slate-900 dark:hover:bg-slate-600 transition hover:-translate-y-0.5"
+                    id="dashPhotoBtn">Upload Photo</button>
+                </form>
+
+                <div id="dashPhotoGallery" class="mt-6 grid grid-cols-2 gap-4">
+                  <!-- Photos injected here -->
+                </div>
+              </div>
+
+              <!-- MANAGE EVENTS SECTION -->
+              <div id="dashEventsState" class="hidden animate-fade-in">
+                <button type="button"
+                  class="backToDashMenu mb-6 inline-flex items-center gap-2 text-sm text-brand-600 dark:text-brand-400 font-bold hover:gap-3 transition-all group">
+                  <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                      d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                  </svg>
+                  Back to Dashboard
+                </button>
+
+                <div class="mb-8 text-left">
+                  <h4 class="font-bold text-slate-900 dark:text-white text-2xl tracking-tight leading-tight">Upcoming
+                    Performances</h4>
+                  <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Keep your performance schedule up to date
+                  </p>
+                </div>
+
+                <form id="dashEventForm"
+                  class="flex flex-col gap-5 mb-10 bg-brand-50/20 dark:bg-brand-900/10 p-6 rounded-[2rem] border border-brand-100 dark:border-brand-500/20 shadow-inner animate-fade-in">
+                  <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Event / Temple
+                      Name</label>
+                    <input type="text" id="dashEventTemple" placeholder="Enter name..."
+                      class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
+                  </div>
+                  <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Village /
+                      Location</label>
+                    <input type="text" id="dashEventVillage" placeholder="Village name..."
+                      class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
+                  </div>
+                  <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Event Date</label>
+                    <input type="date" id="dashEventDate"
+                      class="premium-input w-full p-4 rounded-2xl focus:outline-none transition" required>
+                  </div>
+                  <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Map Location
+                      (Optional)</label>
+                    <button type="button" id="openDashMapBtn"
+                      class="premium-dash-btn w-full p-4 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-sm group">
+                      <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                      </svg>
+                      <span id="dashMapBtnText">Pick Location on Map</span>
+                    </button>
+                    <input type="hidden" id="dashEventLat">
+                    <input type="hidden" id="dashEventLng">
+                    <button type="button" id="dashEventClearMap"
+                      class="w-full mt-2 p-3 bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400 border border-red-200/30 rounded-xl font-bold hover:bg-red-100 transition hidden">Clear
+                      Location</button>
+                  </div>
+                  <button type="submit"
+                    class="py-4 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/20 transition transform hover:-translate-y-0.5 active:scale-[0.98]"
+                    id="dashEventBtn">Add Event to Schedule</button>
+                </form>
+
+                <div id="dashEventsList" class="flex flex-col gap-3">
+                  <!-- Events injected here -->
+                </div>
+              </div>
             </div>
 
-            <button type="submit" class="mt-4 py-4 bg-blue-500 text-white font-bold rounded-2xl shadow-lg hover:bg-blue-600 transition hover:-translate-y-0.5" id="ceSubmitBtn">Publish Community Event</button>
-          </form>
+            <!-- Master Footer -->
+            <div
+              class="p-8 border-t border-slate-200 dark:border-brand-500/10 text-center bg-slate-50/50 dark:bg-slate-900/50">
+              <button type="button" id="dashDeleteBtn"
+                class="w-full py-4 bg-red-500 hover:bg-red-600 text-white font-bold rounded-2xl shadow-lg shadow-red-500/20 transition-all transform hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2 group">
+                <svg class="w-5 h-5 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                  </path>
+                </svg>
+                Permanently Delete Group
+              </button>
+            </div>
+          </div>
+
+
+
+
+
+
+
         </div>
+
+        <div id="hub-competitions-wrapper" class="hidden">
+          <!-- Organizer - My Competitions List -->
+          <div id="myCompetitionsListSection" class="hidden glass-card p-6 md:p-8 rounded-3xl mt-4">
+            <div class="flex justify-between items-center mb-6">
+              <div>
+                <h3 class="font-bold text-2xl text-slate-800 dark:text-slate-100">My Competitions</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Organize events and manage registrations</p>
+              </div>
+              <button id="showCompRegisterBtn"
+                class="bg-brand-100 hover:bg-brand-200 text-brand-700 dark:bg-brand-900/30 dark:hover:bg-brand-900/50 dark:text-brand-400 font-bold px-4 py-2 rounded-xl text-sm transition shadow-sm">+
+                Create Event</button>
+            </div>
+
+            <div id="myCompetitionsContainer" class="flex flex-col gap-3">
+              <div class="text-center py-6 text-slate-500 text-sm">Loading competitions...</div>
+            </div>
+          </div>
+
+          <!-- Create Competition Section -->
+          <div id="compRegistrationSection" class="hidden glass-card p-6 md:p-8 rounded-3xl mt-4 relative">
+            <button type="button" id="cancelCompRegisterBtn"
+              class="mb-5 inline-flex items-center gap-1.5 text-sm text-brand-600 dark:text-brand-400 font-bold hover:underline transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+                </path>
+              </svg>
+              Back
+            </button>
+
+            <div class="flex items-center gap-3 mb-6">
+              <div
+                class="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400 flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-xl text-slate-800 dark:text-slate-100">Create Competition</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Host an event for your group</p>
+              </div>
+            </div>
+
+            <form id="compForm" class="flex flex-col gap-4 text-sm">
+              <input type="text" id="cTitle" placeholder="Event Title (e.g. Mahashivratri Dindi Spardha)"
+                class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
+                required>
+              <div class="space-y-1">
+                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Event Type</label>
+                <select id="cType"
+                  class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
+                  required>
+                  <option value="Dindi">Dindi</option>
+                  <option value="Bhajan">Bhajan</option>
+                  <option value="Kirtan">Kirtan</option>
+                </select>
+              </div>
+              <textarea id="cDesc" rows="3" placeholder="Description & Rules"
+                class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition resize-none"
+                required></textarea>
+              <input type="text" id="cLocation" placeholder="Location / Village"
+                class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
+                required>
+              <div class="flex gap-4">
+                <div class="flex-1">
+                  <label class="block text-xs text-slate-500 mb-1 ml-1">Event Date</label>
+                  <input type="date" id="cDate"
+                    class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
+                    required>
+                </div>
+                <div class="flex-1">
+                  <label class="block text-xs text-slate-500 mb-1 ml-1">Registration Deadline</label>
+                  <input type="date" id="cDeadline"
+                    class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
+                    required>
+                </div>
+              </div>
+
+              <div class="mt-2 relative z-0">
+                <label class="block text-xs text-slate-500 mb-2 ml-1">Map Location (Optional) - Search or click on the
+                  map</label>
+                <button type="button" id="openCompMapBtn"
+                  class="w-full p-3.5 glass-input rounded-xl border border-brand-200 dark:border-brand-800 text-brand-600 dark:text-brand-400 font-bold  dark:hover:bg-brand-900/30 transition flex items-center justify-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                  <span id="compMapBtnText">Pick Location on Map</span>
+                </button>
+                <input type="hidden" id="compEventLat">
+                <input type="hidden" id="compEventLng">
+                <button type="button" id="compEventClearMap"
+                  class="w-full mt-2 p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/30 rounded-xl font-bold hover:bg-red-100 dark:hover:bg-red-900/40 transition hidden">Clear
+                  Location</button>
+              </div>
+
+              <div class="mt-2">
+                <label class="block text-xs text-slate-500 mb-1 ml-1">Competition Poster / Photo(s)</label>
+                <input type="file" id="cPoster" accept="image/*" multiple
+                  class="w-full p-3 glass-input rounded-xl cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-900/30 dark:file:text-brand-400 transition">
+              </div>
+
+              <button type="submit"
+                class="mt-4 py-4 bg-brand-500 text-white font-bold rounded-2xl shadow-lg hover:bg-brand-600 transition hover:-translate-y-0.5"
+                id="cSubmitBtn">Publish Event</button>
+            </form>
+          </div>
+
+        </div>
+
+        <div id="hub-community-wrapper" class="hidden">
+          <!-- Organizer - My Community Events List -->
+          <div id="myCommunityEventsListSection" class="hidden glass-card p-6 md:p-8 rounded-3xl mt-4">
+            <div class="flex justify-between items-center mb-6">
+              <div>
+                <h3 class="font-bold text-2xl text-slate-800 dark:text-slate-100">My Community Events</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Organize and share local events</p>
+              </div>
+              <button id="showCommunityEventRegisterBtn"
+                class="bg-blue-100 hover:bg-blue-200 text-blue-700 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-400 font-bold px-4 py-2 rounded-xl text-sm transition shadow-sm">+
+                Add Event</button>
+            </div>
+
+            <div id="myCommunityEventsContainer" class="flex flex-col gap-3">
+              <div class="text-center py-6 text-slate-500 text-sm">Loading community events...</div>
+            </div>
+          </div>
+
+          <!-- Create Community Event Section -->
+          <div id="communityEventRegistrationSection" class="hidden glass-card p-6 md:p-8 rounded-3xl mt-4 relative">
+            <button type="button" id="cancelCommunityEventRegisterBtn"
+              class="mb-5 inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 font-bold hover:underline transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+                </path>
+              </svg>
+              Back
+            </button>
+
+            <div class="flex items-center gap-3 mb-6">
+              <div
+                class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-xl text-slate-800 dark:text-slate-100">Add Community Event</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Host an event for the community</p>
+              </div>
+            </div>
+
+            <form id="communityEventForm" class="flex flex-col gap-4 text-sm">
+              <input type="text" id="ceTitle" placeholder="Event Name"
+                class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                required>
+              <input type="text" id="ceOrganizer" placeholder="Organizer Name"
+                class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                required>
+
+              <div class="space-y-1">
+                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Event Type</label>
+                <select id="ceType"
+                  class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                  required>
+                  <option value="Dindi">Dindi</option>
+                  <option value="Bhajan">Bhajan</option>
+                  <option value="Kirtan">Kirtan</option>
+                  <option value="Music">Music</option>
+                  <option value="Workshop">Workshop</option>
+                  <option value="Cultural">Cultural</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <textarea id="ceDesc" rows="3" placeholder="Description"
+                class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition resize-none"
+                required></textarea>
+              <input type="text" id="ceLocation" placeholder="Venue / Village"
+                class="p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                required>
+
+              <div class="flex gap-4">
+                <div class="flex-1">
+                  <label class="block text-xs text-slate-500 mb-1 ml-1">Start Date</label>
+                  <input type="date" id="ceDate"
+                    class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                    required>
+                </div>
+                <div class="flex-1">
+                  <label class="block text-xs text-slate-500 mb-1 ml-1">End Date <span class="text-slate-400">(if
+                      multi-day)</span></label>
+                  <input type="date" id="ceEndDate"
+                    class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <label class="block text-xs text-slate-500 mb-1 ml-1">Registration Deadline (Required)</label>
+                <input type="date" id="ceDeadline"
+                  class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                  required>
+              </div>
+
+              <!-- Dynamic Contacts Section -->
+              <div id="ceContactsContainer" class="space-y-3">
+                <div class="flex gap-4 contact-row">
+                  <div class="flex-1">
+                    <label
+                      class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-1">Contact
+                      Person</label>
+                    <input type="text"
+                      class="ce-contact-name w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                      placeholder="Name" required>
+                  </div>
+                  <div class="flex-1">
+                    <label
+                      class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-1">Contact
+                      Number</label>
+                    <input type="tel"
+                      class="ce-contact-phone w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                      placeholder="Phone" required>
+                  </div>
+                </div>
+              </div>
+              <button type="button" id="ceAddContactBtn"
+                class="text-[11px] font-black text-blue-500 hover:text-blue-600 flex items-center gap-1.5 mt-1 transition group uppercase tracking-wider">
+                <div
+                  class="w-5 h-5 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center group-hover:bg-blue-100 transition">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path>
+                  </svg>
+                </div>
+                Add Another Contact
+              </button>
+
+              <div class="flex flex-col sm:flex-row gap-4 mt-2">
+                <label class="flex items-center gap-3 cursor-pointer p-3.5 glass-input rounded-xl flex-1">
+                  <input type="checkbox" id="ceFoodProvided"
+                    class="w-5 h-5 text-blue-500 rounded focus:ring-blue-500 accent-blue-500 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600">
+                  <span class="text-slate-600 dark:text-slate-300 font-medium">Food Provided</span>
+                </label>
+
+                <div class="flex-1 flex flex-col gap-2">
+                  <label class="flex items-center gap-3 cursor-pointer p-3.5 glass-input rounded-xl">
+                    <input type="checkbox" id="ceEntryFee"
+                      class="w-5 h-5 text-blue-500 rounded focus:ring-blue-500 accent-blue-500 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600">
+                    <span class="text-slate-600 dark:text-slate-300 font-medium">Entry Fee</span>
+                  </label>
+                  <input type="number" id="ceEntryFeeAmount" placeholder="Fee Amount (₹)"
+                    class="hidden w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <label class="block text-xs text-slate-500 mb-1 ml-1">Event Poster / Photos (Optional)</label>
+                <input type="file" id="cePoster" accept="image/*" multiple
+                  class="w-full p-3.5 glass-input rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition cursor-pointer text-sm font-medium text-slate-500">
+              </div>
+
+              <button type="submit"
+                class="mt-4 py-4 bg-blue-500 text-white font-bold rounded-2xl shadow-lg hover:bg-blue-600 transition hover:-translate-y-0.5"
+                id="ceSubmitBtn">Publish Community Event</button>
+            </form>
+          </div>
+        </div> <!-- Close hub-community-wrapper -->
       </div>
 
     </div>
@@ -872,24 +1620,32 @@
   <div id="mapPickerModal" class="map-modal-overlay hidden">
     <div class="bg-white dark:bg-slate-800 p-4 flex justify-between items-center shadow-md z-10 relative">
       <h3 class="font-bold text-lg text-slate-800 dark:text-slate-100">Select Location</h3>
-      <button type="button" id="closeMapModalBtn" class="p-2 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 transition">
-        <svg class="w-5 h-5 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      <button type="button" id="closeMapModalBtn"
+        class="p-2 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 transition">
+        <svg class="w-5 h-5 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
       </button>
     </div>
     <div id="globalMapContainer" class="flex-1 w-full bg-slate-200 relative z-0"></div>
     <div class="bg-white dark:bg-slate-800 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-10 relative flex gap-4">
-      <button type="button" id="confirmMapBtn" class="flex-1 py-3.5 bg-brand-500 text-white font-bold rounded-xl shadow-lg hover:bg-brand-600 transition">Confirm Location</button>
+      <button type="button" id="confirmMapBtn"
+        class="flex-1 py-3.5 bg-brand-500 text-white font-bold rounded-xl shadow-lg hover:bg-brand-600 transition">Confirm
+        Location</button>
     </div>
   </div>
 
   <!-- Custom Confirm Modal -->
   <div id="confirmModal" class="custom-modal-overlay hidden">
-    <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-2xl max-w-sm w-full mx-4 border border-slate-200 dark:border-slate-700 text-center">
+    <div
+      class="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-2xl max-w-sm w-full mx-4 border border-slate-200 dark:border-slate-700 text-center">
       <h3 class="text-xl font-bold text-slate-800 dark:text-slate-100 mb-2">Confirm Deletion</h3>
       <p id="confirmMessage" class="text-slate-500 dark:text-slate-400 text-sm mb-6"></p>
       <div class="flex gap-3">
-        <button id="confirmCancelBtn" class="flex-1 py-3 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-600 transition">Cancel</button>
-        <button id="confirmOkBtn" class="flex-1 py-3 custom-delete-btn font-bold rounded-xl shadow-lg transition">Delete</button>
+        <button id="confirmCancelBtn"
+          class="flex-1 py-3 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-600 transition">Cancel</button>
+        <button id="confirmOkBtn"
+          class="flex-1 py-3 custom-delete-btn font-bold rounded-xl shadow-lg transition">Delete</button>
       </div>
     </div>
   </div>
@@ -897,94 +1653,85 @@
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-geosearch@3.11.1/dist/bundle.min.js"></script>
-  
-  
-      
-  
+
+
+
+
   <!-- Mobile Floating Bottom Nav -->
-  <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav mobile-bottom-nav rounded-3xl px-6 py-3 flex justify-between items-center shadow-xl transition-all duration-300 transform">
+  <nav
+    class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-nav mobile-bottom-nav rounded-3xl px-6 py-3 flex justify-between items-center shadow-xl transition-all duration-300 transform">
     <a href="/" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
-      <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+      <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20">
+        <path
+          d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+        </path>
+      </svg>
       <span class="text-[10px] font-medium">Home</span>
     </a>
-    <a href="/calendar.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
-      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+    <a href="/calendar.html"
+      class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+      </svg>
       <span class="text-[10px] font-medium">Calendar</span>
     </a>
-    <a href="/dashboard.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
-       <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-       <span class="text-[10px] font-medium">Dash</span>
+    <a href="/dashboard.html"
+      class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+        </path>
+      </svg>
+      <span class="text-[10px] font-medium">Dash</span>
     </a>
     <a href="/auth.html" class="flex flex-col items-center text-brand-500 transition transform scale-105">
-      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+      </svg>
       <span class="text-[10px] font-bold">Profile</span>
     </a>
-    <a href="/contact.html" class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
-      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+    <a href="/contact.html"
+      class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-brand-500 transition">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z">
+        </path>
+      </svg>
       <span class="text-[10px] font-medium">Help</span>
     </a>
   </nav>
 
-  <script src="/js/main.js?v=52.09"></script>
+  <script src="/js/main.js?v=52.19"></script>
   <script src="/js/payment.js?v=11"></script>
 
-    
-  
-  
+
+
+
   <!-- PWA Install Banner (Mobile) -->
-  <div id="installMobileBanner" class="hidden md:hidden fixed bottom-24 left-0 right-0 mx-auto w-[90%] max-w-sm glass-card p-4 rounded-2xl shadow-2xl border border-brand-200/50 dark:border-brand-500/30 animate-fade-in" style="z-index: 9999;">
+  <div id="installMobileBanner"
+    class="hidden md:hidden fixed bottom-24 left-0 right-0 mx-auto w-[90%] max-w-sm glass-card p-4 rounded-2xl shadow-2xl border border-brand-200/50 dark:border-brand-500/30 animate-fade-in"
+    style="z-index: 9999;">
     <div class="flex items-center gap-4">
-      <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-500 to-orange-500 text-white flex items-center justify-center font-bold text-xl shrink-0 shadow-lg shadow-brand-500/20">V</div>
+      <div
+        class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-500 to-orange-500 text-white flex items-center justify-center font-bold text-xl shrink-0 shadow-lg shadow-brand-500/20">
+        V</div>
       <div class="flex-1 min-w-0">
         <h4 class="text-sm font-black text-slate-800 dark:text-slate-100">Install Vandan</h4>
         <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate">Fast, secure & offline access</p>
       </div>
       <div class="flex items-center gap-2">
         <button id="dismissInstallBanner" class="p-2 text-slate-400 hover:text-slate-600 transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
         </button>
-        <button id="installMobileBtn" class="px-4 py-2 bg-brand-500 text-white text-[10px] font-black rounded-lg shadow-lg shadow-brand-500/30">INSTALL</button>
+        <button id="installMobileBtn"
+          class="px-4 py-2 bg-brand-500 text-white text-[10px] font-black rounded-lg shadow-lg shadow-brand-500/30">INSTALL</button>
       </div>
     </div>
   </div>
 </body>
+
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

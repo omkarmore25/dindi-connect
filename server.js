@@ -101,11 +101,14 @@ app.use('/api/community-events', communityEventRoutes);
 app.use('/api/donations', donationRoutes);
 
 // Serve static files from 'public' directory
+// HTML and JS are never cached so users always get latest changes
 app.use(express.static(path.join(__dirname, 'public'), {
-  maxAge: '1d',
-  setHeaders: (res, path) => {
-    if (path.endsWith('.html')) {
+  maxAge: '7d',
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html') || filePath.endsWith('.js')) {
       res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
     }
   }
 }));

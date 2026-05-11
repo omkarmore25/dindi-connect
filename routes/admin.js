@@ -45,15 +45,16 @@ router.get('/check', (req, res) => {
 // GET /api/admin/stats
 router.get('/stats', requireAdmin, async (req, res) => {
   try {
-    const [groups, bookings, reports, competitions, communityEvents, users] = await Promise.all([
+    const [groups, bookings, reports, competitions, communityEvents, users, natakGroups] = await Promise.all([
       Group.countDocuments(),
       Booking.countDocuments(),
       Report.countDocuments(),
       Competition.countDocuments(),
       CommunityEvent.countDocuments(),
-      User.countDocuments()
+      User.countDocuments(),
+      Group.countDocuments({ groupType: 'Natak' })
     ]);
-    res.json({ groups, bookings, reports, competitions, communityEvents, users });
+    res.json({ groups, bookings, reports, competitions, communityEvents, users, natakGroups });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

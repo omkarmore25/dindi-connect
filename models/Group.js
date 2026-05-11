@@ -15,7 +15,7 @@ const GroupSchema = new mongoose.Schema({
   },
   groupType: {
     type: String,
-    enum: ['Dindi', 'Bhajan', 'Kirtan'],
+    enum: ['Dindi', 'Bhajan', 'Kirtan', 'Natak'],
     required: true,
     default: 'Dindi'
   },
@@ -56,6 +56,21 @@ const GroupSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  subType: {
+    type: String,
+    enum: ['Dashavatar', 'Normal'],
+  },
+  performanceType: String,
+  trickSceneMinPrice: Number,
+  trickSceneMaxPrice: Number,
+  simpleMinPrice: Number,
+  simpleMaxPrice: Number,
+  languages: [String],
+  districts: [String],
+  totalArtists: Number,
+  experienceYears: Number,
+  natakNames: [String],
+  pastPerformancePhotos: [String]
 }, { timestamps: true });
 
 GroupSchema.index({ groupName: 1, village: 1, groupType: 1 }, { unique: true });
