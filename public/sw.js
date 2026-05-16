@@ -1,6 +1,6 @@
 // Vandan - Service Worker
 // Strategy: HTML + JS = ALWAYS network (never stale), Images/CSS = cache-first for offline
-const CACHE_NAME = 'vandan-v52.19';
+const CACHE_NAME = 'vandan-v52.20';
 
 const CACHE_ONLY_ASSETS = [
   '/css/style.css',
